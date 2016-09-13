@@ -1,0 +1,8 @@
+﻿$Id$
+
+Revision History:
+=================
+
+* v1.00 (Sep. 13, 2016)
+----------------------
+- Initial version which support WoW 7.0.3

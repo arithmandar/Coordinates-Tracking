@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$
+-->
+<Ui xmlns="http://www.blizzard.com/wow/ui/"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	<Script file="CoordsTracking-enUS.lua"/>
+	<Script file="CoordsTracking-deDE.lua"/>
+	<Script file="CoordsTracking-esES.lua"/>
+	<Script file="CoordsTracking-esMX.lua"/>
+	<Script file="CoordsTracking-frFR.lua"/>
+	<Script file="CoordsTracking-itIT.lua"/>
+	<Script file="CoordsTracking-ptBR.lua"/>
+	<Script file="CoordsTracking-ruRU.lua"/>
+	<Script file="CoordsTracking-zhCN.lua"/>
+	<Script file="CoordsTracking-zhTW.lua"/>
+	<Script file="GlobalStrings.lua"/>
+</Ui>

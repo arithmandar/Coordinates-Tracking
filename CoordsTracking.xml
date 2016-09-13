@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Frame>
+		<Frames>
+			<Button name="CoordsTrackingFrame" movable="true" enableMouse="true" parent="UIParent" Text="Coordinates"> 
+				<Size>
+					<AbsDimension x="200" y="28" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="UIParent">
+						<Offset>
+							<AbsDimension x="450" y="-80" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<ButtonText name="$parentText" JustifyH="LEFT"/>
+				<NormalFont style="NumberFontNormal"/>
+				<Scripts>
+					<OnEnter>
+						CRDS_Frame_OnEnter(self);
+					</OnEnter>
+					<OnLeave>
+						CRDS_Frame_OnLeave(self);
+					</OnLeave>
+					<OnMouseDown>
+						CRDS_Frame_HandleMouseDown(self, button);
+					</OnMouseDown>
+					<OnMouseUp>
+						CRDS_Frame_HandleMouseUp(self, button);
+					</OnMouseUp>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				CRDS_OnLoad(self);
+			</OnLoad>
+			<OnEvent>
+				CRDS_OnEvent(self, event, ...);
+			</OnEvent>
+			<OnUpdate>
+				CRDS_Frame_Update(self);						
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+
+	<Frame name="CoordsOnWorldMapFrame" parent="WorldMapFrame" toplevel="true" frameLevel="10">
+		<Size>
+			<AbsDimension x="200" y="28" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="WorldMapScrollFrame" relativePoint="BOTTOMLEFT">
+				<Offset>
+					<AbsDimension x="10" y="25"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="$parentPlayerText" inherits="NumberFontNormal" key="playerTxt" JustifyH="LEFT" />
+				<FontString name="$parentCursorText" inherits="NumberFontNormal" key="cursorTxt" JustifyH="LEFT">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentPlayerText" relativePoint="TOPRIGHT">
+							<Offset>
+								<AbsDimension x="20" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+
+</Ui>
