@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v1.01 (Sep. 20, 2016)
+----------------------
+- Added Simplified Chinese translation
+
 * v1.00 (Sep. 13, 2016)
 ----------------------
 - Initial version which support WoW 7.0.3

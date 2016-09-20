@@ -245,9 +245,8 @@ function CRDS_Frame_OnEnter(self)
 	
 	if (options.show_zonenametooltip) then
 		if(CoordsTrackingFrame:IsVisible()) then
-			
 			if (not GameTooltip:IsShown()) then
-				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", -10, 0);
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", -10, 0);
 				GameTooltip:SetBackdropColor(0, 0, 0, options.tooltip_alpha);
 				GameTooltip:SetText("|cFFFFFFFF"..CRDS_GetZoneText(), 1, 1, 1, nil, 1);
 				GameTooltip:SetScale(options.tooltip_scale);

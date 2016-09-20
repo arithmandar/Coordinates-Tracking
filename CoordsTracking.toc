@@ -30,7 +30,7 @@
 ## Notes-zhTW: |cff00CC33追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上|r
 #@end-debug@
 ## Author: @project-author@
-## Version: 1.00
+## Version: 1.01
 ## OptionalDeps: LibDataBroker-1.1, LibAboutPanel, CallbackHandler-1.0, LibStub, AceLocale-3.0
 ## DefaultState: Enabled
 ## SavedVariables: CoordsTrackingDB
@@ -39,7 +39,7 @@
 ## X-Website: http://mods.curse.com/addons/wow/currency-tracking
 ## X-License: GPLv2
 ## X-Category: Information
-## X-Localizations: enUS, zhTW
+## X-Localizations: enUS, zhTW, zhCN
 
 Embeds.xml
 Locale\Locales.xml
