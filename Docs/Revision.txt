@@ -3,10 +3,18 @@
 Revision History:
 =================
 
+* v1.02 (Oct. 27, 2016)
+-----------------------
+- Toc update to support WoW 7.1.0
+- Fixed the issue that coordinates cannot be shown while in instance (transitbus)
+  (WoW 7.1.0 now do not allow addon to access player's position while in instance
+- Translation updated:
+  - German (pas06)
+  
 * v1.01 (Sep. 20, 2016)
-----------------------
+-----------------------
 - Added Simplified Chinese translation
 
 * v1.00 (Sep. 13, 2016)
-----------------------
+-----------------------
 - Initial version which support WoW 7.0.3

@@ -108,7 +108,11 @@ function CRDS_GetButtonText()
 
 	if (posText) then 
 		if (options.show_zonename) then
-			posText = format("|cffffffff%s"..L["COLON"]..posText, CRDS_GetZoneText());
+			if ( IsInInstance() ) then 
+				posText = format("|cffffffff%s", CRDS_GetZoneText());
+			else
+				posText = format("|cffffffff%s"..L["COLON"]..posText, CRDS_GetZoneText());
+			end
 		else
 			posText = "|cffffffff"..posText;
 		end
@@ -184,7 +188,12 @@ function CRDS_GetPlayerPositionText()
 	crdsText = crdsTextTemplate:format(acc, acc);
 	
 	-- SetMapToCurrentZone();
-	posX, posY = GetPlayerMapPosition("player");
+	if ( IsInInstance() ) then
+		posX = 0;
+		posY = 0;
+	else
+		posX, posY = GetPlayerMapPosition("player");
+	end
 	
 	posText = format(crdsText, posX*100, posY*100);
 	

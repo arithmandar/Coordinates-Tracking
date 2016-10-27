@@ -1,4 +1,4 @@
-## Interface: 70000
+## Interface: 70100
 #@non-debug@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
 ## Title-deDE: @localization(locale="deDE", key="Title", namespace="ToC")@
@@ -30,7 +30,7 @@
 ## Notes-zhTW: |cff00CC33追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上|r
 #@end-debug@
 ## Author: @project-author@
-## Version: 1.01
+## Version: 1.02
 ## OptionalDeps: LibDataBroker-1.1, LibAboutPanel, CallbackHandler-1.0, LibStub, AceLocale-3.0
 ## DefaultState: Enabled
 ## SavedVariables: CoordsTrackingDB
