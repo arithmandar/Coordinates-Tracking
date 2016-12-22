@@ -13,9 +13,5 @@ externals:
     Libs/LibDataBroker-1.1: git://git.wowace.com/wow/libdatabroker-1-1/mainline.git
     Libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
 
-ignore:
-    - Libs/LibAboutPanel
-    - Libs/LibDataBroker-1.1
-
 license-output: Docs/LICENSE.txt
 

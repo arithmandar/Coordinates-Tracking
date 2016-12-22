@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v1.03 (Dec. 22, 2016)
+-----------------------
+- Translation updated:
+  - Korean (next96)
+
 * v1.02 (Oct. 27, 2016)
 -----------------------
 - Toc update to support WoW 7.1.0
