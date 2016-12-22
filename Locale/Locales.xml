@@ -8,6 +8,7 @@
 	<Script file="CoordsTracking-esMX.lua"/>
 	<Script file="CoordsTracking-frFR.lua"/>
 	<Script file="CoordsTracking-itIT.lua"/>
+	<Script file="CoordsTracking-koKR.lua"/>
 	<Script file="CoordsTracking-ptBR.lua"/>
 	<Script file="CoordsTracking-ruRU.lua"/>
 	<Script file="CoordsTracking-zhCN.lua"/>
