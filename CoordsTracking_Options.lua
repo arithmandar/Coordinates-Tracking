@@ -73,6 +73,11 @@ function CoordsTrackingOptions_ShowOnWorldMapToggle()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 
 	options.show_coords_onworldmap = not options.show_coords_onworldmap;
+	if (options.show_coords_onworldmap) then
+		CoordsOnWorldMapFrame:Show();
+	else
+		CoordsOnWorldMapFrame:Hide();
+	end
 end
 
 function CoordsTrackingOptions_ResetPosition()

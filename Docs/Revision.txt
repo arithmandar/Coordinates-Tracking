@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v1.04 (Jan. 17, 2017)
+-----------------------
+- Fixed the issue that when toggling coordinates to show / not-show on world 
+  map and it won't take effect immediately.
+
 * v1.03 (Dec. 22, 2016)
 -----------------------
 - Translation updated:
