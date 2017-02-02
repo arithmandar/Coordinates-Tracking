@@ -3,6 +3,14 @@
 Revision History:
 =================
 
+* v1.05 (Feb. 02, 2017)
+-----------------------
+- Fixed the issue that show tooltip's check-box didn't reflect the actual 
+  configuration in Option window
+- Zone text now will have text color based on PvP type
+- Frame structure re-organized
+- Codes clean-up
+
 * v1.04 (Jan. 17, 2017)
 -----------------------
 - Fixed the issue that when toggling coordinates to show / not-show on world 

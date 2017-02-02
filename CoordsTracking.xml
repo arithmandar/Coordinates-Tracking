@@ -2,37 +2,33 @@
 <!-- $Id$ -->
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-	<Frame>
-		<Frames>
-			<Button name="CoordsTrackingFrame" movable="true" enableMouse="true" parent="UIParent" Text="Coordinates"> 
-				<Size>
-					<AbsDimension x="200" y="28" />
-				</Size>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="UIParent">
-						<Offset>
-							<AbsDimension x="450" y="-80" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<ButtonText name="$parentText" JustifyH="LEFT"/>
-				<NormalFont style="NumberFontNormal"/>
-				<Scripts>
-					<OnEnter>
-						CRDS_Frame_OnEnter(self);
-					</OnEnter>
-					<OnLeave>
-						CRDS_Frame_OnLeave(self);
-					</OnLeave>
-					<OnMouseDown>
-						CRDS_Frame_HandleMouseDown(self, button);
-					</OnMouseDown>
-					<OnMouseUp>
-						CRDS_Frame_HandleMouseUp(self, button);
-					</OnMouseUp>
-				</Scripts>
-			</Button>
-		</Frames>
+	<Button name="CoordsTrackingFrame" movable="true" enableMouse="true" parent="UIParent" Text="Coordinates"> 
+		<Size>
+			<AbsDimension x="200" y="28" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="UIParent">
+				<Offset>
+					<AbsDimension x="450" y="-80" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="$parentText" parentKey="Text" JustifyH="LEFT" inherits="NumberFontNormal" Text="">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="0" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<!--
+		<ButtonText name="$parentText" parentKey="Text" JustifyH="LEFT"/>
+		<NormalFont style="NumberFontNormal"/>-->
 		<Scripts>
 			<OnLoad>
 				CRDS_OnLoad(self);
@@ -40,11 +36,23 @@
 			<OnEvent>
 				CRDS_OnEvent(self, event, ...);
 			</OnEvent>
+			<OnEnter>
+				CRDS_OnEnter(self);
+			</OnEnter>
+			<OnLeave>
+				CRDS_OnLeave(self);
+			</OnLeave>
+			<OnMouseDown>
+				CRDS_OnMouseDown(self, button);
+			</OnMouseDown>
+			<OnMouseUp>
+				CRDS_OnMouseUp(self, button);
+			</OnMouseUp>
 			<OnUpdate>
-				CRDS_Frame_Update(self);						
+				CRDS_OnUpdate(self);						
 			</OnUpdate>
 		</Scripts>
-	</Frame>
+	</Button>
 
 	<Frame name="CoordsOnWorldMapFrame" parent="WorldMapFrame" toplevel="true" frameLevel="10">
 		<Size>

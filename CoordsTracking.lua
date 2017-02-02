@@ -2,13 +2,16 @@
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
-local _G = getfenv(0)
-
 -- Functions
-local ipairs = _G.ipairs
+local _G = getfenv(0)
 local pairs = _G.pairs
+-- Libraries
+
 CRDS_Player = UnitName("player");
 CRDS_Server = GetRealmName();
+
+local LibStub = _G.LibStub;
+local L = LibStub("AceLocale-3.0"):GetLocale("CoordsTracking");
 
 local CRDS_Version = GetAddOnMetadata("CoordsTracking", "Version");
 local CRDS_Category = GetAddOnMetadata("CoordsTracking", "X-Category");
@@ -37,9 +40,6 @@ local CRDS_Events = {
 	"PLAYER_REGEN_DISABLED",
 };
 
-
-local LibStub = _G.LibStub;
-local L = LibStub("AceLocale-3.0"):GetLocale("CoordsTracking");
 
 local function CRDS_GetZoneText()
 	local posText;
@@ -102,19 +102,40 @@ local LDB_CoordsTracking = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject
 	end,
 });
 
-function CRDS_GetButtonText()
+local function CRDS_GetPlayerPositionText()
+	local posText, posX, posY;
+	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+	local crdsTextTemplate, crdsText = "%%.%df, %%.%df";
+	local acc = options.coords_accuracy;
+	
+	crdsText = crdsTextTemplate:format(acc, acc);
+	
+	-- SetMapToCurrentZone();
+	if ( IsInInstance() ) then
+		posX = 0;
+		posY = 0;
+	else
+		posX, posY = GetPlayerMapPosition("player");
+	end
+	
+	posText = format(crdsText, posX*100, posY*100);
+	
+	return posText;
+end
+
+local function CRDS_GetButtonText()
 	local posText = CRDS_GetPlayerPositionText();
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 
 	if (posText) then 
 		if (options.show_zonename) then
 			if ( IsInInstance() ) then 
-				posText = format("|cffffffff%s", CRDS_GetZoneText());
+				posText = CRDS_GetZoneText();
 			else
-				posText = format("|cffffffff%s"..L["COLON"]..posText, CRDS_GetZoneText());
+				posText = format("%s"..L["COLON"]..posText, CRDS_GetZoneText());
 			end
 		else
-			posText = "|cffffffff"..posText;
+			--posText = "|cffffffff"..posText;
 		end
 	else
 		posText = L["TITLE"];
@@ -123,10 +144,38 @@ function CRDS_GetButtonText()
 	return posText;
 end
 
-function Currency_UpdateAlpha()
+--[[
+function CRDS_UpdateAlpha()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 	
-	AtlasFrame:SetAlpha(options.tooltip_alpha);
+	CoordsTrackingFrame:SetAlpha(options.tooltip_alpha);
+end
+]]
+
+local function CRDS_InitOptions()
+	if ( CoordsTrackingDB == nil ) then
+		CoordsTrackingDB = { };
+	end
+	if ( CoordsTrackingDB[CRDS_Server] == nil ) then
+		CoordsTrackingDB[CRDS_Server] = { };
+	end
+	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player] == nil ) then
+		CoordsTrackingDB[CRDS_Server][CRDS_Player] = { };
+	end
+	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] == nil ) then
+		CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] = CRDS_DefaultOptions;
+	end
+end
+
+local function CRDS_Init()
+	CRDS_InitOptions();
+	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+
+	if(options.show_coords_onscreen == true) then
+		CoordsTrackingFrame:Show();
+	else
+		CoordsTrackingFrame:Hide();
+	end
 end
 
 function CRDS_OnLoad(self)
@@ -153,60 +202,29 @@ function CRDS_OnEvent(self, event, ...)
 	--LDB_CoordsTracking.text = CRDS_GetButtonText();
 end
 
-function CRDS_InitOptions()
-	if ( CoordsTrackingDB == nil ) then
-		CoordsTrackingDB = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server] == nil ) then
-		CoordsTrackingDB[CRDS_Server] = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player] == nil ) then
-		CoordsTrackingDB[CRDS_Server][CRDS_Player] = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] == nil ) then
-		CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] = CRDS_DefaultOptions;
-	end
-end
-
-function CRDS_Init()
-	CRDS_InitOptions();
-	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
-
-	if(options.show_coords_onscreen == true) then
-		CoordsTrackingFrame:Show();
-	else
-		CoordsTrackingFrame:Hide();
-	end
-end
-
-function CRDS_GetPlayerPositionText()
-	local posText, posX, posY;
-	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
-	local crdsTextTemplate, crdsText = "%%.%df, %%.%df";
-	local acc = options.coords_accuracy;
-	
-	crdsText = crdsTextTemplate:format(acc, acc);
-	
-	-- SetMapToCurrentZone();
-	if ( IsInInstance() ) then
-		posX = 0;
-		posY = 0;
-	else
-		posX, posY = GetPlayerMapPosition("player");
-	end
-	
-	posText = format(crdsText, posX*100, posY*100);
-	
-	return posText;
-end
-
-function CRDS_Frame_Update()
+function CRDS_OnUpdate()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 	local posText = CRDS_GetButtonText();
 	if (posText ~= CRDS_POSTEXT) then
-		CoordsTrackingFrame:SetText(posText);
-		CoordsTrackingFrame:SetWidth(CoordsTrackingFrame:GetTextWidth()+10);
-		LDB_CoordsTracking.text = posText;
+		CoordsTrackingFrame.Text:SetText(posText);
+		CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth());
+
+		local pvpType = GetZonePVPInfo();
+		if ( pvpType == "sanctuary" ) then
+			CoordsTrackingFrame.Text:SetTextColor(0.41, 0.8, 0.94);
+		elseif ( pvpType == "arena" ) then
+			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
+		elseif ( pvpType == "friendly" ) then
+			CoordsTrackingFrame.Text:SetTextColor(0.1, 1.0, 0.1);
+		elseif ( pvpType == "hostile" ) then
+			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
+		elseif ( pvpType == "contested" ) then
+			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.7, 0.0);
+		else
+			CoordsTrackingFrame.Text:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
+		end
+
+		LDB_CoordsTracking.text = HIGHLIGHT_FONT_COLOR_CODE..posText..FONT_COLOR_CODE_CLOSE;
 		CRDS_POSTEXT = posText;
 	end
 
@@ -221,7 +239,7 @@ function CRDS_Frame_Update()
 	end
 end
 
-function CRDS_Frame_HandleMouseDown(self, buttonName)    
+function CRDS_OnMouseDown(self, buttonName)    
 	-- Prevent activation when in combat
 	if (isInLockdown) then
 		return;
@@ -239,13 +257,13 @@ function CRDS_Frame_HandleMouseDown(self, buttonName)
 	end
 end
 
-function CRDS_Frame_HandleMouseUp(self, buttonName)
+function CRDS_OnMouseUp(self, buttonName)
 	if(CoordsTrackingFrame:IsVisible()) then
 		CoordsTrackingFrame:StopMovingOrSizing();
 	end
 end
 
-function CRDS_Frame_OnEnter(self)
+function CRDS_OnEnter(self)
 	if (isInLockdown) then
 		return;
 	end
@@ -255,9 +273,27 @@ function CRDS_Frame_OnEnter(self)
 	if (options.show_zonenametooltip) then
 		if(CoordsTrackingFrame:IsVisible()) then
 			if (not GameTooltip:IsShown()) then
+				local pvpType, isSubZonePvP, factionName = GetZonePVPInfo();
+				local zoneText = CRDS_GetZoneText();
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", -10, 0);
 				GameTooltip:SetBackdropColor(0, 0, 0, options.tooltip_alpha);
-				GameTooltip:SetText("|cFFFFFFFF"..CRDS_GetZoneText(), 1, 1, 1, nil, 1);
+				if ( pvpType == "sanctuary" ) then
+					GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 );	
+				elseif ( pvpType == "arena" ) then
+					GameTooltip:SetText( zoneText.." "..FREE_FOR_ALL_TERRITORY, 1.0, 0.1, 0.1 );	
+				elseif ( pvpType == "friendly" ) then
+					GameTooltip:SetText( zoneText, 0.1, 1.0, 0.1 );	
+					GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 0.1, 1.0, 0.1);
+				elseif ( pvpType == "hostile" ) then
+					GameTooltip:SetText( zoneText, 1.0, 0.1, 0.1 );	
+					GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1);
+				elseif ( pvpType == "contested" ) then
+					GameTooltip:SetText( subzoneName.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 );	
+				elseif ( pvpType == "combat" ) then
+					GameTooltip:SetText( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 );	
+				else
+					GameTooltip:SetText( zoneText, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b );	
+				end
 				GameTooltip:SetScale(options.tooltip_scale);
 				GameTooltip:Show();
 			else
@@ -267,7 +303,7 @@ function CRDS_Frame_OnEnter(self)
 	end
 end
 
-function CRDS_Frame_OnLeave(self)
+function CRDS_OnLeave(self)
 	GameTooltip_Hide();
 	GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE);
 end

@@ -1,6 +1,13 @@
 --[[
 $Id$
 ]]
+-----------------------------------------------------------------------
+-- Upvalued Lua API.
+-----------------------------------------------------------------------
+-- Functions
+local _G = getfenv(0)
+-- Libraries
+local math = _G.math;
 
 local LibStub = _G.LibStub;
 local L = LibStub("AceLocale-3.0"):GetLocale("CoordsTracking");
@@ -30,7 +37,7 @@ function CoordsTrackingOptions_OnShow()
 	
 	CoordsTrackingOptionsFrame_ShowOnScreen:SetChecked(options.show_coords_onscreen);
 	CoordsTrackingOptionsFrame_ShowZoneName:SetChecked(options.show_zonename);
-	CoordsTrackingOptionsFrame_ShowZoneNameTooltip:SetChecked(options.show_zonename);
+	CoordsTrackingOptionsFrame_ShowZoneNameTooltip:SetChecked(options.show_zonenametooltip);
 	CoordsTrackingOptionsFrame_ShowOnWorldMap:SetChecked(options.show_coords_onworldmap);
 	CoordsTrackingOptionsFrameSliderAccuracy:SetValue(options.coords_accuracy);
 	CoordsTrackingOptionsFrameSliderAlpha:SetValue(options.tooltip_alpha);
