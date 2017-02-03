@@ -15,7 +15,9 @@ if L then
 	L["OPT_ShowOnWorldMap"] = "在世界地圖上顯示座標資訊";
 	L["OPT_BTN_Reset"] = "重置位置";
 	L["OPT_ACCURACY"] = "座標資訊精確度";
-	L["OPT_TRANSPARENCY"] = "座標資訊提示的透明度";
+	L["OPT_TRANSPARENCY"] = "座標資訊的透明度";
+	L["OPT_SCALE"] = "座標資訊的大小比例";
+	L["OPT_TOOLTIPTRANSPARENCY"] = "座標資訊提示的透明度";
 	L["OPT_TOOLTIPSCALE"] = "座標資訊提示的大小比例";
 	L["COLON"] = "：";
 	L["CURSOR"] = "游標";

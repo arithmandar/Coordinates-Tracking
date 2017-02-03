@@ -13,7 +13,9 @@ if L then
 	L["OPT_ShowOnWorldMap"] = "Show coordinates info on world map";
 	L["OPT_BTN_Reset"] = "Reset position";
 	L["OPT_ACCURACY"] = "Coordinates' accuracy";
-	L["OPT_TRANSPARENCY"] = "Coordinates info tooltip's transparency";
+	L["OPT_TRANSPARENCY"] = "Coordinates info's transparency";
+	L["OPT_SCALE"] = "Coordinates info's scale";
+	L["OPT_TOOLTIPTRANSPARENCY"] = "Coordinates info tooltip's transparency";
 	L["OPT_TOOLTIPSCALE"] = "Coordinates info tooltip's scale";
 	L["COLON"] = ": ";
 	L["CURSOR"] = "Cursor";

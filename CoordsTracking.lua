@@ -27,8 +27,10 @@ local CRDS_DefaultOptions = {
 	show_zonenametooltip = true,
 	show_coords_onworldmap = true,
 	coords_accuracy = 1,
+	alpha = 1,
+	scale = 1,
 	tooltip_alpha = 0.9,
-	tooltip_scale = 1;
+	tooltip_scale = 1,
 };
 
 local CRDS_Events = {
@@ -40,6 +42,13 @@ local CRDS_Events = {
 	"PLAYER_REGEN_DISABLED",
 };
 
+local function CRDS_UpdateOptions(player_options)
+	for k, v in pairs(CRDS_DefaultOptions) do
+		if (player_options[k] == nil) then
+			player_options[k] = v;
+		end
+	end
+end
 
 local function CRDS_GetZoneText()
 	local posText;
@@ -165,6 +174,9 @@ local function CRDS_InitOptions()
 	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] == nil ) then
 		CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] = CRDS_DefaultOptions;
 	end
+	
+	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+	CRDS_UpdateOptions(options);
 end
 
 local function CRDS_Init()
@@ -173,6 +185,8 @@ local function CRDS_Init()
 
 	if(options.show_coords_onscreen == true) then
 		CoordsTrackingFrame:Show();
+		CoordsTrackingFrame:SetAlpha(options.alpha);
+		CoordsTrackingFrame:SetScale(options.scale);
 	else
 		CoordsTrackingFrame:Hide();
 	end

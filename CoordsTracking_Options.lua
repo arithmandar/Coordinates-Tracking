@@ -40,7 +40,9 @@ function CoordsTrackingOptions_OnShow()
 	CoordsTrackingOptionsFrame_ShowZoneNameTooltip:SetChecked(options.show_zonenametooltip);
 	CoordsTrackingOptionsFrame_ShowOnWorldMap:SetChecked(options.show_coords_onworldmap);
 	CoordsTrackingOptionsFrameSliderAccuracy:SetValue(options.coords_accuracy);
-	CoordsTrackingOptionsFrameSliderAlpha:SetValue(options.tooltip_alpha);
+	CoordsTrackingOptionsFrameSliderAlpha:SetValue(options.alpha);
+	CoordsTrackingOptionsFrameSliderScale:SetValue(options.scale);
+	CoordsTrackingOptionsFrameSliderToolTipAlpha:SetValue(options.tooltip_alpha);
 	CoordsTrackingOptionsFrameSliderToolTipScale:SetValue(options.tooltip_scale);
 end
 
@@ -120,6 +122,22 @@ function CoordsTrackingOptions_SliderAlphaOnValueChanged(self)
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 	
 	CoordsTrackingOptions_UpdateSlider(self, CRDS_OPT_TRANSPARENCY);
+	options.alpha = self:GetValue();
+	CoordsTrackingFrame:SetAlpha(options.alpha);
+end
+
+function CoordsTrackingOptions_SliderScaleOnValueChanged(self)
+	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+	
+	CoordsTrackingOptions_UpdateSlider(self, CRDS_OPT_SCALE);
+	options.scale = self:GetValue();
+	CoordsTrackingFrame:SetScale(options.scale);
+end
+
+function CoordsTrackingOptions_SliderToolTipAlphaOnValueChanged(self)
+	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+	
+	CoordsTrackingOptions_UpdateSlider(self, CRDS_OPT_TOOLTIPTRANSPARENCY);
 	options.tooltip_alpha = self:GetValue();
 end
 

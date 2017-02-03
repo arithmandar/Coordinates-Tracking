@@ -130,7 +130,7 @@ $Id$
 					</OnMouseWheel>
 				</Scripts>
 			</Slider>
-			<Slider name="$ParentSliderAlpha" inherits="OptionsSliderTemplate">
+			<Slider name="$ParentSliderScale" inherits="OptionsSliderTemplate">
 				<Size>
 					<AbsDimension x="360" y="16"/>
 				</Size>
@@ -144,9 +144,35 @@ $Id$
 				<Scripts>
 					<OnLoad>
 						self:EnableMouseWheel(true)
-						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_TRANSPARENCY, 0, 1.0, 0.01);
-						CoordsTrackingOptionsFrameSliderAlphaLow:SetText("0.00");
-						CoordsTrackingOptionsFrameSliderAlphaHigh:SetText("1.00");
+						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_SCALE, 0.5, 2.0, 0.1);
+						CoordsTrackingOptionsFrameSliderScaleLow:SetText("0.5");
+						CoordsTrackingOptionsFrameSliderScaleHigh:SetText("2.0");
+					</OnLoad>
+					<OnValueChanged>
+						CoordsTrackingOptions_SliderScaleOnValueChanged(self)
+					</OnValueChanged>
+					<OnMouseWheel>
+						CoordsTrackingOptions_OnMouseWheel(self, delta)
+					</OnMouseWheel>
+				</Scripts>
+			</Slider>
+			<Slider name="$ParentSliderAlpha" inherits="OptionsSliderTemplate">
+				<Size>
+					<AbsDimension x="360" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$ParentSliderScale" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-50" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:EnableMouseWheel(true)
+						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_TRANSPARENCY, 0, 1.0, 0.1);
+						CoordsTrackingOptionsFrameSliderAlphaLow:SetText("0.0");
+						CoordsTrackingOptionsFrameSliderAlphaHigh:SetText("1.0");
 					</OnLoad>
 					<OnValueChanged>
 						CoordsTrackingOptions_SliderAlphaOnValueChanged(self);
@@ -176,6 +202,32 @@ $Id$
 					</OnLoad>
 					<OnValueChanged>
 						CoordsTrackingOptions_SliderToolTipScaleOnValueChanged(self)
+					</OnValueChanged>
+					<OnMouseWheel>
+						CoordsTrackingOptions_OnMouseWheel(self, delta)
+					</OnMouseWheel>
+				</Scripts>
+			</Slider>
+			<Slider name="$ParentSliderToolTipAlpha" inherits="OptionsSliderTemplate">
+				<Size>
+					<AbsDimension x="360" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$ParentSliderToolTipScale" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-50" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:EnableMouseWheel(true)
+						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_TOOLTIPTRANSPARENCY, 0, 1.0, 0.01);
+						CoordsTrackingOptionsFrameSliderToolTipAlphaLow:SetText("0.00");
+						CoordsTrackingOptionsFrameSliderToolTipAlphaHigh:SetText("1.00");
+					</OnLoad>
+					<OnValueChanged>
+						CoordsTrackingOptions_SliderToolTipAlphaOnValueChanged(self);
 					</OnValueChanged>
 					<OnMouseWheel>
 						CoordsTrackingOptions_OnMouseWheel(self, delta)
