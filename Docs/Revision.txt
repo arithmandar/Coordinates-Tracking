@@ -3,6 +3,9 @@
 Revision History:
 =================
 
+* v1.06 (Feb. XX, 2017)
+-----------------------
+
 * v1.05 (Feb. 02, 2017)
 -----------------------
 - Fixed the issue that show tooltip's check-box didn't reflect the actual 
