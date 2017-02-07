@@ -3,6 +3,9 @@
 Revision History:
 =================
 
+* v1.07 (Feb. xx, 2017)
+-----------------------
+
 * v1.06 (Feb. 07, 2017)
 -----------------------
 - Supported in adjusting coordinate info's scale and transparency
