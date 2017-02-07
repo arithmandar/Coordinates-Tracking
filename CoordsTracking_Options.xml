@@ -144,9 +144,9 @@ $Id$
 				<Scripts>
 					<OnLoad>
 						self:EnableMouseWheel(true)
-						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_SCALE, 0.5, 2.0, 0.1);
+						CoordsTrackingOptions_SetupSlider(self, CRDS_OPT_SCALE, 0.5, 3.0, 0.1);
 						CoordsTrackingOptionsFrameSliderScaleLow:SetText("0.5");
-						CoordsTrackingOptionsFrameSliderScaleHigh:SetText("2.0");
+						CoordsTrackingOptionsFrameSliderScaleHigh:SetText("3.0");
 					</OnLoad>
 					<OnValueChanged>
 						CoordsTrackingOptions_SliderScaleOnValueChanged(self)
