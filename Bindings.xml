@@ -1,0 +1,11 @@
+<!--
+$Id$
+-->
+<Bindings>
+	<Binding name="COORDSTRACKING_TOGGLE" header="COORDSTRACKING_TITLE" category="ADDONS">
+		CoordsTrackingOptions_ShowOnScreenToggle();
+	</Binding>
+	<Binding name="COORDSTRACKING_WORLDMAP_TOGGLE" category="ADDONS">
+		CoordsTrackingOptions_ShowOnWorldMapToggle();
+	</Binding>
+</Bindings>
