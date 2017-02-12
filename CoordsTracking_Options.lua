@@ -54,14 +54,13 @@ end
 
 function CoordsTrackingOptions_ShowOnScreenToggle()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
+	options.show_coords_onscreen = not options.show_coords_onscreen;
 	
 	if(CoordsTrackingFrame:IsVisible()) then
 		CoordsTrackingFrame:Hide();
-		options.show_coords_onscreen = false;
 		CoordsTrackingOptionsFrame_ShowZoneName:Disable();
 	else
 		CoordsTrackingFrame:Show();
-		options.show_coords_onscreen = true;
 		CoordsTrackingOptionsFrame_ShowZoneName:Enable();
 	end
 end

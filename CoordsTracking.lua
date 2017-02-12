@@ -220,22 +220,24 @@ function CRDS_OnUpdate()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 	local posText = CRDS_GetButtonText();
 	if (posText ~= CRDS_POSTEXT) then
-		CoordsTrackingFrame.Text:SetText(posText);
-		CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth());
+		if (CoordsTrackingFrame:IsShown()) then
+			CoordsTrackingFrame.Text:SetText(posText);
+			CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth());
 
-		local pvpType = GetZonePVPInfo();
-		if ( pvpType == "sanctuary" ) then
-			CoordsTrackingFrame.Text:SetTextColor(0.41, 0.8, 0.94);
-		elseif ( pvpType == "arena" ) then
-			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
-		elseif ( pvpType == "friendly" ) then
-			CoordsTrackingFrame.Text:SetTextColor(0.1, 1.0, 0.1);
-		elseif ( pvpType == "hostile" ) then
-			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
-		elseif ( pvpType == "contested" ) then
-			CoordsTrackingFrame.Text:SetTextColor(1.0, 0.7, 0.0);
-		else
-			CoordsTrackingFrame.Text:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
+			local pvpType = GetZonePVPInfo();
+			if ( pvpType == "sanctuary" ) then
+				CoordsTrackingFrame.Text:SetTextColor(0.41, 0.8, 0.94);
+			elseif ( pvpType == "arena" ) then
+				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
+			elseif ( pvpType == "friendly" ) then
+				CoordsTrackingFrame.Text:SetTextColor(0.1, 1.0, 0.1);
+			elseif ( pvpType == "hostile" ) then
+				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
+			elseif ( pvpType == "contested" ) then
+				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.7, 0.0);
+			else
+				CoordsTrackingFrame.Text:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
+			end
 		end
 
 		LDB_CoordsTracking.text = HIGHLIGHT_FONT_COLOR_CODE..posText..FONT_COLOR_CODE_CLOSE;
