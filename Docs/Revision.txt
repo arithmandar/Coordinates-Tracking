@@ -3,6 +3,9 @@
 Revision History:
 =================
 
+* v1.09 (Feb. xx, 2017)
+-----------------------
+
 * v1.08 (Feb. 12, 2017)
 -----------------------
 - Fixed the issue the LDB text won't show or update properly when on-screen 
