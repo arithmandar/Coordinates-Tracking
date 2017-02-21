@@ -5,6 +5,10 @@ Revision History:
 
 * v1.10 (Feb. 21, 2017)
 -----------------------
+- Fixed error while player is in a contested zone.
+- Zone text now will have text color based on PvP type on LDB-suported frame
+- Fixed the issue that on-screen showing's toggle won't immediately show it
+  when it was set to disable in a fresh login.
 
 * v1.09 (Feb. 21, 2017)
 -----------------------

@@ -44,6 +44,14 @@ function CoordsTrackingOptions_OnShow()
 	CoordsTrackingOptionsFrameSliderScale:SetValue(options.scale);
 	CoordsTrackingOptionsFrameSliderToolTipAlpha:SetValue(options.tooltip_alpha);
 	CoordsTrackingOptionsFrameSliderToolTipScale:SetValue(options.tooltip_scale);
+
+	if(not options.show_coords_onscreen) then
+		CoordsTrackingOptionsFrame_ShowZoneName:Disable();
+		CoordsTrackingOptionsFrame_ShowZoneNameTooltip:Disable();
+	else
+		CoordsTrackingOptionsFrame_ShowZoneName:Enable();
+		CoordsTrackingOptionsFrame_ShowZoneNameTooltip:Enable();
+	end
 end
 
 function CoordsTrackingOptions_OnHide(self)
@@ -59,9 +67,11 @@ function CoordsTrackingOptions_ShowOnScreenToggle()
 	if(CoordsTrackingFrame:IsVisible()) then
 		CoordsTrackingFrame:Hide();
 		CoordsTrackingOptionsFrame_ShowZoneName:Disable();
+		CoordsTrackingOptionsFrame_ShowZoneNameTooltip:Disable();
 	else
 		CoordsTrackingFrame:Show();
 		CoordsTrackingOptionsFrame_ShowZoneName:Enable();
+		CoordsTrackingOptionsFrame_ShowZoneNameTooltip:Enable();
 	end
 end
 

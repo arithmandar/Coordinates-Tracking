@@ -220,27 +220,32 @@ function CRDS_OnUpdate()
 	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
 	local posText = CRDS_GetButtonText();
 	if (posText ~= CRDS_POSTEXT) then
+		local pvpType = GetZonePVPInfo();
+		local color = {};
+
+		if ( pvpType == "sanctuary" ) then
+			color = {r=0.41, g=0.8, b=0.94};
+		elseif ( pvpType == "arena" ) then
+			color = {r=1.0, g=0.1, b=0.1};
+		elseif ( pvpType == "friendly" ) then
+			color = {r=0.1, g=1.0, b=0.1};
+		elseif ( pvpType == "hostile" ) then
+			color = {r=1.0, g=0.1, b=0.1};
+		elseif ( pvpType == "contested" ) then
+			color = {r=1.0, g=0.7, b=0.0};
+		else
+			color = {r=HIGHLIGHT_FONT_COLOR.r, g=HIGHLIGHT_FONT_COLOR.g, b=HIGHLIGHT_FONT_COLOR.b};
+		end
+
+		local colortag = string.format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255);
+
 		if (CoordsTrackingFrame:IsShown()) then
 			CoordsTrackingFrame.Text:SetText(posText);
 			CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth());
-
-			local pvpType = GetZonePVPInfo();
-			if ( pvpType == "sanctuary" ) then
-				CoordsTrackingFrame.Text:SetTextColor(0.41, 0.8, 0.94);
-			elseif ( pvpType == "arena" ) then
-				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
-			elseif ( pvpType == "friendly" ) then
-				CoordsTrackingFrame.Text:SetTextColor(0.1, 1.0, 0.1);
-			elseif ( pvpType == "hostile" ) then
-				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.1, 0.1);
-			elseif ( pvpType == "contested" ) then
-				CoordsTrackingFrame.Text:SetTextColor(1.0, 0.7, 0.0);
-			else
-				CoordsTrackingFrame.Text:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
-			end
+			CoordsTrackingFrame.Text:SetTextColor(color.r, color.g, color.b);
 		end
 
-		LDB_CoordsTracking.text = HIGHLIGHT_FONT_COLOR_CODE..posText..FONT_COLOR_CODE_CLOSE;
+		LDB_CoordsTracking.text = colortag..posText..FONT_COLOR_CODE_CLOSE;
 		CRDS_POSTEXT = posText;
 	end
 
@@ -253,6 +258,10 @@ function CRDS_OnUpdate()
 			CoordsOnWorldMapFrameCursorText:SetText("");
 		end
 	end
+end
+
+function CRDS_OnShow()
+	CRDS_POSTEXT = nil;
 end
 
 function CRDS_OnMouseDown(self, buttonName)    
@@ -304,7 +313,7 @@ function CRDS_OnEnter(self)
 					GameTooltip:SetText( zoneText, 1.0, 0.1, 0.1 );	
 					GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1);
 				elseif ( pvpType == "contested" ) then
-					GameTooltip:SetText( subzoneName.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 );	
+					GameTooltip:SetText( zoneText.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 );	
 				elseif ( pvpType == "combat" ) then
 					GameTooltip:SetText( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 );	
 				else

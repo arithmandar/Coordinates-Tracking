@@ -44,6 +44,9 @@
 					<OnMouseUp>
 						CRDS_OnMouseUp(self, button);
 					</OnMouseUp>
+					<OnShow>
+						CRDS_OnShow(self);
+					</OnShow>
 				</Scripts>
 			</Button>
 		</Frames>
