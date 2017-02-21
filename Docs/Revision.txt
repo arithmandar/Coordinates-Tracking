@@ -3,6 +3,9 @@
 Revision History:
 =================
 
+* v1.11 (Feb. xx, 2017)
+-----------------------
+
 * v1.10 (Feb. 21, 2017)
 -----------------------
 - Fixed error while player is in a contested zone.
