@@ -7,11 +7,21 @@ manual-changelog:
 enable-nolib-creation: yes
 
 externals:
-    Libs/AceLocale-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
-    Libs/CallbackHandler-1.0: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
-    Libs/LibAboutPanel: git://git.curseforge.net/wow/libaboutpanel/mainline.git
-    Libs/LibDataBroker-1.1: git://git.wowace.com/wow/libdatabroker-1-1/mainline.git
-    Libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
+# SVN
+    Libs/AceLocale-3.0: 
+        url: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
+# SVN
+    Libs/CallbackHandler-1.0: 
+        url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+# Git
+    Libs/LibAboutPanel: 
+        url: https://repos.curseforge.com/wow/libaboutpanel
+# Git
+    Libs/LibDataBroker-1.1: 
+        url: https://repos.wowace.com/wow/libdatabroker-1-1
+# SVN
+    Libs/LibStub: 
+        url: https://repos.wowace.com/wow/libstub/trunk
 
 license-output: Docs/LICENSE.txt
 
