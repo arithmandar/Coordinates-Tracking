@@ -52,10 +52,11 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>
-				CRDS_OnLoad(self);
+				--CRDS_OnLoad(self);
+				self:RegisterForDrag("LeftButton");
 			</OnLoad>
 			<OnEvent>
-				CRDS_OnEvent(self, event, ...);
+				--CRDS_OnEvent(self, event, ...);
 			</OnEvent>
 			<OnUpdate>
 				CRDS_OnUpdate(self);
@@ -76,8 +77,8 @@
 		</Anchors>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString name="$parentPlayerText" inherits="NumberFontNormal" key="playerTxt" JustifyH="LEFT" />
-				<FontString name="$parentCursorText" inherits="NumberFontNormal" key="cursorTxt" JustifyH="LEFT">
+				<FontString name="$parentPlayerText" inherits="NumberFontNormal" parentKey="playerTxt" JustifyH="LEFT" />
+				<FontString name="$parentCursorText" inherits="NumberFontNormal" parentKey="cursorTxt" JustifyH="LEFT">
 					<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="$parentPlayerText" relativePoint="TOPRIGHT">
 							<Offset>

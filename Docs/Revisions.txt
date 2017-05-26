@@ -3,6 +3,15 @@
 Revision History:
 =================
 
+* v2.00 (May xx, 2017)
+-----------------------
+- Migrated option toggling to Ace library
+  - Option settings will need to be reconfigured since this release
+- Introduced LibSharedMedia-3.0 to provide more font's options
+- User now can configure the coordinate's accuracy for on-screen and worldmap separately
+- Now if you have ever temporary disable CoorsTracking, it will restore the on-screen frame's
+  position when the next time you enable it. 
+
 * v1.11 (Mar. 27, 2017)
 -----------------------
 - Toc update to support WoW 7.2

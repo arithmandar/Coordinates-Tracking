@@ -29,21 +29,22 @@
 ## Notes: Tracks on your current coordinates and shows in on the screen and world map.
 ## Notes-zhTW: |cff00CC33追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上|r
 #@end-debug@
-## Author: @project-author@
-## Version: 1.11
-## OptionalDeps: LibDataBroker-1.1, LibAboutPanel, CallbackHandler-1.0, LibStub, AceLocale-3.0
+## Author: arith
+## Version: @project-version@
+## OptionalDeps: Ace3, LibDataBroker-1.1, LibAboutPanel, CallbackHandler-1.0, LibStub, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
 ## DefaultState: Enabled
 ## SavedVariables: CoordsTrackingDB
 ## X-Date: @project-date-iso@
-## X-Donate: https://pledgie.com/campaigns/31749
-## X-Website: http://mods.curse.com/addons/wow/currency-tracking
+## X-Donate: https://pledgie.com/campaigns/33899
+## X-Website: https://wow.curseforge.com/projects/coordstracking
 ## X-License: GPLv2
 ## X-Category: Information
-## X-Localizations: enUS, zhTW, zhCN
+## X-Localizations: enUS, zhTW, zhCN, deDE
 
-Embeds.xml
+Libs\Libs.xml
 Locale\Locales.xml
-CoordsTracking.lua
-CoordsTracking.xml
-CoordsTracking_Options.xml
 
+Core\Constants.lua
+Core\Core.lua
+Core\Core.xml
+Core\Config.lua
