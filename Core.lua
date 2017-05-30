@@ -365,9 +365,7 @@ function addon:OnEnable()
 	end
 
 	setupLDB()
-	onscreenFrameStatusRefresh()
-	addon:SetOnScreenFontStyle()
-	addon:SetWorldMapFontStyle()
+	self:Refresh()
 end
 
 function addon:Refresh()
