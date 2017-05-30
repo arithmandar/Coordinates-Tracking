@@ -18,7 +18,12 @@ local FOLDER_NAME, private = ...
 local LibStub = _G.LibStub
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
 local AceDB = LibStub("AceDB-3.0")
-local LDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(private.addon_name)
+local LDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(private.addon_name, {
+	type = "data source",
+	text = L["TITLE"],
+	label = L["TITLE"],
+	icon = "Interface\\MINIMAP\\MinimapArrow",
+});
 local Media = LibStub("LibSharedMedia-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon(private.addon_name, "AceEvent-3.0")
@@ -252,6 +257,36 @@ function CRDS_OnMouseUp(self, buttonName)
 	end
 end
 
+local function get_zonename_tooltip(frame)
+	if (not GameTooltip:IsShown()) then
+		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
+		local zoneText = CRDS_GetZoneText()
+		if frame then GameTooltip:SetOwner(frame, "ANCHOR_BOTTOM", -10, 0) end
+		GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
+		if ( pvpType == "sanctuary" ) then
+			GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 )
+		elseif ( pvpType == "arena" ) then
+			GameTooltip:SetText( zoneText.." "..FREE_FOR_ALL_TERRITORY, 1.0, 0.1, 0.1 )	
+		elseif ( pvpType == "friendly" ) then
+			GameTooltip:SetText( zoneText, 0.1, 1.0, 0.1 )
+			GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 0.1, 1.0, 0.1)
+		elseif ( pvpType == "hostile" ) then
+			GameTooltip:SetText( zoneText, 1.0, 0.1, 0.1 )
+			GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1)
+		elseif ( pvpType == "contested" ) then
+			GameTooltip:SetText( zoneText.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 )	
+		elseif ( pvpType == "combat" ) then
+			GameTooltip:SetText( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 )
+		else
+			GameTooltip:SetText( zoneText, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b )
+		end
+		GameTooltip:SetScale(profile.tooltip_scale)
+		GameTooltip:Show()
+	else
+		GameTooltip:Hide()
+	end
+end
+
 function CRDS_OnEnter(self)
 	if (isInLockdown) then
 		return
@@ -259,33 +294,7 @@ function CRDS_OnEnter(self)
 
 	if (profile.show_zonenametooltip) then
 		if(CoordsTrackingFrame:IsVisible()) then
-			if (not GameTooltip:IsShown()) then
-				local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
-				local zoneText = CRDS_GetZoneText()
-				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", -10, 0);
-				GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
-				if ( pvpType == "sanctuary" ) then
-					GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 );
-				elseif ( pvpType == "arena" ) then
-					GameTooltip:SetText( zoneText.." "..FREE_FOR_ALL_TERRITORY, 1.0, 0.1, 0.1 )	
-				elseif ( pvpType == "friendly" ) then
-					GameTooltip:SetText( zoneText, 0.1, 1.0, 0.1 )
-					GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 0.1, 1.0, 0.1)
-				elseif ( pvpType == "hostile" ) then
-					GameTooltip:SetText( zoneText, 1.0, 0.1, 0.1 )
-					GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1)
-				elseif ( pvpType == "contested" ) then
-					GameTooltip:SetText( zoneText.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 )	
-				elseif ( pvpType == "combat" ) then
-					GameTooltip:SetText( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 )
-				else
-					GameTooltip:SetText( zoneText, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b )
-				end
-				GameTooltip:SetScale(profile.tooltip_scale)
-				GameTooltip:Show()
-			else
-				GameTooltip:Hide()
-			end
+			get_zonename_tooltip(self)
 		end
 	end
 end
@@ -312,23 +321,12 @@ end
 
 local function setupLDB()
 	-- setup LDB
-	LDB.type = "data source"
-	LDB.text = L["TITLE"]
-	LDB.label = L["TITLE"]
-	LDB.icon = "Interface\\MINIMAP\\MinimapArrow"
-	LDB.OnClick = (function(self, button)
-		if button == "LeftButton" then
-			CRDS_OnClick()
-		elseif button == "RightButton" then
-			addon:OpenOptions()
-		end
-	end)
+	LDB.text = CRDS_GetButtonText()
+	LDB.OnClick = (function(self, button) addon:OpenOptions() end)
 	LDB.OnTooltipShow = (function(tooltip)
 		if not tooltip or not tooltip.AddLine then return end
 		if (profile.show_zonenametooltip) then
-			GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
-			GameTooltip:SetText(CRDS_GetZoneText(), 1, 1, 1, nil, 1)
-			GameTooltip:SetScale(profile.tooltip_scale)
+			get_zonename_tooltip()
 		end
 	end)
 end
