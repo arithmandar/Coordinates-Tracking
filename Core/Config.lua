@@ -19,6 +19,8 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
 local Media = LibStub("LibSharedMedia-3.0")
 
+local profile
+
 local optGetter, optSetter
 do
 	function optGetter(info)
@@ -36,6 +38,7 @@ end
 local options, moduleOptions = nil, {}
 
 local function getOptions()
+	profile = addon.db.profile
 	if not options then
 		options = {
 			type = "group",
@@ -71,6 +74,9 @@ local function getOptions()
 									type = "toggle",
 									name = L["Show zone name together with coordinates"],
 									width = "full",
+									--disabled = function()
+									--	return not profile.show_coords_onscreen
+									--end,
 								},
 								show_zonenametooltip = {
 									order = 13,
@@ -90,8 +96,8 @@ local function getOptions()
 									name = L["Reset position"],
 									func = function()
 										CoordsTrackingFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", 450, -80)
-										addon.db.profile.offsetx = 450
-										addon.db.profile.offsety = -80
+										profile.offsetx = 450
+										profile.offsety = -80
 									end,
 								},
 							},
@@ -113,10 +119,10 @@ local function getOptions()
 											dialogControl = 'LSM30_Font',
 											name = L["Select font"],
 											get = function()
-												return addon.db.profile.font_onscreen
+												return profile.font_onscreen
 											end,
 											set = function(info, value)
-												addon.db.profile.font_onscreen = value
+												profile.font_onscreen = value
 												addon:SetOnScreenFontStyle()
 											end,
 											values = AceGUIWidgetLSMlists.font,
@@ -127,10 +133,10 @@ local function getOptions()
 											name = L["Configure font size"],
 											min = 7, max = 20, step = 1,
 											get = function() 
-												return addon.db.profile.fontsize_onscreen
+												return profile.fontsize_onscreen
 											end,
 											set = function(info, value)
-												addon.db.profile.fontsize_onscreen = value
+												profile.fontsize_onscreen = value
 												addon:SetOnScreenFontStyle()
 											end,
 										},
@@ -152,10 +158,10 @@ local function getOptions()
 											dialogControl = 'LSM30_Font',
 											name = L["Select font"],
 											get = function()
-												return addon.db.profile.font_worldmap
+												return profile.font_worldmap
 											end,
 											set = function(info, value)
-												addon.db.profile.font_worldmap =  value
+												profile.font_worldmap =  value
 												addon:SetWorldMapFontStyle()
 											end,
 											values = AceGUIWidgetLSMlists.font,
@@ -166,10 +172,10 @@ local function getOptions()
 											name = L["Configure font size"],
 											min = 7, max = 20, step = 1,
 											get = function() 
-												return addon.db.profile.fontsize_worldmap
+												return profile.fontsize_worldmap
 											end,
 											set = function(info, value)
-												addon.db.profile.fontsize_worldmap = value
+												profile.fontsize_worldmap = value
 												addon:SetWorldMapFontStyle()
 											end,
 										},
@@ -201,10 +207,10 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.coords_accuracy
+												return profile.coords_accuracy
 											end,
 											set = function(info, value)
-												addon.db.profile.coords_accuracy = value
+												profile.coords_accuracy = value
 											end,
 										},
 										worldmap_accuracy = {
@@ -215,10 +221,10 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.worldmap_accuracy
+												return profile.worldmap_accuracy
 											end,
 											set = function(info, value)
-												addon.db.profile.worldmap_accuracy = value
+												profile.worldmap_accuracy = value
 											end,
 										},
 									},
@@ -236,12 +242,12 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.alpha
+												return profile.alpha
 											end,
 											set = function(info, value)
-												addon.db.profile.alpha = value
+												profile.alpha = value
 												local f = _G["CoordsTrackingFrame"]
-												f:SetAlpha(addon.db.profile.alpha)
+												f:SetAlpha(profile.alpha)
 											end,
 										},
 										scale = {
@@ -252,12 +258,12 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.scale
+												return profile.scale
 											end,
 											set = function(info, value)
-												addon.db.profile.scale = value
+												profile.scale = value
 												local f = _G["CoordsTrackingFrame"]
-												f:SetScale(addon.db.profile.scale)
+												f:SetScale(profile.scale)
 											end,
 										},
 									},
@@ -275,10 +281,10 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.tooltip_alpha
+												return profile.tooltip_alpha
 											end,
 											set = function(info, value)
-												addon.db.profile.tooltip_alpha = value
+												profile.tooltip_alpha = value
 											end,
 										},
 										tooltip_scale = {
@@ -289,10 +295,10 @@ local function getOptions()
 											--isPercent = true,
 											--width = "full",
 											get = function()
-												return addon.db.profile.tooltip_scale
+												return profile.tooltip_scale
 											end,
 											set = function(info, value)
-												addon.db.profile.tooltip_scale = value
+												profile.tooltip_scale = value
 											end,
 										},
 									},
@@ -335,6 +341,11 @@ function addon:SetupOptions()
 	self.optionsFrames.General = AceConfigDialog:AddToBlizOptions(addon.LocName, nil, nil, "general")
 
 	self:RegisterModuleOptions("Profiles", giveProfiles, L["Profile Options"])
+
+	-- Add in the about panel to the Bliz options (not a part of the ace3 config)
+	if LibStub:GetLibrary("LibAboutPanel", true) then
+		self.optionsFrames["About"] = LibStub:GetLibrary("LibAboutPanel").new(addon.LocName, addon.Name)
+	end
 end
 
 -- Description: Function which extends our options table in a modular way
