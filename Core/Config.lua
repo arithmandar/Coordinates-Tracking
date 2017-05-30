@@ -102,79 +102,83 @@ local function getOptions()
 							name = L["Font Settings"],
 							inline = true,
 							args = {
-								header21 = {
+								group21 = {
 									order = 10,
-									type = "header",
+									type = "group",
 									name = L["Setup font style for on-screen frame"],
+									args = {
+										font_onscreen = {
+											order = 11,
+											type = "select",
+											dialogControl = 'LSM30_Font',
+											name = L["Select font"],
+											get = function()
+												return addon.db.profile.font_onscreen
+											end,
+											set = function(info, value)
+												addon.db.profile.font_onscreen = value
+												addon:SetOnScreenFontStyle()
+											end,
+											values = AceGUIWidgetLSMlists.font,
+										},
+										fontsize_onscreen = {
+											order = 12, 
+											type = "range",
+											name = L["Configure font size"],
+											min = 7, max = 20, step = 1,
+											get = function() 
+												return addon.db.profile.fontsize_onscreen
+											end,
+											set = function(info, value)
+												addon.db.profile.fontsize_onscreen = value
+												addon:SetOnScreenFontStyle()
+											end,
+										},
+										fontoutline_onscreen = {
+											order = 13, 
+											type = "toggle",
+											name = L["Show outline"],
+										},
+									},
 								},
-								font_onscreen = {
-									order = 11,
-									type = "select",
-									dialogControl = 'LSM30_Font',
-									name = L["Select font"],
-									get = function()
-										return addon.db.profile.font_onscreen
-									end,
-									set = function(info, value)
-										addon.db.profile.font_onscreen = value
-										addon:SetOnScreenFontStyle()
-									end,
-									values = AceGUIWidgetLSMlists.font,
-								},
-								fontsize_onscreen = {
-									order = 12, 
-									type = "range",
-									name = L["Configure font size"],
-									min = 7, max = 20, step = 1,
-									get = function() 
-										return addon.db.profile.fontsize_onscreen
-									end,
-									set = function(info, value)
-										addon.db.profile.fontsize_onscreen = value
-										addon:SetOnScreenFontStyle()
-									end,
-								},
-								fontoutline_onscreen = {
-									order = 13, 
-									type = "toggle",
-									name = L["Show outline"],
-								},
-								header22 = {
+								group22 = {
 									order = 20,
-									type = "header",
+									type = "group",
 									name = L["Setup font style for coordinates on WorldMap frame"],
-								},
-								font_worldmap = {
-									order = 21,
-									type = "select",
-									dialogControl = 'LSM30_Font',
-									name = L["Select font"],
-									get = function()
-										return addon.db.profile.font_worldmap
-									end,
-									set = function(info, value)
-										addon.db.profile.font_worldmap =  value
-										addon:SetWorldMapFontStyle()
-									end,
-									values = AceGUIWidgetLSMlists.font,
-								},
-								fontsize_worldmap = {
-									order = 22, 
-									type = "range",
-									name = L["Configure font size"],
-									min = 7, max = 20, step = 1,
-									get = function() 
-										return addon.db.profile.fontsize_worldmap
-									end,
-									set = function(info, value)
-										addon.db.profile.fontsize_worldmap = value
-										addon:SetWorldMapFontStyle()
-									end,
-								},
-								fontoutline_worldmap = {
-									order = 23, 
-									type = "toggle",
-									name = L["Show outline"],
+									args = {
+										font_worldmap = {
+											order = 21,
+											type = "select",
+											dialogControl = 'LSM30_Font',
+											name = L["Select font"],
+											get = function()
+												return addon.db.profile.font_worldmap
+											end,
+											set = function(info, value)
+												addon.db.profile.font_worldmap =  value
+												addon:SetWorldMapFontStyle()
+											end,
+											values = AceGUIWidgetLSMlists.font,
+										},
+										fontsize_worldmap = {
+											order = 22, 
+											type = "range",
+											name = L["Configure font size"],
+											min = 7, max = 20, step = 1,
+											get = function() 
+												return addon.db.profile.fontsize_worldmap
+											end,
+											set = function(info, value)
+												addon.db.profile.fontsize_worldmap = value
+												addon:SetWorldMapFontStyle()
+											end,
+										},
+										fontoutline_worldmap = {
+											order = 23, 
+											type = "toggle",
+											name = L["Show outline"],
+										},
+									},
 								},
 							},
 						},
@@ -184,108 +188,114 @@ local function getOptions()
 							name = L["Scale and Transparency"],
 							inline = true,
 							args = {
-								header31 = {
+								group31 = {
 									order = 10,
-									type = "header",
+									type = "group",
 									name = L["Accuracy"],
+									args = {
+										coords_accuracy = {
+											order = 11,
+											type = "range",
+											name = L["Coordinates' accuracy"],
+											min = 0, max = 2, bigStep = 1, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.coords_accuracy
+											end,
+											set = function(info, value)
+												addon.db.profile.coords_accuracy = value
+											end,
+										},
+										worldmap_accuracy = {
+											order = 12,
+											type = "range",
+											name = L["Coordinates' accuracy on WorldMap Frame"],
+											min = 0, max = 2, bigStep = 1, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.worldmap_accuracy
+											end,
+											set = function(info, value)
+												addon.db.profile.worldmap_accuracy = value
+											end,
+										},
+									},
 								},
-								coords_accuracy = {
-									order = 11,
-									type = "range",
-									name = L["Coordinates' accuracy"],
-									min = 0, max = 2, bigStep = 1, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.coords_accuracy
-									end,
-									set = function(info, value)
-										addon.db.profile.coords_accuracy = value
-									end,
-								},
-								worldmap_accuracy = {
-									order = 12,
-									type = "range",
-									name = L["Coordinates' accuracy on WorldMap Frame"],
-									min = 0, max = 2, bigStep = 1, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.worldmap_accuracy
-									end,
-									set = function(info, value)
-										addon.db.profile.worldmap_accuracy = value
-									end,
-								},
-								header32 = {
+								group32 = {
 									order = 20,
-									type = "header",
+									type = "group",
 									name = L["On-screen frame"],
+									args = {
+										alpha = {
+											order = 21,
+											type = "range",
+											name = L["Coordinates info's transparency"],
+											min = 0, max = 1, bigStep = 0.1, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.alpha
+											end,
+											set = function(info, value)
+												addon.db.profile.alpha = value
+												local f = _G["CoordsTrackingFrame"]
+												f:SetAlpha(addon.db.profile.alpha)
+											end,
+										},
+										scale = {
+											order = 22,
+											type = "range",
+											name = L["Coordinates info's scale"],
+											min = 0, max = 3, bigStep = 0.1, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.scale
+											end,
+											set = function(info, value)
+												addon.db.profile.scale = value
+												local f = _G["CoordsTrackingFrame"]
+												f:SetScale(addon.db.profile.scale)
+											end,
+										},
+									},
 								},
-								alpha = {
-									order = 21,
-									type = "range",
-									name = L["Coordinates info's transparency"],
-									min = 0, max = 1, bigStep = 0.1, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.alpha
-									end,
-									set = function(info, value)
-										addon.db.profile.alpha = value
-										local f = _G["CoordsTrackingFrame"]
-										f:SetAlpha(addon.db.profile.alph)
-									end,
-								},
-								scale = {
-									order = 22,
-									type = "range",
-									name = L["Coordinates info's scale"],
-									min = 0, max = 3, bigStep = 0.1, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.scale
-									end,
-									set = function(info, value)
-										addon.db.profile.scale = value
-										local f = _G["CoordsTrackingFrame"]
-										f:SetScale(addon.db.profile.scale)
-									end,
-								},
-								header33 = {
+								group33 = {
 									order = 30,
-									type = "header",
+									type = "group",
 									name = L["Tooltip"],
-								},
-								tooltip_alpha = {
-									order = 33,
-									type = "range",
-									name = L["Coordinates info tooltip's transparency"],
-									min = 0, max = 1, bigStep = 0.1, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.tooltip_alpha
-									end,
-									set = function(info, value)
-										addon.db.profile.tooltip_alpha = value
-									end,
-								},
-								tooltip_scale = {
-									order = 34,
-									type = "range",
-									name = L["Coordinates info tooltip's scale"],
-									min = 0, max = 1.75, bigStep = 0.01, 
-									--isPercent = true,
-									--width = "full",
-									get = function()
-										return addon.db.profile.tooltip_scale
-									end,
-									set = function(info, value)
-										addon.db.profile.tooltip_scale = value
-									end,
+									args = {
+										tooltip_alpha = {
+											order = 33,
+											type = "range",
+											name = L["Coordinates info tooltip's transparency"],
+											min = 0, max = 1, bigStep = 0.1, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.tooltip_alpha
+											end,
+											set = function(info, value)
+												addon.db.profile.tooltip_alpha = value
+											end,
+										},
+										tooltip_scale = {
+											order = 34,
+											type = "range",
+											name = L["Coordinates info tooltip's scale"],
+											min = 0, max = 1.75, bigStep = 0.01, 
+											--isPercent = true,
+											--width = "full",
+											get = function()
+												return addon.db.profile.tooltip_scale
+											end,
+											set = function(info, value)
+												addon.db.profile.tooltip_scale = value
+											end,
+										},
+									},
 								},
 							},
 						},
