@@ -11,6 +11,9 @@ Revision History:
 - User now can configure the coordinate's accuracy for on-screen and worldmap separately
 - Now if you have ever temporary disable CoorsTracking, it will restore the on-screen frame's
   position when the next time you enable it. 
+- Enhanced to support ChocolateBar Broker Display
+- Translation updated:
+  - Korean (next96)
 
 * v1.11 (Mar. 27, 2017)
 -----------------------
