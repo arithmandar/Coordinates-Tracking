@@ -3,7 +3,7 @@
 Revision History:
 =================
 
-* v2.00 (May xx, 2017)
+* v2.00 (May 31, 2017)
 -----------------------
 - Migrated option toggling to Ace library
   - Option settings will need to be reconfigured since this release
