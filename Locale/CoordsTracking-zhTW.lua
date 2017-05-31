@@ -28,16 +28,12 @@ L["Setup font style for coordinates on WorldMap frame"] = "設定世界地圖上
 L["Select font"] = "選擇字形"
 L["Configure font size"] = "設定字體大小"
 L["Show outline"] = "使用外框字型"
-L["Accuracy"] = "精確度"
 L["Coordinates' accuracy"] = "座標資訊精確度"
-L["Coordinates' accuracy on WorldMap Frame"] = "世界地圖上的座標資訊精確度"
 L["On-screen frame"] = "遊戲畫面窗格"
-L["Coordinates info's transparency"] = "座標資訊的透明度"
-L["Coordinates info's scale"] = "座標資訊的大小比例"
 L["Tooltip"] = "提示訊息"
-L["Coordinates info tooltip's transparency"] = "座標資訊提示的透明度"
-L["Coordinates info tooltip's scale"] = "座標資訊提示的大小比例"
 L["Profile Options"] = "選項設定"
+L["Scale"] = "大小"
+L["Transparency"] = "透明度"
 --@end-do-not-package@
 --@localization(locale="zhTW", format="lua_additive_table")@
 end

@@ -61,7 +61,7 @@ local function getOptions()
 							order = 10,
 							type = "group",
 							name = L["Display Settings"],
-							inline = true,
+							--inline = true,
 							args = {
 								show_coords_onscreen = {
 									order = 11,
@@ -106,12 +106,13 @@ local function getOptions()
 							order = 20,
 							type = "group",
 							name = L["Font Settings"],
-							inline = true,
+							--inline = true,
 							args = {
 								group21 = {
 									order = 10,
 									type = "group",
 									name = L["Setup font style for on-screen frame"],
+									inline = true,
 									args = {
 										font_onscreen = {
 											order = 11,
@@ -151,6 +152,7 @@ local function getOptions()
 									order = 20,
 									type = "group",
 									name = L["Setup font style for coordinates on WorldMap frame"],
+									inline = true,
 									args = {
 										font_worldmap = {
 											order = 21,
@@ -191,115 +193,66 @@ local function getOptions()
 						group3 = {
 							order = 30,
 							type = "group",
-							name = L["Scale and Transparency"],
-							inline = true,
+							name = L["Coordinates' accuracy"],
+							--inline = true,
 							args = {
-								group31 = {
-									order = 10,
-									type = "group",
-									name = L["Accuracy"],
-									args = {
-										coords_accuracy = {
-											order = 11,
-											type = "range",
-											name = L["Coordinates' accuracy"],
-											min = 0, max = 2, bigStep = 1, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.coords_accuracy
-											end,
-											set = function(info, value)
-												profile.coords_accuracy = value
-											end,
-										},
-										worldmap_accuracy = {
-											order = 12,
-											type = "range",
-											name = L["Coordinates' accuracy on WorldMap Frame"],
-											min = 0, max = 2, bigStep = 1, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.worldmap_accuracy
-											end,
-											set = function(info, value)
-												profile.worldmap_accuracy = value
-											end,
-										},
-									},
+								coords_accuracy = {
+									order = 11,
+									type = "range",
+									name = L["On-screen frame"],
+									min = 0, max = 4, bigStep = 1, 
 								},
-								group32 = {
+								worldmap_accuracy = {
+									order = 12,
+									type = "range",
+									name = WORLD_MAP,
+									min = 0, max = 4, bigStep = 1, 
+								},
+							},
+						},
+						group4 = {
+							order = 40,
+							type = "group",
+							name = L["Scale and Transparency"],
+							--inline = true,
+							args = {
+								group41 = {
 									order = 20,
 									type = "group",
 									name = L["On-screen frame"],
+									inline = true,
 									args = {
 										alpha = {
 											order = 21,
 											type = "range",
-											name = L["Coordinates info's transparency"],
+											name = L["Transparency"],
 											min = 0, max = 1, bigStep = 0.1, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.alpha
-											end,
-											set = function(info, value)
-												profile.alpha = value
-												local f = _G["CoordsTrackingFrame"]
-												f:SetAlpha(profile.alpha)
-											end,
 										},
 										scale = {
 											order = 22,
 											type = "range",
-											name = L["Coordinates info's scale"],
+											name = L["Scale"],
 											min = 0, max = 3, bigStep = 0.1, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.scale
-											end,
-											set = function(info, value)
-												profile.scale = value
-												local f = _G["CoordsTrackingFrame"]
-												f:SetScale(profile.scale)
-											end,
 										},
 									},
 								},
-								group33 = {
+								group42 = {
 									order = 30,
 									type = "group",
 									name = L["Tooltip"],
+									inline = true,
 									args = {
 										tooltip_alpha = {
 											order = 33,
 											type = "range",
-											name = L["Coordinates info tooltip's transparency"],
+											name = L["Transparency"],
 											min = 0, max = 1, bigStep = 0.1, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.tooltip_alpha
-											end,
-											set = function(info, value)
-												profile.tooltip_alpha = value
-											end,
 										},
 										tooltip_scale = {
 											order = 34,
 											type = "range",
-											name = L["Coordinates info tooltip's scale"],
+											name = L["Scale"],
 											min = 0, max = 1.75, bigStep = 0.01, 
-											--isPercent = true,
-											--width = "full",
-											get = function()
-												return profile.tooltip_scale
-											end,
-											set = function(info, value)
-												profile.tooltip_scale = value
-											end,
 										},
 									},
 								},

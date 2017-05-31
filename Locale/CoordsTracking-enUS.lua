@@ -27,16 +27,12 @@ L["Setup font style for coordinates on WorldMap frame"] = "Setup font style for 
 L["Select font"] = "Select font"
 L["Configure font size"] = "Configure font size"
 L["Show outline"] = "Show outline"
-L["Accuracy"] = "Accuracy"
 L["Coordinates' accuracy"] = "Coordinates' accuracy"
-L["Coordinates' accuracy on WorldMap Frame"] = "Coordinates' accuracy on WorldMap Frame"
 L["On-screen frame"] = "On-screen frame"
-L["Coordinates info's transparency"] = "Coordinates info's transparency"
-L["Coordinates info's scale"] = "Coordinates info's scale"
 L["Tooltip"] = "Tooltip"
-L["Coordinates info tooltip's transparency"] = "Coordinates info tooltip's transparency"
-L["Coordinates info tooltip's scale"] = "Coordinates info tooltip's scale"
 L["Profile Options"] = "Profile Options"
+L["Scale"] = "Scale"
+L["Transparency"] = "Transparency"
 --@end-do-not-package@
 --@localization(locale="enUS", format="lua_additive_table")@
 end
