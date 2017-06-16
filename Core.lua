@@ -312,7 +312,7 @@ local function onscreenFrameStatusRefresh()
 		f:SetScale(profile.scale)
 		local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
 		f:ClearAllPoints()
-		f:SetParent(UIParent)
+		f:SetParent("UIParent")
 		f:SetPoint(point or "TOPLEFT", nil, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 	elseif (f) then
 		f:Hide()
