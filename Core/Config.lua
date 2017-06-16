@@ -294,11 +294,6 @@ function addon:SetupOptions()
 	self.optionsFrames.General = AceConfigDialog:AddToBlizOptions(addon.LocName, nil, nil, "general")
 
 	self:RegisterModuleOptions("Profiles", giveProfiles, L["Profile Options"])
-
-	-- Add in the about panel to the Bliz options (not a part of the ace3 config)
-	if LibStub:GetLibrary("LibAboutPanel", true) then
-		self.optionsFrames["About"] = LibStub:GetLibrary("LibAboutPanel").new(addon.LocName, addon.Name)
-	end
 end
 
 -- Description: Function which extends our options table in a modular way

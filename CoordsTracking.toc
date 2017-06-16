@@ -31,7 +31,7 @@
 #@end-debug@
 ## Author: arith
 ## Version: @project-version@
-## OptionalDeps: Ace3, LibDataBroker-1.1, LibAboutPanel, CallbackHandler-1.0, LibStub, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
 ## DefaultState: Enabled
 ## SavedVariables: CoordsTrackingDB
 ## X-Date: @project-date-iso@

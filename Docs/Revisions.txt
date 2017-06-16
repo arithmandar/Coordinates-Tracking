@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v2.01 (Jun. 16, 2017)
+-----------------------
+- Fixed no-lib version's lib setting. LibDataBroker-1.1 should be embedded anyway.
+- Removed LibAboutPanel.
+
 * v2.00 (May 31, 2017)
 -----------------------
 - Migrated option toggling to Ace library
