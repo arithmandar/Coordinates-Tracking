@@ -3,6 +3,13 @@
 Revision History:
 =================
 
+* v2.02 (Aug. 29, 2017)
+-----------------------
+- ToC update to support WoW 7.3.0
+- Lib Update: Ace3
+- Translation updated:
+  - Korean (next96)
+
 * v2.01 (Jun. 16, 2017)
 -----------------------
 - Fixed no-lib version's lib setting. LibDataBroker-1.1 should be embedded anyway.
