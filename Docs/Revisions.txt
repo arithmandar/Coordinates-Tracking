@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.03 (Nov. 09, 2017)
+-----------------------
+- Lib update: AceConfigDialog
+
 * v2.02 (Aug. 29, 2017)
 -----------------------
 - ToC update to support WoW 7.3.0
