@@ -7,6 +7,8 @@ Revision History:
 -----------------------
 - Lib Update: 
   - LibSharedMedia
+- Translation updated:
+  - Korean (next96)
 
 * v2.04 (Mar. 04, 2018)
 -----------------------
