@@ -3,10 +3,15 @@
 Revision History:
 =================
 
+* v2.05 (Mar. 20, 2018)
+-----------------------
+- Lib Update: 
+  - LibSharedMedia
+
 * v2.04 (Mar. 04, 2018)
 -----------------------
-  - Lib Update: 
-    - AceConfig
+- Lib Update: 
+  - AceConfig
 
 * v2.03 (Nov. 09, 2017)
 -----------------------
