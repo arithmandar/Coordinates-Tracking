@@ -10,6 +10,11 @@ local select = _G.select
 -- Libraries
 local GameTooltip = GameTooltip
 local format = string.format
+
+local GetCursorPosition = GetCursorPosition
+local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
+
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
@@ -54,9 +59,9 @@ end
 
 -- Codes adopted from Mapster
 local function CRDS_GetCursorPosition()
-	local left, top = WorldMapDetailFrame:GetLeft(), WorldMapDetailFrame:GetTop()
-	local width, height = WorldMapDetailFrame:GetWidth(), WorldMapDetailFrame:GetHeight()
-	local scale = WorldMapDetailFrame:GetEffectiveScale()
+	local left, top = WorldMapScrollChild:GetLeft() or 0, WorldMapScrollChild:GetTop() or 0
+	local width, height = WorldMapScrollChild:GetWidth(), WorldMapScrollChild:GetHeight()
+	local scale = WorldMapScrollChild:GetEffectiveScale()
 
 	local x, y = GetCursorPosition()
 	local cx = (x/scale - left) / width
@@ -73,7 +78,7 @@ local function CRDS_GetCursorPosition()
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
 	-- SetMapToCurrentZone(); -- this should not be called
-	posX, posY = GetPlayerMapPosition("player")
+	--posX, posY = GetPlayerMapPosition("player")
 	
 	posText = format(crdsText, cx*100, cy*100)
 	
@@ -92,7 +97,7 @@ local function CRDS_GetPlayerPositionText(worldMap)
 		posX = 0
 		posY = 0
 	else
-		posX, posY = GetPlayerMapPosition("player")
+		posX, posY = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player"):GetXY()
 	end
 	
 	posText = format(crdsText, posX*100, posY*100)
@@ -348,6 +353,16 @@ function addon:SetWorldMapFontStyle()
 	end
 end
 
+local function createCoordsOnWorldMapFrame()
+	local f = _G["CoordsOnWorldMapFrame"]
+	if not f then f = CreateFrame("Frame", "CoordsOnWorldMapFrame", WorldMapFrame.ScrollContainer) end
+	
+	f.playerTxt = f:CreateFontString("CoordsOnWorldMapFramePlayerText", "OVERLAY", "NumberFontNormal")
+	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", 30, -5)
+	f.cursorTxt = f:CreateFontString("CoordsOnWorldMapFrameCursorText", "OVERLAY", "NumberFontNormal")
+	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
+end
+
 function addon:OnInitialize()
 	self.db = AceDB:New(addon.Name.."DB", addon.constants.defaults, true)
 	profile = self.db.profile
@@ -357,6 +372,8 @@ function addon:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "Refresh")
 
 	self:SetupOptions()
+	createCoordsOnWorldMapFrame()
+
 end
 
 function addon:OnEnable()

@@ -3,6 +3,12 @@
 Revision History:
 =================
 
+* v2.06 (Jul. 25, 2018)
+-----------------------
+- Libs Update
+- ToC update to support WoW 8.0.1
+- API and codes update to support WoW 8.0.1
+
 * v2.05 (Mar. 20, 2018)
 -----------------------
 - Lib Update: 

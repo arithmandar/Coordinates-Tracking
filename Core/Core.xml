@@ -64,31 +64,4 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CoordsOnWorldMapFrame" parent="WorldMapFrame" toplevel="true" frameLevel="10">
-		<Size>
-			<AbsDimension x="200" y="28" />
-		</Size>
-		<Anchors>
-			<Anchor point="TOPLEFT" relativeTo="WorldMapScrollFrame" relativePoint="BOTTOMLEFT">
-				<Offset>
-					<AbsDimension x="10" y="25"/>
-				</Offset>
-			</Anchor>
-		</Anchors>
-		<Layers>
-			<Layer level="OVERLAY">
-				<FontString name="$parentPlayerText" inherits="NumberFontNormal" parentKey="playerTxt" JustifyH="LEFT" />
-				<FontString name="$parentCursorText" inherits="NumberFontNormal" parentKey="cursorTxt" JustifyH="LEFT">
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="$parentPlayerText" relativePoint="TOPRIGHT">
-							<Offset>
-								<AbsDimension x="20" y="0" />
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
-	</Frame>
-
 </Ui>
