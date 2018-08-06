@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.08 (Aug. 07, 2018)
+-----------------------
+- Fixed error while loading the player position when in some cases the mapID is not yet available
+
 * v2.07 (Aug. 06, 2018)
 -----------------------
 - Adjust on-map coordinates' position

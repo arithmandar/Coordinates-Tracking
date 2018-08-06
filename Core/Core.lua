@@ -91,7 +91,11 @@ local function CRDS_GetPlayerPositionText(worldMap)
 	local acc = worldMap and profile.worldmap_accuracy or profile.coords_accuracy
 	
 	--local posXY = C_Map.GetPlayerMapPosition(WorldMapFrame:GetMapID(), "player")
-	local posXY = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
+	local mapID = C_Map.GetBestMapForUnit("player")
+	local posXY = nil
+	if (mapID) then 
+		posXY = C_Map.GetPlayerMapPosition(mapID, "player") or nil
+	end
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
