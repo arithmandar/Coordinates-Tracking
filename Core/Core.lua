@@ -90,17 +90,20 @@ local function CRDS_GetPlayerPositionText(worldMap)
 	local crdsTextTemplate = "%%.%df"..L["COMMA"].."%%.%df"
 	local acc = worldMap and profile.worldmap_accuracy or profile.coords_accuracy
 	
+	--local posXY = C_Map.GetPlayerMapPosition(WorldMapFrame:GetMapID(), "player")
+	local posXY = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
+	
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
 	-- SetMapToCurrentZone()
 	if ( IsInInstance() ) then
 		posX = 0
 		posY = 0
-	else
-		posX, posY = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player"):GetXY()
+	elseif (posXY) then
+		posX, posY = posXY:GetXY()
 	end
 	
-	posText = format(crdsText, posX*100, posY*100)
+	posText = format(crdsText, posX and posX*100 or 0, posY and posY*100 or 0)
 	
 	return posText
 end

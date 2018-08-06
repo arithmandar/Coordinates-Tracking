@@ -3,9 +3,10 @@
 Revision History:
 =================
 
-* v2.07 (Jul. XX, 2018)
+* v2.07 (Aug. 06, 2018)
 -----------------------
 - Adjust on-map coordinates' position
+- Fixed issue while entering class order hall
 
 * v2.06 (Jul. 25, 2018)
 -----------------------
