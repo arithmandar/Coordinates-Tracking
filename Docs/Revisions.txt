@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.09 (Dec. 16, 2018)
+-----------------------
+- ToC update to support WoW 8.1.0
+
 * v2.08 (Aug. 07, 2018)
 -----------------------
 - Fixed error while loading the player position when in some cases the mapID is not yet available

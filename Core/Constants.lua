@@ -41,4 +41,8 @@ constants.defaults = {
 constants.events = {
 	"PLAYER_REGEN_ENABLED",
 	"PLAYER_REGEN_DISABLED",
+	"ZONE_CHANGED",
+--	"ZONE_CHANGED_NEW",
+	"ZONE_CHANGED_NEW_AREA",
+	"ZONE_CHANGED_INDOORS",
 }

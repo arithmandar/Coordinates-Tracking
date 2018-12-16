@@ -4,16 +4,15 @@
 -----------------------------------------------------------------------
 -- Functions
 local _G = getfenv(0)
-local pairs = _G.pairs
-local string = _G.string
-local select = _G.select
+local pairs, string, select = _G.pairs, _G.string, _G.select
 -- Libraries
 local GameTooltip = GameTooltip
 local format = string.format
 
-local GetCursorPosition = GetCursorPosition
+local GetCursorPosition, GetSubZoneText, GetZoneText = _G.GetCursorPosition, _G.GetSubZoneText, _G.GetZoneText
 local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
+local GetAddOnInfo, GameTooltip, GetZonePVPInfo = _G.GetAddOnInfo, _G.GameTooltip, _G.GetZonePVPInfo
 
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
@@ -28,7 +27,7 @@ local LDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(private.addon_
 	text = L["TITLE"],
 	label = L["TITLE"],
 	icon = "Interface\\MINIMAP\\MinimapArrow",
-});
+})
 local Media = LibStub("LibSharedMedia-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon(private.addon_name, "AceEvent-3.0")
@@ -39,26 +38,25 @@ addon.LocName = select(2, GetAddOnInfo(addon.Name))
 addon.Notes = select(3, GetAddOnInfo(addon.Name))
 _G.CoordsTracking = addon
 local profile
-
-CRDS_Player = UnitName("player")
-CRDS_Server = GetRealmName()
+local locationText = ""
 
 local isInLockdown = false
 local CRDS_ORIG_GAMPTOOLTIP_SCALE = GameTooltip:GetScale()
 local CRDS_POSTEXT = nil
 
-local function CRDS_GetZoneText()
-	local posText;
-	if (GetSubZoneText() == "") then
-		posText = GetZoneText()
+local function getLocationText()
+	local subZoneText = GetSubZoneText()
+	local zoneText = GetZoneText()
+	if (subZoneText == "") then
+		locationText = zoneText
 	else
-		posText = format("%s - %s", GetZoneText(), GetSubZoneText())
+		locationText = format("%s - %s", zoneText, subZoneText)
 	end
-	return posText
+	return locationText
 end
 
 -- Codes adopted from Mapster
-local function CRDS_GetCursorPosition()
+local function getCursorPositionText()
 	local left, top = WorldMapScrollChild:GetLeft() or 0, WorldMapScrollChild:GetTop() or 0
 	local width, height = WorldMapScrollChild:GetWidth(), WorldMapScrollChild:GetHeight()
 	local scale = WorldMapScrollChild:GetEffectiveScale()
@@ -77,24 +75,21 @@ local function CRDS_GetCursorPosition()
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
-	-- SetMapToCurrentZone(); -- this should not be called
-	--posX, posY = GetPlayerMapPosition("player")
-	
 	posText = format(crdsText, cx*100, cy*100)
 	
 	return posText
 end
 
-local function CRDS_GetPlayerPositionText(worldMap)
+local function getPlayerPositionText(isWorldMap)
 	local posText, crdsText, posX, posY
 	local crdsTextTemplate = "%%.%df"..L["COMMA"].."%%.%df"
-	local acc = worldMap and profile.worldmap_accuracy or profile.coords_accuracy
+	local acc = isWorldMap and profile.worldmap_accuracy or profile.coords_accuracy
 	
 	--local posXY = C_Map.GetPlayerMapPosition(WorldMapFrame:GetMapID(), "player")
-	local mapID = C_Map.GetBestMapForUnit("player")
+	local uiMapID = C_Map.GetBestMapForUnit("player")
 	local posXY = nil
-	if (mapID) then 
-		posXY = C_Map.GetPlayerMapPosition(mapID, "player") or nil
+	if (uiMapID) then 
+		posXY = C_Map.GetPlayerMapPosition(uiMapID, "player") or nil
 	end
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
@@ -112,15 +107,15 @@ local function CRDS_GetPlayerPositionText(worldMap)
 	return posText
 end
 
-local function CRDS_GetButtonText()
-	local posText = CRDS_GetPlayerPositionText()
+local function getButtonText()
+	local posText = ""
 
 	if (posText) then 
 		if (profile.show_zonename) then
 			if ( IsInInstance() ) then 
-				posText = CRDS_GetZoneText()
+				posText = locationText
 			else
-				posText = format("%s"..L["COLON"]..posText, CRDS_GetZoneText())
+				posText = format("%s"..L["COLON"]..getPlayerPositionText(), locationText)
 			end
 		else
 			--posText = "|cffffffff"..posText
@@ -132,115 +127,51 @@ local function CRDS_GetButtonText()
 	return posText
 end
 
---[[
-local function CRDS_UpdateOptions(player_options)
-	for k, v in pairs(CRDS_DefaultOptions) do
-		if (player_options[k] == nil) then
-			player_options[k] = v;
-		end
-	end
-end
-
-local function CRDS_InitOptions()
-	if ( CoordsTrackingDB == nil ) then
-		CoordsTrackingDB = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server] == nil ) then
-		CoordsTrackingDB[CRDS_Server] = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player] == nil ) then
-		CoordsTrackingDB[CRDS_Server][CRDS_Player] = { };
-	end
-	if ( CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] == nil ) then
-		CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"] = CRDS_DefaultOptions;
-	end
-	
-	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
-	CRDS_UpdateOptions(options);
-end
-
-local function CRDS_Init()
-	CRDS_InitOptions();
-	local options = CoordsTrackingDB[CRDS_Server][CRDS_Player]["options"];
-
-	if(options.show_coords_onscreen == true) then
-		CoordsTrackingFrame:Show();
-		CoordsTrackingFrame:SetAlpha(options.alpha);
-		CoordsTrackingFrame:SetScale(options.scale);
-	else
-		CoordsTrackingFrame:Hide();
-	end
-end
-
-function CRDS_OnLoad(self)
-	-- Register the CoordsTracking frame for the following events
-        for key, value in pairs( CRDS_Events ) do
-            self:RegisterEvent( value );
-        end
-
-	self:RegisterForDrag("LeftButton");
-end
-
-function CRDS_OnEvent(self, event, ...)
-	local arg1 = ...;
-	if (event == "ADDON_LOADED" and arg1 == "CoordsTracking") then
-		CRDS_Init();
-	end
-	-- for combact lockdown
-	if (event == "PLAYER_REGEN_DISABLED") then
-		isInLockdown = true;
-	elseif (event == "PLAYER_REGEN_ENABLED") then
-		isInLockdown = false;
-	end
-	
-	--LDB.text = CRDS_GetButtonText();
-end
-]]
 function CRDS_OnUpdate()
-	local posText = CRDS_GetButtonText();
+	local posText = getButtonText()
 	if (posText ~= CRDS_POSTEXT) then
-		local pvpType = GetZonePVPInfo();
-		local color = {};
+		local pvpType = GetZonePVPInfo()
+		local color = {}
 
 		if ( pvpType == "sanctuary" ) then
-			color = {r=0.41, g=0.8, b=0.94};
+			color = {r=0.41, g=0.8, b=0.94}
 		elseif ( pvpType == "arena" ) then
-			color = {r=1.0, g=0.1, b=0.1};
+			color = {r=1.0, g=0.1, b=0.1}
 		elseif ( pvpType == "friendly" ) then
-			color = {r=0.1, g=1.0, b=0.1};
+			color = {r=0.1, g=1.0, b=0.1}
 		elseif ( pvpType == "hostile" ) then
-			color = {r=1.0, g=0.1, b=0.1};
+			color = {r=1.0, g=0.1, b=0.1}
 		elseif ( pvpType == "contested" ) then
-			color = {r=1.0, g=0.7, b=0.0};
+			color = {r=1.0, g=0.7, b=0.0}
 		else
-			color = {r=HIGHLIGHT_FONT_COLOR.r, g=HIGHLIGHT_FONT_COLOR.g, b=HIGHLIGHT_FONT_COLOR.b};
+			color = {r=HIGHLIGHT_FONT_COLOR.r, g=HIGHLIGHT_FONT_COLOR.g, b=HIGHLIGHT_FONT_COLOR.b}
 		end
 
-		local colortag = string.format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255);
+		local colortag = format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
 
 		if (CoordsTrackingFrame:IsShown()) then
-			CoordsTrackingFrame.Text:SetText(posText);
-			CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth());
-			CoordsTrackingFrame.Text:SetTextColor(color.r, color.g, color.b);
+			CoordsTrackingFrame.Text:SetText(posText)
+			CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
+			CoordsTrackingFrame.Text:SetTextColor(color.r, color.g, color.b)
 		end
 
-		LDB.text = colortag..posText..FONT_COLOR_CODE_CLOSE;
-		CRDS_POSTEXT = posText;
+		LDB.text = colortag..posText..FONT_COLOR_CODE_CLOSE
+		CRDS_POSTEXT = posText
 	end
 
 	if (profile.show_coords_onworldmap) then
-		CoordsOnWorldMapFramePlayerText:SetText(UnitName("player")..L["COLON"]..CRDS_GetPlayerPositionText(true));
-		local cursorPos = CRDS_GetCursorPosition();
+		CoordsOnWorldMapFramePlayerText:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
+		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
-			CoordsOnWorldMapFrameCursorText:SetText(L["Cursor"]..L["COLON"]..cursorPos);
+			CoordsOnWorldMapFrameCursorText:SetText(L["Cursor"]..L["COLON"]..cursorPos)
 		else
-			CoordsOnWorldMapFrameCursorText:SetText("");
+			CoordsOnWorldMapFrameCursorText:SetText("")
 		end
 	end
 end
 
 function CRDS_OnShow()
-	CRDS_POSTEXT = nil;
+	CRDS_POSTEXT = nil
 end
 
 function CRDS_OnMouseDown(self, buttonName)    
@@ -272,7 +203,7 @@ end
 local function get_zonename_tooltip(frame)
 	if (not GameTooltip:IsShown()) then
 		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
-		local zoneText = CRDS_GetZoneText()
+		local zoneText = locationText
 		if frame then GameTooltip:SetOwner(frame, "ANCHOR_BOTTOM", -10, 0) end
 		GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
 		if ( pvpType == "sanctuary" ) then
@@ -312,8 +243,8 @@ function CRDS_OnEnter(self)
 end
 
 function CRDS_OnLeave(self)
-	GameTooltip_Hide();
-	GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE);
+	GameTooltip_Hide()
+	GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
 end
 
 local function onscreenFrameStatusRefresh()
@@ -333,7 +264,7 @@ end
 
 local function setupLDB()
 	-- setup LDB
-	LDB.text = CRDS_GetButtonText()
+	LDB.text = getButtonText()
 	LDB.OnClick = (function(self, button) addon:OpenOptions() end)
 	LDB.OnTooltipShow = (function(tooltip)
 		if not tooltip or not tooltip.AddLine then return end
@@ -381,7 +312,6 @@ function addon:OnInitialize()
 
 	self:SetupOptions()
 	createCoordsOnWorldMapFrame()
-
 end
 
 function addon:OnEnable()
@@ -390,6 +320,9 @@ function addon:OnEnable()
 	end
 
 	setupLDB()
+	if (profile.show_zonename and locationText == "") then
+		getLocationText()
+	end
 	self:Refresh()
 end
 
@@ -400,9 +333,9 @@ function addon:Refresh()
 	addon:SetOnScreenFontStyle()
 	addon:SetWorldMapFontStyle()
 	if (profile.show_coords_onworldmap) then
-		CoordsOnWorldMapFrame:Show();
+		CoordsOnWorldMapFrame:Show()
 	else
-		CoordsOnWorldMapFrame:Hide();
+		CoordsOnWorldMapFrame:Hide()
 	end
 end
 
@@ -413,3 +346,20 @@ end
 function addon:PLAYER_REGEN_ENABLED()
 	isInLockdown = false
 end
+
+function addon:ZONE_CHANGED()
+	if (profile.show_zonename) then getLocationText() end
+end
+
+function addon:ZONE_CHANGED_NEW()
+	if (profile.show_zonename) then getLocationText() end
+end
+
+function addon:ZONE_CHANGED_NEW_AREA()
+	if (profile.show_zonename) then getLocationText() end
+end
+
+function addon:ZONE_CHANGED_INDOORS()
+	if (profile.show_zonename) then getLocationText() end
+end
+
