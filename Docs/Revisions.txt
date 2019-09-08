@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.11 (Sep. 08, 2019)
+-----------------------
+- Added option to allow user to customize text color on world map.
+
 * v2.10 (Sep. 03, 2019)
 -----------------------
 - ToC update to support WoW 8.2.0

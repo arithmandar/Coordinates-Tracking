@@ -26,6 +26,7 @@ L["Setup font style for on-screen frame"] = "Setup font style for on-screen fram
 L["Setup font style for coordinates on WorldMap frame"] = "Setup font style for coordinates on WorldMap frame"
 L["Select font"] = "Select font"
 L["Configure font size"] = "Configure font size"
+L["Configure font color"] = "Configure font color"
 L["Show outline"] = "Show outline"
 L["Coordinates' accuracy"] = "Coordinates' accuracy"
 L["On-screen frame"] = "On-screen frame"

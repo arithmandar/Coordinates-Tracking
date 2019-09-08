@@ -291,6 +291,15 @@ function addon:SetWorldMapFontStyle()
 	end
 end
 
+function addon:SetWorldMapFontColor()
+	local f = _G["CoordsOnWorldMapFrame"]
+	local color = profile.fontcolor_worldmap
+	if (f) then
+		f.playerTxt:SetTextColor(color.r or 1, color.g or 1, color.b or 1)
+		f.cursorTxt:SetTextColor(color.r or 1, color.g or 1, color.b or 1)
+	end
+end
+
 local function createCoordsOnWorldMapFrame()
 	local f = _G["CoordsOnWorldMapFrame"]
 	if not f then f = CreateFrame("Frame", "CoordsOnWorldMapFrame", WorldMapFrame.ScrollContainer) end
