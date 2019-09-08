@@ -181,8 +181,24 @@ local function getOptions()
 												addon:SetWorldMapFontStyle()
 											end,
 										},
+										fontcolor_worldmap = {
+											order = 23,
+											type = "color",
+											hasAlpha = false,
+											name = L["Configure font color"],
+											get = function()
+												local color = profile.fontcolor_worldmap
+												return color.r or 1, color.g or 1, color.b or 1
+											end,
+											set = function(info, r, g, b)
+												local color = {}
+												color.r, color.g, color.b = r, g, b
+												profile.fontcolor_worldmap = color
+												addon:SetWorldMapFontColor()
+											end,
+										},
 										fontoutline_worldmap = {
-											order = 23, 
+											order = 24, 
 											type = "toggle",
 											name = L["Show outline"],
 										},
