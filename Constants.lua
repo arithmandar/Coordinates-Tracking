@@ -35,6 +35,7 @@ constants.defaults = {
 		font_worldmap = (GetLocale() == "ruRU") and "Arial Narrow" or "Friz Quadrata TT",
 		fontsize_worldmap = 14,
 		fontoutline_worldmap = true,
+		fontcolor_worldmap = { r = 1, g = 1, b = 1 },
 	},
 }
 
