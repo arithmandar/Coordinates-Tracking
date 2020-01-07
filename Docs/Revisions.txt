@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.13 (Jan. 07, 2020)
+-----------------------
+- ToC update to support WoW 8.2.5
+
 * v2.12 (Sep. 09, 2019)
 -----------------------
 - Added worldmap's text color's default value to prevent from error
