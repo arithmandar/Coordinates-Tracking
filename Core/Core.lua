@@ -111,24 +111,20 @@ end
 local function getButtonText()
 	local posText = ""
 
-	if (posText) then 
-		if (profile.show_zonename) then
-			if ( IsInInstance() ) then 
-				posText = locationText
-			else
-				posText = format("%s"..L["COLON"]..getPlayerPositionText(), locationText)
-			end
+	if (profile.show_zonename) then
+		if ( IsInInstance() ) then 
+			posText = locationText
 		else
-			--posText = "|cffffffff"..posText
+			posText = format("%s"..L["COLON"]..getPlayerPositionText(), locationText)
 		end
 	else
-		posText = L["TITLE"]
+		posText = getPlayerPositionText()
 	end
 
 	return posText
 end
 
-function CRDS_OnUpdate()
+local function frame_OnUpdate()
 	local posText = getButtonText()
 	if (posText ~= CRDS_POSTEXT) then
 		local pvpType = GetZonePVPInfo()
@@ -171,36 +167,6 @@ function CRDS_OnUpdate()
 	end
 end
 
-function CRDS_OnShow()
-	CRDS_POSTEXT = nil
-end
-
-function CRDS_OnMouseDown(self, buttonName)    
-	-- Prevent activation when in combat
-	if (isInLockdown) then
-		return
-	end
-	if(CoordsTrackingFrame:IsVisible()) then
-		-- Handle left button clicks
-		if (buttonName == "LeftButton") then
-			-- Hide tooltip while draging
-			GameTooltip:Hide()
-			CoordsTrackingFrame:StartMoving()
-		elseif (buttonName == "RightButton") then
-			addon:OpenOptions()
-			GameTooltip_Hide()
-		end
-	end
-end
-
-function CRDS_OnMouseUp(self, buttonName)
-	if(CoordsTrackingFrame:IsVisible()) then
-		CoordsTrackingFrame:StopMovingOrSizing()
-		local a, b, c, d, e = CoordsTrackingFrame:GetPoint()
-		profile.point = { a, b, c, d, e }
-	end
-end
-
 local function get_zonename_tooltip(frame)
 	if (not GameTooltip:IsShown()) then
 		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
@@ -231,23 +197,6 @@ local function get_zonename_tooltip(frame)
 	end
 end
 
-function CRDS_OnEnter(self)
-	if (isInLockdown) then
-		return
-	end
-
-	if (profile.show_zonenametooltip) then
-		if(CoordsTrackingFrame:IsVisible()) then
-			get_zonename_tooltip(self)
-		end
-	end
-end
-
-function CRDS_OnLeave(self)
-	GameTooltip_Hide()
-	GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
-end
-
 local function onscreenFrameStatusRefresh()
 	local f = _G["CoordsTrackingFrame"]
 	if (f and profile.show_coords_onscreen) then
@@ -262,6 +211,84 @@ local function onscreenFrameStatusRefresh()
 		f:Hide()
 	end
 end
+
+local function createCoordsTrackingFrame()
+	local function frame_OnShow()
+		CRDS_POSTEXT = nil
+	end
+
+	local function frame_OnMouseDown(self, buttonName)    
+		-- Prevent activation when in combat
+		if (isInLockdown) then
+			return
+		end
+		if(CoordsTrackingFrame:IsVisible()) then
+			-- Handle left button clicks
+			if (buttonName == "LeftButton") then
+				-- Hide tooltip while draging
+				GameTooltip:Hide()
+				CoordsTrackingFrame:StartMoving()
+			elseif (buttonName == "RightButton") then
+				addon:OpenOptions()
+				GameTooltip_Hide()
+			end
+		end
+	end
+
+	local function frame_OnMouseUp(self, buttonName)
+		if(CoordsTrackingFrame:IsVisible()) then
+			CoordsTrackingFrame:StopMovingOrSizing()
+			local a, b, c, d, e = CoordsTrackingFrame:GetPoint()
+			profile.point = { a, b, c, d, e }
+		end
+	end
+
+	local function frame_OnEnter(self)
+		if (isInLockdown) then
+			return
+		end
+
+		if (profile.show_zonenametooltip) then
+			if(CoordsTrackingFrame:IsVisible()) then
+				get_zonename_tooltip(self)
+			end
+		end
+	end
+
+	local function frame_OnLeave(self)
+		GameTooltip_Hide()
+		GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
+	end
+
+	local name = addon.Name
+	
+	local f = _G[name.."Frame"]
+	if not f then f = CreateFrame("Frame", name.."Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate") end
+	f:SetWidth(200)
+	f:SetHeight(28)
+	--f:SetText(name)
+	local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
+	f:SetPoint(point or "TOPLEFT", "UIParent", relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
+	
+	local t = f:CreateFontString(name.."Text", "OVERLAY", "NumberFontNormal")
+	t:SetPoint("CENTER", 0, 0)
+	f.Text = t
+	
+	f:RegisterForDrag("LeftButton")
+	f:SetClampedToScreen(true)
+	f:SetMovable(true)
+	f:EnableMouse(true)
+	
+	-- SetScript
+	f:SetScript("OnEnter", frame_OnEnter)
+	f:SetScript("OnLeave", frame_OnLeave)
+	f:SetScript("OnMouseDown", frame_OnMouseDown)
+	f:SetScript("OnMouseUp", frame_OnMouseUp)
+	f:SetScript("OnShow", frame_OnLeave)
+	f:SetScript("OnUpdate", frame_OnUpdate)
+	return f
+end
+
 
 local function setupLDB()
 	-- setup LDB
@@ -303,11 +330,11 @@ end
 
 local function createCoordsOnWorldMapFrame()
 	local f = _G["CoordsOnWorldMapFrame"]
-	if not f then f = CreateFrame("Frame", "CoordsOnWorldMapFrame", WorldMapFrame.ScrollContainer) end
+	if not f then f = CreateFrame("Frame", "CoordsOnWorldMapFrame", WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
 	
 	--f:SetFrameLevel(WorldMapFrame.UIElementsFrame:GetFrameLevel() + 20)
 	f.playerTxt = f:CreateFontString("CoordsOnWorldMapFramePlayerText", "OVERLAY", "NumberFontNormal")
-	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", -10, 20)
+	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", -40, 20)
 	f.cursorTxt = f:CreateFontString("CoordsOnWorldMapFrameCursorText", "OVERLAY", "NumberFontNormal")
 	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
 end
@@ -321,6 +348,7 @@ function addon:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "Refresh")
 
 	self:SetupOptions()
+	self.frame = createCoordsTrackingFrame()
 	createCoordsOnWorldMapFrame()
 end
 

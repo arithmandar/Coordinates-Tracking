@@ -74,15 +74,18 @@ local function getOptions()
 									type = "toggle",
 									name = L["Show zone name together with coordinates"],
 									width = "full",
-									--disabled = function()
-									--	return not profile.show_coords_onscreen
-									--end,
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
 								},
 								show_zonenametooltip = {
 									order = 13,
 									type = "toggle",
 									name = L["Show zone name as tooltip on coordinates when mouse hover"],
 									width = "full",
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
 								},
 								show_coords_onworldmap = {
 									order = 14,
@@ -147,6 +150,9 @@ local function getOptions()
 											name = L["Show outline"],
 										},
 									},
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
 								},
 								group22 = {
 									order = 20,
@@ -203,8 +209,14 @@ local function getOptions()
 											name = L["Show outline"],
 										},
 									},
+									disabled = function()
+										return not profile.show_coords_onworldmap
+									end,
 								},
 							},
+							disabled = function()
+								return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
+							end,
 						},
 						group3 = {
 							order = 30,
@@ -225,6 +237,9 @@ local function getOptions()
 									min = 0, max = 4, bigStep = 1, 
 								},
 							},
+							disabled = function()
+								return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
+							end,
 						},
 						group4 = {
 							order = 40,
@@ -251,6 +266,9 @@ local function getOptions()
 											min = 0, max = 3, bigStep = 0.1, 
 										},
 									},
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
 								},
 								group42 = {
 									order = 30,
@@ -271,8 +289,14 @@ local function getOptions()
 											min = 0, max = 1.75, bigStep = 0.01, 
 										},
 									},
+									disabled = function()
+										return not profile.show_coords_onworldmap
+									end,
 								},
 							},
+							disabled = function()
+								return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
+							end,
 						},
 					},
 				},

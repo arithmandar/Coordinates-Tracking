@@ -2,6 +2,7 @@
 <!-- $Id$ -->
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
+<!--
 	<Frame>
 		<Frames>
 			<Button name="CoordsTrackingFrame" movable="true" enableMouse="true" parent="UIParent" Text="Coordinates"> 
@@ -28,9 +29,6 @@
 						</FontString>
 					</Layer>
 				</Layers>
-				<!--
-				<ButtonText name="$parentText" parentKey="Text" JustifyH="LEFT"/>
-				<NormalFont style="NumberFontNormal"/>-->
 				<Scripts>
 					<OnEnter>
 						CRDS_OnEnter(self);
@@ -52,16 +50,16 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>
-				--CRDS_OnLoad(self);
+				CRDS_OnLoad(self);
 				self:RegisterForDrag("LeftButton");
 			</OnLoad>
 			<OnEvent>
-				--CRDS_OnEvent(self, event, ...);
+				CRDS_OnEvent(self, event, ...);
 			</OnEvent>
 			<OnUpdate>
 				CRDS_OnUpdate(self);
 			</OnUpdate>
 		</Scripts>
 	</Frame>
-
+-->
 </Ui>

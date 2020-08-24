@@ -10,6 +10,12 @@ Revision History:
 - Library update:
   - Removal of LibAbout Panel
   - Dev-Lib folder arrangement
+- Enhancement:
+  - Create frame within Lua codes
+  - Move frame scripts to local function
+  - Beter toggling mechanism while disabling showing on screen or on world map
+- Bug Fix:
+  - Toggle show-zonename is not working properly
 
 * v2.14 (Jan. 17, 2020)
 -----------------------
