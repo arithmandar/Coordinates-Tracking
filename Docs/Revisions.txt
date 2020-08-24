@@ -3,6 +3,14 @@
 Revision History:
 =================
 
+* v2.15 (Aug. 24, 2020)
+-----------------------
+- Prevent from WorldMap data is still empty and result in cursor position's error
+- Supported Shadowlands
+- Library update:
+  - Removal of LibAbout Panel
+  - Dev-Lib folder arrangement
+
 * v2.14 (Jan. 17, 2020)
 -----------------------
 - ToC update to support WoW 8.3.0

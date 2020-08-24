@@ -35,13 +35,13 @@
 ## DefaultState: Enabled
 ## SavedVariables: CoordsTrackingDB
 ## X-Date: @project-date-iso@
-## X-Donate: https://pledgie.com/campaigns/33899
 ## X-Website: https://wow.curseforge.com/projects/coordstracking
 ## X-License: GPLv2
 ## X-Category: Information
 ## X-Localizations: enUS, zhTW, zhCN, deDE
 
 Libs\Libs.xml
+
 Locale\Locales.xml
 
 Core\Constants.lua

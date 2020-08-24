@@ -60,6 +60,8 @@ local function getCursorPositionText()
 	local left, top = WorldMapScrollChild:GetLeft() or 0, WorldMapScrollChild:GetTop() or 0
 	local width, height = WorldMapScrollChild:GetWidth(), WorldMapScrollChild:GetHeight()
 	local scale = WorldMapScrollChild:GetEffectiveScale()
+	
+	if (width == 0) or (height == 0) then return end 
 
 	local x, y = GetCursorPosition()
 	local cx = (x/scale - left) / width
@@ -85,7 +87,6 @@ local function getPlayerPositionText(isWorldMap)
 	local crdsTextTemplate = "%%.%df"..L["COMMA"].."%%.%df"
 	local acc = isWorldMap and profile.worldmap_accuracy or profile.coords_accuracy
 	
-	--local posXY = C_Map.GetPlayerMapPosition(WorldMapFrame:GetMapID(), "player")
 	local uiMapID = C_Map.GetBestMapForUnit("player")
 	local posXY = nil
 	if (uiMapID) then 
