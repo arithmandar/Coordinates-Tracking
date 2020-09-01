@@ -34,6 +34,9 @@ L["Tooltip"] = "Tooltip"
 L["Profile Options"] = "Profile Options"
 L["Scale"] = "Scale"
 L["Transparency"] = "Transparency"
+L["Background"] = "Background"
+L["Background Texture"] = "Background Texture"
+L["Vertex Color"] = "Vertex Color"
 --@end-do-not-package@
 --@localization(locale="enUS", format="lua_additive_table")@
 end

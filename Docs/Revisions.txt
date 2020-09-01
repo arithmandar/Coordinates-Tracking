@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.16 (Sep. xx, 2020)
+-----------------------
+- Added background control to onscreen frame
+
 * v2.15 (Aug. 24, 2020)
 -----------------------
 - Prevent from WorldMap data is still empty and result in cursor position's error

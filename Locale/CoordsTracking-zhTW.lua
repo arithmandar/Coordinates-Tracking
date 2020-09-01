@@ -27,6 +27,7 @@ L["Setup font style for on-screen frame"] = "設定遊戲畫面上的座標框�
 L["Setup font style for coordinates on WorldMap frame"] = "設定世界地圖上的座標框架字體樣式"
 L["Select font"] = "選擇字形"
 L["Configure font size"] = "設定字體大小"
+L["Configure font color"] = "設定字體顏色"
 L["Show outline"] = "使用外框字型"
 L["Coordinates' accuracy"] = "座標資訊精確度"
 L["On-screen frame"] = "遊戲畫面窗格"
@@ -34,6 +35,9 @@ L["Tooltip"] = "提示訊息"
 L["Profile Options"] = "選項設定"
 L["Scale"] = "大小"
 L["Transparency"] = "透明度"
+L["Background"] = "背景"
+L["Background Texture"] = "背景材質"
+L["Vertex Color"] = "頂點顏色"
 --@end-do-not-package@
 --@localization(locale="zhTW", format="lua_additive_table")@
 end

@@ -30,7 +30,13 @@ local LDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(private.addon_
 })
 local Media = LibStub("LibSharedMedia-3.0")
 
-local addon = LibStub("AceAddon-3.0"):NewAddon(private.addon_name, "AceEvent-3.0")
+-- Frame names
+local onscreenName = private.addon_name.."Frame"
+local worldmapName = "CoordsOnWorldMapFrame"
+local MyFrame = _G[onscreenName]
+if not MyFrame then MyFrame = CreateFrame("Frame", onscreenName, UIParent, BackdropTemplateMixin and "BackdropTemplate") end
+
+local addon = LibStub("AceAddon-3.0"):NewAddon(MyFrame, private.addon_name, "AceEvent-3.0")
 addon.constants = private.constants
 addon.constants.addon_name = private.addon_name
 addon.Name = FOLDER_NAME
@@ -147,9 +153,9 @@ local function frame_OnUpdate()
 		local colortag = format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
 
 		if (CoordsTrackingFrame:IsShown()) then
-			CoordsTrackingFrame.Text:SetText(posText)
-			CoordsTrackingFrame:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
-			CoordsTrackingFrame.Text:SetTextColor(color.r, color.g, color.b)
+			addon.Text:SetText(posText)
+			addon:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
+			addon.Text:SetTextColor(color.r, color.g, color.b)
 		end
 
 		LDB.text = colortag..posText..FONT_COLOR_CODE_CLOSE
@@ -157,12 +163,12 @@ local function frame_OnUpdate()
 	end
 
 	if (profile.show_coords_onworldmap) then
-		CoordsOnWorldMapFramePlayerText:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
+		addon.WorldMapFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
-			CoordsOnWorldMapFrameCursorText:SetText(L["Cursor"]..L["COLON"]..cursorPos)
+			addon.WorldMapFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos)
 		else
-			CoordsOnWorldMapFrameCursorText:SetText("")
+			addon.WorldMapFrame.cursorTxt:SetText("")
 		end
 	end
 end
@@ -198,7 +204,7 @@ local function get_zonename_tooltip(frame)
 end
 
 local function onscreenFrameStatusRefresh()
-	local f = _G["CoordsTrackingFrame"]
+	local f = _G[private.addon_name.."Frame"]
 	if (f and profile.show_coords_onscreen) then
 		f:Show()
 		f:SetAlpha(profile.alpha)
@@ -212,12 +218,12 @@ local function onscreenFrameStatusRefresh()
 	end
 end
 
-local function createCoordsTrackingFrame()
-	local function frame_OnShow()
+local function setupCoordsTrackingFrame()
+	local function onShow()
 		CRDS_POSTEXT = nil
 	end
 
-	local function frame_OnMouseDown(self, buttonName)    
+	local function onMouseDown(self, buttonName)    
 		-- Prevent activation when in combat
 		if (isInLockdown) then
 			return
@@ -235,7 +241,7 @@ local function createCoordsTrackingFrame()
 		end
 	end
 
-	local function frame_OnMouseUp(self, buttonName)
+	local function onMouseUp(self, buttonName)
 		if(CoordsTrackingFrame:IsVisible()) then
 			CoordsTrackingFrame:StopMovingOrSizing()
 			local a, b, c, d, e = CoordsTrackingFrame:GetPoint()
@@ -243,7 +249,7 @@ local function createCoordsTrackingFrame()
 		end
 	end
 
-	local function frame_OnEnter(self)
+	local function onEnter(self)
 		if (isInLockdown) then
 			return
 		end
@@ -255,7 +261,7 @@ local function createCoordsTrackingFrame()
 		end
 	end
 
-	local function frame_OnLeave(self)
+	local function onLeave(self)
 		GameTooltip_Hide()
 		GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
 	end
@@ -270,9 +276,11 @@ local function createCoordsTrackingFrame()
 	local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
 	f:SetPoint(point or "TOPLEFT", "UIParent", relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 	
-	local t = f:CreateFontString(name.."Text", "OVERLAY", "NumberFontNormal")
-	t:SetPoint("CENTER", 0, 0)
-	f.Text = t
+	f.Background = f:CreateTexture(name.."Background", "BACKGROUND")
+	f.Border = CreateFrame("Frame", name.."Border", f, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	
+	f.Text = f:CreateFontString(name.."Text", "OVERLAY", "NumberFontNormal")
+	f.Text:SetPoint("CENTER", 0, 0)
 	
 	f:RegisterForDrag("LeftButton")
 	f:SetClampedToScreen(true)
@@ -280,15 +288,13 @@ local function createCoordsTrackingFrame()
 	f:EnableMouse(true)
 	
 	-- SetScript
-	f:SetScript("OnEnter", frame_OnEnter)
-	f:SetScript("OnLeave", frame_OnLeave)
-	f:SetScript("OnMouseDown", frame_OnMouseDown)
-	f:SetScript("OnMouseUp", frame_OnMouseUp)
-	f:SetScript("OnShow", frame_OnLeave)
+	f:SetScript("OnEnter", onEnter)
+	f:SetScript("OnLeave", onLeave)
+	f:SetScript("OnMouseDown", onMouseDown)
+	f:SetScript("OnMouseUp", onMouseUp)
+	f:SetScript("OnShow", onLeave)
 	f:SetScript("OnUpdate", frame_OnUpdate)
-	return f
 end
-
 
 local function setupLDB()
 	-- setup LDB
@@ -303,15 +309,27 @@ local function setupLDB()
 end
 
 function addon:SetOnScreenFontStyle()
-	local f = _G["CoordsTrackingFrame"]
+	local f = _G[private.addon_name.."Frame"]
 	if (f) then
 		local newfont = Media:Fetch("font", profile.font_onscreen)
 		f.Text:SetFont(newfont, profile.fontsize_onscreen, profile.fontoutline_onscreen and "OUTLINE" or nil)
 	end
 end
 
+function addon:SetOnScreenBackground()
+	local f = _G[private.addon_name.."Frame"]
+	if (f) then
+		f.Background:SetAllPoints()
+		f.Background:SetTexture(profile.background or nil)
+		f.Background:SetSize(f:GetWidth(), f:GetHeight())
+		f.Background:SetPoint("TOPLEFT", 0, 0)
+		local t = profile.backgroundColor or nil
+		f.Background:SetVertexColor(t.r or 0, t.g or 0, t.b or 0, t.a or 1)
+	end
+end
+
 function addon:SetWorldMapFontStyle()
-	local f = _G["CoordsOnWorldMapFrame"]
+	local f = _G[worldmapName]
 	if (f) then
 		local newfont = Media:Fetch("font", profile.font_worldmap)
 		f.playerTxt:SetFont(newfont, profile.fontsize_worldmap, profile.fontoutline_worldmap and "OUTLINE" or nil)
@@ -320,7 +338,7 @@ function addon:SetWorldMapFontStyle()
 end
 
 function addon:SetWorldMapFontColor()
-	local f = _G["CoordsOnWorldMapFrame"]
+	local f = _G[worldmapName]
 	local color = profile.fontcolor_worldmap
 	if (f) then
 		f.playerTxt:SetTextColor(color.r or 1, color.g or 1, color.b or 1)
@@ -329,14 +347,16 @@ function addon:SetWorldMapFontColor()
 end
 
 local function createCoordsOnWorldMapFrame()
-	local f = _G["CoordsOnWorldMapFrame"]
-	if not f then f = CreateFrame("Frame", "CoordsOnWorldMapFrame", WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
+	local f = _G[worldmapName]
+	if not f then f = CreateFrame("Frame", worldmapName, WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
 	
 	--f:SetFrameLevel(WorldMapFrame.UIElementsFrame:GetFrameLevel() + 20)
-	f.playerTxt = f:CreateFontString("CoordsOnWorldMapFramePlayerText", "OVERLAY", "NumberFontNormal")
+	f.playerTxt = f:CreateFontString(worldmapName.."PlayerText", "OVERLAY", "NumberFontNormal")
 	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", -40, 20)
-	f.cursorTxt = f:CreateFontString("CoordsOnWorldMapFrameCursorText", "OVERLAY", "NumberFontNormal")
+	f.cursorTxt = f:CreateFontString(worldmapName.."CursorText", "OVERLAY", "NumberFontNormal")
 	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
+	
+	return f
 end
 
 function addon:OnInitialize()
@@ -348,11 +368,13 @@ function addon:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "Refresh")
 
 	self:SetupOptions()
-	self.frame = createCoordsTrackingFrame()
-	createCoordsOnWorldMapFrame()
 end
 
 function addon:OnEnable()
+	setupCoordsTrackingFrame()
+	self.WorldMapFrame = createCoordsOnWorldMapFrame()
+
+	-- Register events
 	for key, value in pairs( addon.constants.events ) do
 		self:RegisterEvent( value )
 	end
@@ -371,10 +393,11 @@ function addon:Refresh()
 	addon:SetOnScreenFontStyle()
 	addon:SetWorldMapFontStyle()
 	if (profile.show_coords_onworldmap) then
-		CoordsOnWorldMapFrame:Show()
+		self.WorldMapFrame:Show()
 	else
-		CoordsOnWorldMapFrame:Hide()
+		self.WorldMapFrame:Hide()
 	end
+	addon:SetOnScreenBackground()
 end
 
 function addon:PLAYER_REGEN_DISABLED()
