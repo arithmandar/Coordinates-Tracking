@@ -195,10 +195,6 @@ local function updateWorldmapText()
 	end
 end
 
-local function frame_OnUpdate()
-	updateButtonText()
-	updateWorldmapText()
-end
 
 local function get_zonename_tooltip(frame)
 	if (not GameTooltip:IsShown()) then
@@ -293,6 +289,11 @@ local function setupCoordsTrackingFrame()
 		GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
 	end
 
+	local function onUpdate()
+		updateButtonText()
+		updateWorldmapText()
+	end
+
 	local name = addon.Name
 	
 	local f = _G[name.."Frame"]
@@ -320,7 +321,7 @@ local function setupCoordsTrackingFrame()
 	f:SetScript("OnMouseDown", onMouseDown)
 	f:SetScript("OnMouseUp", onMouseUp)
 	f:SetScript("OnShow", onLeave)
-	f:SetScript("OnUpdate", frame_OnUpdate)
+	f:SetScript("OnUpdate", onUpdate)
 end
 
 local function setupLDB()
