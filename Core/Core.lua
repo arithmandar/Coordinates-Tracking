@@ -61,7 +61,7 @@ local locationText = ""
 
 local isInLockdown = false
 local isMoving = true
-local isWorldMapOpened = false
+
 local CRDS_ORIG_GAMPTOOLTIP_SCALE = GameTooltip:GetScale()
 local CRDS_POSTEXT = nil
 
@@ -182,9 +182,8 @@ local function updateButtonText()
 end
 
 local function updateWorldmapText()
-	if WoWClassic then
-		if WorldMapFrame:IsShown() then isWorldMapOpened = true else isWorldMapOpened = false end
-	end
+	local isWorldMapOpened = WorldMapFrame:IsShown()
+
 	if (profile.show_coords_onworldmap and isWorldMapOpened) then
 		addon.WorldMapFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
 		local cursorPos = getCursorPositionText()
@@ -459,12 +458,3 @@ end
 function addon:PLAYER_STOPPED_MOVING()
 	isMoving = false
 end
-
-function addon:WORLD_MAP_OPEN()
-	isWorldMapOpened = true
-end
-
-function addon:WORLD_MAP_CLOSE()
-	isWorldMapOpened = false
-end
-
