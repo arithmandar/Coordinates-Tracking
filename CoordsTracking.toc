@@ -46,5 +46,4 @@ Locale\Locales.xml
 
 Core\Constants.lua
 Core\Core.lua
-Core\Core.xml
 Core\Config.lua
