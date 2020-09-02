@@ -5,6 +5,19 @@
 -- Functions
 local _G = getfenv(0)
 -- Libraries
+local GetBuildInfo = _G.GetBuildInfo
+
+-- Determine WoW TOC Version
+local WoWClassic, WoWRetail, WoWShadowlands
+local wowtocversion  = select(4, GetBuildInfo())
+if wowtocversion < 19999 then
+	WoWClassic = true
+elseif wowtocversion > 19999 and wowtocversion < 90000 then 
+	WoWRetail = true
+else
+	WoWShadowlands = true
+end
+
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
@@ -41,11 +54,26 @@ constants.defaults = {
 	},
 }
 
-constants.events = {
-	"PLAYER_REGEN_ENABLED",
-	"PLAYER_REGEN_DISABLED",
-	"ZONE_CHANGED",
---	"ZONE_CHANGED_NEW",
-	"ZONE_CHANGED_NEW_AREA",
-	"ZONE_CHANGED_INDOORS",
-}
+if WoWClassic then 
+	constants.events = {
+		"PLAYER_REGEN_ENABLED",
+		"PLAYER_REGEN_DISABLED",
+		"ZONE_CHANGED",
+		"ZONE_CHANGED_NEW_AREA",
+		"ZONE_CHANGED_INDOORS",
+		"PLAYER_STARTED_MOVING",
+		"PLAYER_STOPPED_MOVING",
+	}
+else
+	constants.events = {
+		"PLAYER_REGEN_ENABLED",
+		"PLAYER_REGEN_DISABLED",
+		"ZONE_CHANGED",
+		"ZONE_CHANGED_NEW_AREA",
+		"ZONE_CHANGED_INDOORS",
+		"PLAYER_STARTED_MOVING",
+		"PLAYER_STOPPED_MOVING",
+		"WORLD_MAP_OPEN",
+		"WORLD_MAP_CLOSE",
+	}
+end

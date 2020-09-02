@@ -14,6 +14,19 @@ local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
 local GetAddOnInfo, GameTooltip, GetZonePVPInfo = _G.GetAddOnInfo, _G.GameTooltip, _G.GetZonePVPInfo
 
+local GetBuildInfo = _G.GetBuildInfo
+
+-- Determine WoW TOC Version
+local WoWClassic, WoWRetail, WoWShadowlands
+local wowtocversion  = select(4, GetBuildInfo())
+if wowtocversion < 19999 then
+	WoWClassic = true
+elseif wowtocversion > 19999 and wowtocversion < 90000 then 
+	WoWRetail = true
+else
+	WoWShadowlands = true
+end
+
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
@@ -47,6 +60,8 @@ local profile
 local locationText = ""
 
 local isInLockdown = false
+local isMoving = true
+local isWorldMapOpened = false
 local CRDS_ORIG_GAMPTOOLTIP_SCALE = GameTooltip:GetScale()
 local CRDS_POSTEXT = nil
 
@@ -101,7 +116,6 @@ local function getPlayerPositionText(isWorldMap)
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
-	-- SetMapToCurrentZone()
 	if ( IsInInstance() ) then
 		posX = 0
 		posY = 0
@@ -130,39 +144,48 @@ local function getButtonText()
 	return posText
 end
 
-local function frame_OnUpdate()
-	local posText = getButtonText()
-	if (posText ~= CRDS_POSTEXT) then
-		local pvpType = GetZonePVPInfo()
-		local color = {}
+local function updateButtonText()
+	if (profile.show_coords_onscreen and isMoving) then
+	
+		local posText = getButtonText()
+		if (posText ~= CRDS_POSTEXT) then
+			local pvpType = GetZonePVPInfo()
+			local color = {}
 
-		if ( pvpType == "sanctuary" ) then
-			color = {r=0.41, g=0.8, b=0.94}
-		elseif ( pvpType == "arena" ) then
-			color = {r=1.0, g=0.1, b=0.1}
-		elseif ( pvpType == "friendly" ) then
-			color = {r=0.1, g=1.0, b=0.1}
-		elseif ( pvpType == "hostile" ) then
-			color = {r=1.0, g=0.1, b=0.1}
-		elseif ( pvpType == "contested" ) then
-			color = {r=1.0, g=0.7, b=0.0}
-		else
-			color = {r=HIGHLIGHT_FONT_COLOR.r, g=HIGHLIGHT_FONT_COLOR.g, b=HIGHLIGHT_FONT_COLOR.b}
+			if ( pvpType == "sanctuary" ) then
+				color = {r=0.41, g=0.8, b=0.94}
+			elseif ( pvpType == "arena" ) then
+				color = {r=1.0, g=0.1, b=0.1}
+			elseif ( pvpType == "friendly" ) then
+				color = {r=0.1, g=1.0, b=0.1}
+			elseif ( pvpType == "hostile" ) then
+				color = {r=1.0, g=0.1, b=0.1}
+			elseif ( pvpType == "contested" ) then
+				color = {r=1.0, g=0.7, b=0.0}
+			else
+				--color = {r=HIGHLIGHT_FONT_COLOR.r, g=HIGHLIGHT_FONT_COLOR.g, b=HIGHLIGHT_FONT_COLOR.b}
+				color.r, color.g, color.b = HIGHLIGHT_FONT_COLOR:GetRGB()
+			end
+
+			local colortag = format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
+
+			if (CoordsTrackingFrame:IsShown()) then
+				addon.Text:SetText(posText)
+				addon:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
+				addon.Text:SetTextColor(color.r, color.g, color.b)
+			end
+
+			LDB.text = colortag..posText..FONT_COLOR_CODE_CLOSE
+			CRDS_POSTEXT = posText
 		end
-
-		local colortag = format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
-
-		if (CoordsTrackingFrame:IsShown()) then
-			addon.Text:SetText(posText)
-			addon:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
-			addon.Text:SetTextColor(color.r, color.g, color.b)
-		end
-
-		LDB.text = colortag..posText..FONT_COLOR_CODE_CLOSE
-		CRDS_POSTEXT = posText
 	end
+end
 
-	if (profile.show_coords_onworldmap) then
+local function updateWorldmapText()
+	if WoWClassic then
+		if WorldMapFrame:IsShown() then isWorldMapOpened = true else isWorldMapOpened = false end
+	end
+	if (profile.show_coords_onworldmap and isWorldMapOpened) then
 		addon.WorldMapFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
@@ -171,6 +194,11 @@ local function frame_OnUpdate()
 			addon.WorldMapFrame.cursorTxt:SetText("")
 		end
 	end
+end
+
+local function frame_OnUpdate()
+	updateButtonText()
+	updateWorldmapText()
 end
 
 local function get_zonename_tooltip(frame)
@@ -355,7 +383,7 @@ local function createCoordsOnWorldMapFrame()
 	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", -40, 20)
 	f.cursorTxt = f:CreateFontString(worldmapName.."CursorText", "OVERLAY", "NumberFontNormal")
 	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
-	
+
 	return f
 end
 
@@ -422,5 +450,21 @@ end
 
 function addon:ZONE_CHANGED_INDOORS()
 	if (profile.show_zonename) then getLocationText() end
+end
+
+function addon:PLAYER_STARTED_MOVING()
+	isMoving = true
+end
+
+function addon:PLAYER_STOPPED_MOVING()
+	isMoving = false
+end
+
+function addon:WORLD_MAP_OPEN()
+	isWorldMapOpened = true
+end
+
+function addon:WORLD_MAP_CLOSE()
+	isWorldMapOpened = false
 end
 
