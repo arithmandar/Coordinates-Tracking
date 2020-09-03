@@ -60,7 +60,6 @@ local profile
 local locationText = ""
 
 local isInLockdown = false
-local isMoving = true
 
 local CRDS_ORIG_GAMPTOOLTIP_SCALE = GameTooltip:GetScale()
 local CRDS_POSTEXT = nil
@@ -145,7 +144,7 @@ local function getButtonText()
 end
 
 local function updateButtonText()
-	if (profile.show_coords_onscreen and isMoving) then
+	if (profile.show_coords_onscreen) then
 	
 		local posText = getButtonText()
 		if (posText ~= CRDS_POSTEXT) then
@@ -450,12 +449,4 @@ end
 
 function addon:ZONE_CHANGED_INDOORS()
 	if (profile.show_zonename) then getLocationText() end
-end
-
-function addon:PLAYER_STARTED_MOVING()
-	isMoving = true
-end
-
-function addon:PLAYER_STOPPED_MOVING()
-	isMoving = false
 end
