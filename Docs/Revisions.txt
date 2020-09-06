@@ -7,6 +7,7 @@ Revision History:
 -----------------------
 - Added background control to onscreen frame
 - Added detection to check if WorldMap is shown and then to update workmapfram's button text
+- Added options to toggle WorldMap frame's text position
 
 * v2.15 (Aug. 24, 2020)
 -----------------------

@@ -6,6 +6,8 @@
 local _G = getfenv(0)
 local pairs = _G.pairs
 -- Libraries
+local math = _G.math
+local modf = math.modf
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
@@ -20,6 +22,8 @@ local AceDBOptions = LibStub("AceDBOptions-3.0")
 local Media = LibStub("LibSharedMedia-3.0")
 
 local profile
+
+local WMwidth, WMheight = WorldMapFrame.ScrollContainer.Child:GetWidth(), WorldMapFrame.ScrollContainer.Child:GetHeight()
 
 local optGetter, optSetter
 do
@@ -52,26 +56,39 @@ local function getOptions()
 					set = optSetter,
 					args = {
 						version = {
-							order = 1,
+							order = 10,
 							type = "description",
 							name = addon.Notes,
 							width = "full",
 						},
 						-- Display Settings
 						group1 = {
-							order = 10,
+							order = 20,
 							type = "group",
-							name = L["Display Settings"],
+							name = L["General Settings"],
 							--inline = true,
 							args = {
 								show_coords_onscreen = {
-									order = 11,
+									order = 21,
 									type = "toggle",
 									name = L["Show coordinates info on screen"],
 									width = "full",
 								},
+								resetPos = {
+									order = 22, 
+									type = "execute",
+									name = L["Reset position"],
+									func = function()
+										CoordsTrackingFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", 450, -80)
+										profile.offsetx = 450
+										profile.offsety = -80
+									end,
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
+								},
 								show_zonename = {
-									order = 12,
+									order = 23,
 									type = "toggle",
 									name = L["Show zone name together with coordinates"],
 									width = "full",
@@ -80,7 +97,7 @@ local function getOptions()
 									end,
 								},
 								show_zonenametooltip = {
-									order = 13,
+									order = 24,
 									type = "toggle",
 									name = L["Show zone name as tooltip on coordinates when mouse hover"],
 									width = "full",
@@ -89,32 +106,22 @@ local function getOptions()
 									end,
 								},
 								show_coords_onworldmap = {
-									order = 14,
+									order = 25,
 									type = "toggle",
 									name = L["Show coordinates info on world map"],
 									width = "full",
-								},
-								resetPos = {
-									order = 15, 
-									type = "execute",
-									name = L["Reset position"],
-									func = function()
-										CoordsTrackingFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", 450, -80)
-										profile.offsetx = 450
-										profile.offsety = -80
-									end,
 								},
 							},
 						},
 						-- Coordinates' accuracy
 						group2 = {
-							order = 20,
+							order = 30,
 							type = "group",
 							name = L["Coordinates' accuracy"],
 							--inline = true,
 							args = {
 								coords_accuracy = {
-									order = 1,
+									order = 31,
 									type = "range",
 									name = L["On-screen frame"],
 									min = 0, max = 4, bigStep = 1, 
@@ -123,7 +130,7 @@ local function getOptions()
 									end,
 								},
 								worldmap_accuracy = {
-									order = 2,
+									order = 32,
 									type = "range",
 									name = WORLD_MAP,
 									min = 0, max = 4, bigStep = 1, 
@@ -136,181 +143,175 @@ local function getOptions()
 								return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
 							end,
 						},
-						-- Layout settings
-						group3 = {
-							order = 30,
+						-- Font Settings
+						font_settings = {
+							order = 40,
 							type = "group",
-							name = L["Layouts Settings"],
+							name = L["Font Settings"],
+							--inline = true,
 							args = {
-								-- Font Settings
-								font_settings = {
-									order = 1,
+								font_settings_onscreen = {
+									order = 41,
 									type = "group",
-									name = L["Font Settings"],
+									name = L["Setup font style for on-screen frame"],
 									inline = true,
 									args = {
-										font_settings_onscreen = {
+										font_onscreen = {
 											order = 1,
-											type = "group",
-											name = L["Setup font style for on-screen frame"],
-											inline = true,
-											args = {
-												font_onscreen = {
-													order = 1,
-													type = "select",
-													dialogControl = 'LSM30_Font',
-													name = L["Select font"],
-													get = function()
-														return profile.font_onscreen
-													end,
-													set = function(info, value)
-														profile.font_onscreen = value
-														addon:SetOnScreenFontStyle()
-													end,
-													values = AceGUIWidgetLSMlists.font,
-												},
-												fontsize_onscreen = {
-													order = 2, 
-													type = "range",
-													name = L["Configure font size"],
-													min = 7, max = 20, step = 1,
-													get = function() 
-														return profile.fontsize_onscreen
-													end,
-													set = function(info, value)
-														profile.fontsize_onscreen = value
-														addon:SetOnScreenFontStyle()
-													end,
-												},
-												fontoutline_onscreen = {
-													order = 3, 
-													type = "toggle",
-													name = L["Show outline"],
-												},
-											},
-											disabled = function()
-												return not profile.show_coords_onscreen
+											type = "select",
+											dialogControl = 'LSM30_Font',
+											name = L["Select font"],
+											get = function()
+												return profile.font_onscreen
+											end,
+											set = function(info, value)
+												profile.font_onscreen = value
+												addon:SetOnScreenFontStyle()
+											end,
+											values = AceGUIWidgetLSMlists.font,
+										},
+										fontsize_onscreen = {
+											order = 2, 
+											type = "range",
+											name = L["Configure font size"],
+											min = 7, max = 20, step = 1,
+											get = function() 
+												return profile.fontsize_onscreen
+											end,
+											set = function(info, value)
+												profile.fontsize_onscreen = value
+												addon:SetOnScreenFontStyle()
 											end,
 										},
-										font_settings_worldmap = {
-											order = 2,
-											type = "group",
-											name = L["Setup font style for coordinates on WorldMap frame"],
-											inline = true,
-											args = {
-												font_worldmap = {
-													order = 1,
-													type = "select",
-													dialogControl = 'LSM30_Font',
-													name = L["Select font"],
-													get = function()
-														return profile.font_worldmap
-													end,
-													set = function(info, value)
-														profile.font_worldmap =  value
-														addon:SetWorldMapFontStyle()
-													end,
-													values = AceGUIWidgetLSMlists.font,
-												},
-												fontsize_worldmap = {
-													order = 2, 
-													type = "range",
-													name = L["Configure font size"],
-													min = 7, max = 20, step = 1,
-													get = function() 
-														return profile.fontsize_worldmap
-													end,
-													set = function(info, value)
-														profile.fontsize_worldmap = value
-														addon:SetWorldMapFontStyle()
-													end,
-												},
-												fontcolor_worldmap = {
-													order = 3,
-													type = "color",
-													hasAlpha = false,
-													name = L["Configure font color"],
-													get = function()
-														local color = profile.fontcolor_worldmap
-														return color.r or 1, color.g or 1, color.b or 1
-													end,
-													set = function(info, r, g, b)
-														local color = {}
-														color.r, color.g, color.b = r, g, b
-														profile.fontcolor_worldmap = color
-														addon:SetWorldMapFontColor()
-													end,
-												},
-												fontoutline_worldmap = {
-													order = 4, 
-													type = "toggle",
-													name = L["Show outline"],
-												},
-											},
-											disabled = function()
-												return not profile.show_coords_onworldmap
-											end,
+										fontoutline_onscreen = {
+											order = 3, 
+											type = "toggle",
+											name = L["Show outline"],
 										},
 									},
 									disabled = function()
-										return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
+										return not profile.show_coords_onscreen
 									end,
 								},
-								-- Scale and Transparency
-								scale_transparency = {
-									order = 2,
+								font_settings_worldmap = {
+									order = 42,
 									type = "group",
-									name = L["Scale and Transparency"],
+									name = L["Setup font style for coordinates on WorldMap frame"],
 									inline = true,
 									args = {
-										scale_transparency_onscreen = {
+										font_worldmap = {
 											order = 1,
-											type = "group",
-											name = L["On-screen frame"],
-											inline = true,
-											args = {
-												alpha = {
-													order = 1,
-													type = "range",
-													name = L["Transparency"],
-													min = 0, max = 1, bigStep = 0.1, 
-												},
-												scale = {
-													order = 2,
-													type = "range",
-													name = L["Scale"],
-													min = 0, max = 3, bigStep = 0.1, 
-												},
-											},
+											type = "select",
+											dialogControl = 'LSM30_Font',
+											name = L["Select font"],
+											get = function()
+												return profile.font_worldmap
+											end,
+											set = function(info, value)
+												profile.font_worldmap =  value
+												addon:SetWorldMapFontStyle()
+											end,
+											values = AceGUIWidgetLSMlists.font,
 										},
-										scale_transparency_tooltip = {
-											order = 2,
-											type = "group",
-											name = L["Tooltip"],
-											inline = true,
-											args = {
-												tooltip_alpha = {
-													order = 1,
-													type = "range",
-													name = L["Transparency"],
-													min = 0, max = 1, bigStep = 0.1, 
-												},
-												tooltip_scale = {
-													order = 2,
-													type = "range",
-													name = L["Scale"],
-													min = 0, max = 1.75, bigStep = 0.01, 
-												},
-											},
+										fontsize_worldmap = {
+											order = 2, 
+											type = "range",
+											name = L["Configure font size"],
+											min = 7, max = 20, step = 1,
+											get = function() 
+												return profile.fontsize_worldmap
+											end,
+											set = function(info, value)
+												profile.fontsize_worldmap = value
+												addon:SetWorldMapFontStyle()
+											end,
+										},
+										fontcolor_worldmap = {
+											order = 3,
+											type = "color",
+											hasAlpha = false,
+											name = L["Configure font color"],
+											get = function()
+												local color = profile.fontcolor_worldmap
+												return color.r or 1, color.g or 1, color.b or 1
+											end,
+											set = function(info, r, g, b)
+												local color = {}
+												color.r, color.g, color.b = r, g, b
+												profile.fontcolor_worldmap = color
+												addon:SetWorldMapFontColor()
+											end,
+										},
+										fontoutline_worldmap = {
+											order = 4, 
+											type = "toggle",
+											name = L["Show outline"],
 										},
 									},
 									disabled = function()
-										return not (profile.show_coords_onscreen)
+										return not profile.show_coords_onworldmap
 									end,
+								},
+							},
+							disabled = function()
+								return not (profile.show_coords_onworldmap or profile.show_coords_onscreen)
+							end,
+						},
+						-- Display Settings
+						display_settings = {
+							order = 50,
+							type = "group",
+							name = L["Display Settings"],
+							--inline = true,
+							args = {
+								desc = {
+									order = 51, 
+									type = "header",
+									name = L["Onscreen frame settings"],
+								},
+								scale_transparency_onscreen = {
+									order = 53,
+									type = "group",
+									name = L["On-screen frame text"],
+									inline = true,
+									args = {
+										alpha = {
+											order = 1,
+											type = "range",
+											name = L["Transparency"],
+											min = 0, max = 1, bigStep = 0.1, 
+										},
+										scale = {
+											order = 2,
+											type = "range",
+											name = L["Scale"],
+											min = 0, max = 3, bigStep = 0.1, 
+										},
+									},
+								},
+								scale_transparency_tooltip = {
+									order = 54,
+									type = "group",
+									name = L["Tooltip"],
+									inline = true,
+									args = {
+										tooltip_alpha = {
+											order = 1,
+											type = "range",
+											name = L["Transparency"],
+											min = 0, max = 1, bigStep = 0.1, 
+										},
+										tooltip_scale = {
+											order = 2,
+											type = "range",
+											name = L["Scale"],
+											min = 0, max = 1.75, bigStep = 0.01, 
+										},
+									},
 								},
 								-- Background and border
 								background_border = {
-									order = 3,
+									order = 55,
 									type = "group",
 									name = L["Background"],
 									inline = true,
@@ -351,6 +352,71 @@ local function getOptions()
 									end,
 								},
 							},
+							disabled = function()
+								return not (profile.show_coords_onscreen)
+							end,
+						},
+						-- WorldMap Settings
+						worldmap = {
+							order = 60,
+							type = "group",
+							name = L["WorldMap Settings"],
+							--inline = true,
+							args = {
+								point = {
+									order = 1, 
+									type = "select",
+									name = L["Ancor point"],
+									desc = L["Point of the font string to adjust based on the anchor."],
+									values = function()
+										return {
+											["TOPLEFT"] 	= "TOPLEFT",
+											["TOPRIGHT"] 	= "TOPRIGHT",
+											["BOTTOMLEFT"] 	= "BOTTOMLEFT",
+											["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+										}
+									end,
+									get = function()
+										return profile.wmPoint.point
+									end,
+									set = function(info, value)
+										profile.wmPoint.point = value
+										profile.wmPoint.relativePoint = value
+										addon:Refresh()
+									end,
+								},
+								ofsx = {
+									order = 2, 
+									type = "range",
+									name = L["Horizantal offset"],
+									width = "full",
+									min = 0, max = modf(WMwidth/2)+100, bigStep = 1, 
+									get = function()
+										return profile.wmPoint.ofsx
+									end,
+									set = function(info, value)
+										profile.wmPoint.ofsx = value
+										addon:Refresh()
+									end,
+								},
+								ofsy = {
+									order = 3, 
+									type = "range",
+									name = L["Vertical offset"],
+									width = "full",
+									min = 0, max = modf(WMheight), bigStep = 1, 
+									get = function()
+										return profile.wmPoint.ofsy
+									end,
+									set = function(info, value)
+										profile.wmPoint.ofsy = value
+										addon:Refresh()
+									end,
+								},
+							},
+							disabled = function()
+								return not profile.show_coords_onworldmap
+							end,
 						},
 					},
 				},
