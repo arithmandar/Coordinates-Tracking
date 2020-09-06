@@ -26,6 +26,13 @@ constants.defaults = {
 		coords_accuracy = 1,
 		worldmap_accuracy = 2,
 		point = { "TOPLEFT", "UIParent", "TOPLEFT", 450, -80 },
+		wmPoint = {
+			point = "BOTTOMLEFT",
+			relativeTo = WorldMapFrame.ScrollContainer,
+			relativePoint = "BOTTOMLEFT",
+			ofsx = 0,
+			ofsy = 0,
+		},
 		alpha = 1,
 		scale = 1,
 		tooltip_alpha = 0.9,

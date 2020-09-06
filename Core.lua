@@ -373,13 +373,34 @@ function addon:SetWorldMapFontColor()
 	end
 end
 
+local function CoordsOnWorldMapFrameRefresh()
+	local f = _G[worldmapName]
+	if not f then return end
+	local weight = f.playerTxt:GetStringWidth() + f.cursorTxt:GetStringWidth() + 20
+	if (profile.wmPoint) then
+		local wp = profile.wmPoint
+		local point, relativeTo, relativePoint, ofsx, ofsy = wp.point, wp.relativeTo, wp.relativePoint, wp.ofsx, wp.ofsy
+		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
+			ofsx = -ofsx - weight
+		end
+		if (point == "TOPRIGHT" or point == "TOPLEFT") then
+			ofsy = - ofsy - 6
+		else
+			ofsy = ofsy - 20
+		end
+		f.playerTxt:ClearAllPoints()
+		f.playerTxt:SetPoint(point or "TOPLEFT", relativeTo, relativePoint or "TOPLEFT", ofsx or 0, ofsy or 0)
+	end
+end
+
 local function createCoordsOnWorldMapFrame()
 	local f = _G[worldmapName]
 	if not f then f = CreateFrame("Frame", worldmapName, WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
 	
-	--f:SetFrameLevel(WorldMapFrame.UIElementsFrame:GetFrameLevel() + 20)
+
 	f.playerTxt = f:CreateFontString(worldmapName.."PlayerText", "OVERLAY", "NumberFontNormal")
-	f.playerTxt:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "BOTTOM", -40, 20)
+	--f.playerTxt:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
+
 	f.cursorTxt = f:CreateFontString(worldmapName.."CursorText", "OVERLAY", "NumberFontNormal")
 	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
 
@@ -417,6 +438,7 @@ function addon:Refresh()
 	profile = self.db.profile
 	
 	onscreenFrameStatusRefresh()
+	CoordsOnWorldMapFrameRefresh()
 	addon:SetOnScreenFontStyle()
 	addon:SetWorldMapFontStyle()
 	if (profile.show_coords_onworldmap) then
