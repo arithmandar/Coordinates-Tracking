@@ -394,7 +394,7 @@ local function getOptions()
 									type = "range",
 									name = L["Horizantal offset"],
 									width = "full",
-									min = 0, max = modf(WMwidth/2)+100, bigStep = 1, 
+									min = 0, max = modf(WMwidth/2)-28, bigStep = 1, 
 									get = function()
 										return profile.wmPoint.ofsx
 									end,
@@ -408,7 +408,7 @@ local function getOptions()
 									type = "range",
 									name = L["Vertical offset"],
 									width = "full",
-									min = 0, max = modf(WMheight), bigStep = 1, 
+									min = 0, max = modf(WMheight) -4, bigStep = 1, 
 									get = function()
 										return profile.wmPoint.ofsy
 									end,
