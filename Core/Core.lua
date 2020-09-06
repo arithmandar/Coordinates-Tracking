@@ -376,12 +376,12 @@ end
 local function CoordsOnWorldMapFrameRefresh()
 	local f = _G[worldmapName]
 	if not f then return end
-	local weight = f.playerTxt:GetStringWidth() + f.cursorTxt:GetStringWidth() + 20
+	local width = f.playerTxt:GetStringWidth() + f.cursorTxt:GetStringWidth() + 20
 	if (profile.wmPoint) then
 		local wp = profile.wmPoint
 		local point, relativeTo, relativePoint, ofsx, ofsy = wp.point, wp.relativeTo, wp.relativePoint, wp.ofsx, wp.ofsy
 		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-			ofsx = -ofsx - weight
+			ofsx = -ofsx - width
 		end
 		if (point == "TOPRIGHT" or point == "TOPLEFT") then
 			ofsy = - ofsy - (WoWClassic and 6 or 0)
