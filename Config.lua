@@ -23,7 +23,11 @@ local Media = LibStub("LibSharedMedia-3.0")
 
 local profile
 
-local WMwidth, WMheight = WorldMapFrame.ScrollContainer.Child:GetWidth(), WorldMapFrame.ScrollContainer.Child:GetHeight()
+--local WMwidth, WMheight = WorldMapFrame.ScrollContainer.Child:GetWidth(), WorldMapFrame.ScrollContainer.Child:GetHeight()
+local WMwidth, WMheight = WorldMapFrame.ScrollContainer:GetWidth() , WorldMapFrame.ScrollContainer:GetHeight()
+if (WMwidth == 0) then 
+	WMwidth, WMheight = 696, 454
+end
 
 local optGetter, optSetter
 do

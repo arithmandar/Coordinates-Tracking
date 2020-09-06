@@ -384,9 +384,9 @@ local function CoordsOnWorldMapFrameRefresh()
 			ofsx = -ofsx - weight
 		end
 		if (point == "TOPRIGHT" or point == "TOPLEFT") then
-			ofsy = - ofsy - 6
+			ofsy = - ofsy - (WoWClassic and 6 or 0)
 		else
-			ofsy = ofsy - 20
+			ofsy = ofsy - (WoWClassic and 20 or 0)
 		end
 		f.playerTxt:ClearAllPoints()
 		f.playerTxt:SetPoint(point or "TOPLEFT", relativeTo, relativePoint or "TOPLEFT", ofsx or 0, ofsy or 0)
