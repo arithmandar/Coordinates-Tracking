@@ -28,7 +28,6 @@ constants.defaults = {
 		point = { "TOPLEFT", "UIParent", "TOPLEFT", 450, -80 },
 		wmPoint = {
 			point = "BOTTOMLEFT",
-			relativeTo = WorldMapFrame.ScrollContainer,
 			relativePoint = "BOTTOMLEFT",
 			ofsx = 0,
 			ofsy = 0,
