@@ -81,11 +81,15 @@ local function getCursorPositionText()
 	local width, height = WorldMapScrollChild:GetWidth(), WorldMapScrollChild:GetHeight()
 	local scale = WorldMapScrollChild:GetEffectiveScale()
 	
-	if (width == 0) or (height == 0) then return end 
-
-	local x, y = GetCursorPosition()
-	local cx = (x/scale - left) / width
-	local cy = (top - y/scale) / height
+	local cx, cy, x, y
+	
+	if (width == 0) or (height == 0) then 
+		cx, cy = 0, 0
+	else
+		x, y = GetCursorPosition()
+		cx = (x/scale - left) / width
+		cy = (top - y/scale) / height
+	end 
 
 	if (cx < 0 or cx > 1 or cy < 0 or cy > 1) then
 		return
@@ -180,16 +184,18 @@ local function updateButtonText()
 	end
 end
 
-local function updateWorldmapText()
+local function updateWorldmapText(isInitialize)
 	local isWorldMapOpened = WorldMapFrame:IsShown()
 
-	if (profile.show_coords_onworldmap and isWorldMapOpened) then
+	if (profile.show_coords_onworldmap and (isWorldMapOpened or isInitialize)) then
 		addon.WorldMapFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
-			addon.WorldMapFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos)
+			addon.WorldMapFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos or "0.0, 0.0")
+			addon.WorldMapFrame.cursorTxt:Show()
 		else
-			addon.WorldMapFrame.cursorTxt:SetText("")
+			--addon.WorldMapFrame.cursorTxt:SetText("")
+			addon.WorldMapFrame.cursorTxt:Hide()
 		end
 	end
 end
@@ -376,20 +382,30 @@ end
 local function CoordsOnWorldMapFrameRefresh()
 	local f = _G[worldmapName]
 	if not f then return end
-	local width = f.playerTxt:GetStringWidth() + f.cursorTxt:GetStringWidth() + 20
+	updateWorldmapText(true)
 	if (profile.wmPoint) then
 		local wp = profile.wmPoint
-		local point, relativeTo, relativePoint, ofsx, ofsy = wp.point, wp.relativeTo, wp.relativePoint, wp.ofsx, wp.ofsy
+		local point, relativePoint, ofsx, ofsy = wp.point, wp.relativePoint, wp.ofsx, wp.ofsy
 		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-			ofsx = -ofsx - width
+			ofsx = -ofsx
 		end
 		if (point == "TOPRIGHT" or point == "TOPLEFT") then
 			ofsy = - ofsy - (WoWClassic and 6 or 0)
 		else
 			ofsy = ofsy - (WoWClassic and 20 or 0)
 		end
-		f.playerTxt:ClearAllPoints()
-		f.playerTxt:SetPoint(point or "TOPLEFT", relativeTo, relativePoint or "TOPLEFT", ofsx or 0, ofsy or 0)
+		
+		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
+			f.cursorTxt:ClearAllPoints()
+			f.cursorTxt:SetPoint(point, WorldMapFrame.ScrollContainer, relativePoint, ofsx, ofsy)
+			f.playerTxt:ClearAllPoints()
+			f.playerTxt:SetPoint("TOPRIGHT", f.cursorTxt, "TOPLEFT", -20, 0)
+		else
+			f.playerTxt:ClearAllPoints()
+			f.playerTxt:SetPoint(point or "TOPLEFT", WorldMapFrame.ScrollContainer, relativePoint or "TOPLEFT", ofsx or 0, ofsy or 0)
+			f.cursorTxt:ClearAllPoints()
+			f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
+		end
 	end
 end
 
@@ -402,7 +418,7 @@ local function createCoordsOnWorldMapFrame()
 	--f.playerTxt:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
 
 	f.cursorTxt = f:CreateFontString(worldmapName.."CursorText", "OVERLAY", "NumberFontNormal")
-	f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
+	--f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
 
 	return f
 end
