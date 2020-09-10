@@ -3,7 +3,7 @@
 Revision History:
 =================
 
-* v2.16 (Sep. xx, 2020)
+* v2.16 (Sep. 10, 2020)
 -----------------------
 - Added background control to onscreen frame
 - Added detection to check if WorldMap is shown and then to update workmapfram's button text
