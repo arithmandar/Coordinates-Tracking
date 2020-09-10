@@ -27,9 +27,9 @@ constants.defaults = {
 		worldmap_accuracy = 2,
 		point = { "TOPLEFT", "UIParent", "TOPLEFT", 450, -80 },
 		wmPoint = {
-			point = "BOTTOMLEFT",
-			relativePoint = "BOTTOMLEFT",
-			ofsx = 0,
+			point = "BOTTOMRIGHT",
+			relativePoint = "BOTTOMRIGHT",
+			ofsx = 40,
 			ofsy = 0,
 		},
 		alpha = 1,
