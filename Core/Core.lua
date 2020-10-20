@@ -186,16 +186,17 @@ end
 
 local function updateWorldmapText(isInitialize)
 	local isWorldMapOpened = WorldMapFrame:IsShown()
+	local WMFrame = addon.WorldMapFrame
 
 	if (profile.show_coords_onworldmap and (isWorldMapOpened or isInitialize)) then
-		addon.WorldMapFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
+		WMFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
-			addon.WorldMapFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos or "0.0, 0.0")
-			addon.WorldMapFrame.cursorTxt:Show()
+			WMFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos or "0.0, 0.0")
+			WMFrame.cursorTxt:Show()
 		else
-			--addon.WorldMapFrame.cursorTxt:SetText("")
-			addon.WorldMapFrame.cursorTxt:Hide()
+			--WMFrame.cursorTxt:SetText("")
+			WMFrame.cursorTxt:Hide()
 		end
 	end
 end
@@ -296,7 +297,6 @@ local function setupCoordsTrackingFrame()
 
 	local function onUpdate()
 		updateButtonText()
-		updateWorldmapText()
 	end
 
 	local name = addon.Name
@@ -413,12 +413,17 @@ local function createCoordsOnWorldMapFrame()
 	local f = _G[worldmapName]
 	if not f then f = CreateFrame("Frame", worldmapName, WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
 	
+	local function onUpdate()
+		updateWorldmapText()
+	end
 
 	f.playerTxt = f:CreateFontString(worldmapName.."PlayerText", "OVERLAY", "NumberFontNormal")
 	--f.playerTxt:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
 
 	f.cursorTxt = f:CreateFontString(worldmapName.."CursorText", "OVERLAY", "NumberFontNormal")
 	--f.cursorTxt:SetPoint("TOPLEFT", f.playerTxt, "TOPRIGHT", 20, 0)
+
+	f:SetScript("OnUpdate", onUpdate)
 
 	return f
 end
