@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.19 (Nov. 22, 2020)
+-----------------------
+- ToC update to support WoW 9.0.2
+
 * v2.18 (Oct. 20, 2020)
 -----------------------
 - Fixed issue that worldmap coordinates won't get updated when on-screen frame os disabled.
