@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.22 (Jun. 30, 2021)
+-----------------------
+- ToC update to support WoW 9.1.0
+
 * v2.21 (May 19, 2021)
 -----------------------
 - ToC update to support WoW 9.0.5
