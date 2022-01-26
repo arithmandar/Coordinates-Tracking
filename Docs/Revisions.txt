@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v2.22 (Jan. 26, 2022)
+-----------------------
+- ToC update to support WoW 9.1.5
+- Fixed GameToolTip's backdrop setting issue
+
 * v2.22 (Jun. 30, 2021)
 -----------------------
 - ToC update to support WoW 9.1.0

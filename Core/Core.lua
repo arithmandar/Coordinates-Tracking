@@ -6,7 +6,6 @@
 local _G = getfenv(0)
 local pairs, string, select = _G.pairs, _G.string, _G.select
 -- Libraries
-local GameTooltip = GameTooltip
 local format = string.format
 
 local GetCursorPosition, GetSubZoneText, GetZoneText = _G.GetCursorPosition, _G.GetSubZoneText, _G.GetZoneText
@@ -205,7 +204,8 @@ local function get_zonename_tooltip(frame)
 		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
 		local zoneText = locationText
 		if frame then GameTooltip:SetOwner(frame, "ANCHOR_BOTTOM", -10, 0) end
-		GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
+		--GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
+		GameTooltip.NineSlice:SetCenterColor(0, 0, 0, profile.tooltip_alpha)
 		if ( pvpType == "sanctuary" ) then
 			GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 )
 		elseif ( pvpType == "arena" ) then
