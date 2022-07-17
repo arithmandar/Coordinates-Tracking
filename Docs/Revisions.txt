@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.28 (Jul. 17, 2022)
+-----------------------
+- Classic ToC update to support WoW 1.14.3
+
 * v2.27 (Jul. 17, 2022)
 -----------------------
 - Toc update to support WoW 9.2.5
