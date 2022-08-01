@@ -109,8 +109,17 @@ local function getOptions()
 										return not profile.show_coords_onscreen
 									end,
 								},
-								show_coords_onworldmap = {
+								show_indungeon = {
 									order = 25,
+									type = "toggle",
+									name = L["Show while in dungeon"],
+									width = "full",
+									disabled = function()
+										return not profile.show_coords_onscreen
+									end,
+								},
+								show_coords_onworldmap = {
+									order = 26,
 									type = "toggle",
 									name = L["Show coordinates info on world map"],
 									width = "full",

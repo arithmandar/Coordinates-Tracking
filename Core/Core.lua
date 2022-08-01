@@ -16,12 +16,18 @@ local GetAddOnInfo, GameTooltip, GetZonePVPInfo = _G.GetAddOnInfo, _G.GameToolti
 local GetBuildInfo = _G.GetBuildInfo
 
 -- Determine WoW TOC Version
-local WoWClassic, WoWRetail
-local wowtocversion  = select(4, GetBuildInfo())
-if wowtocversion < 30000 then
-	WoWClassic = true
-else
+local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWRetail
+local wowversion  = select(4, GetBuildInfo())
+if wowversion < 20000 then
+	WoWClassicEra = true
+elseif wowversion < 30000 then 
+	WoWClassicTBC = true
+elseif wowversion < 40000 then 
+	WoWWOTLKC = true
+elseif wowversion > 90000 then
 	WoWRetail = true
+else
+	-- n/a
 end
 
 -- ----------------------------------------------------------------------------
@@ -117,28 +123,31 @@ local function getPlayerPositionText(isWorldMap)
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
 	if ( IsInInstance() ) then
-		posX = 0
-		posY = 0
+		posText = ""
 	elseif (posXY) then
 		posX, posY = posXY:GetXY()
+		posText = format(crdsText, posX and posX*100 or 0, posY and posY*100 or 0)
 	end
-	
-	posText = format(crdsText, posX and posX*100 or 0, posY and posY*100 or 0)
 	
 	return posText
 end
 
 local function getButtonText()
 	local posText = ""
+	local playerPosText = getPlayerPositionText()
 
 	if (profile.show_zonename) then
-		if ( IsInInstance() ) then 
-			posText = locationText
+		if ( IsInInstance() ) then
+			if (profile.show_indungeon) then 
+				posText = locationText
+			else
+				posText = ""
+			end
 		else
-			posText = format("%s"..L["COLON"]..getPlayerPositionText(), locationText)
+			posText = format("%s"..L["COLON"].."%s", locationText or "", playerPosText or "")
 		end
 	else
-		posText = getPlayerPositionText()
+		posText = playerPosText
 	end
 
 	return posText
@@ -147,7 +156,7 @@ end
 local function updateButtonText()
 	if (profile.show_coords_onscreen) then
 	
-		local posText = getButtonText()
+		local posText = getButtonText() or ""
 		if (posText ~= CRDS_POSTEXT) then
 			local pvpType = GetZonePVPInfo()
 			local color = {}
@@ -184,9 +193,10 @@ end
 local function updateWorldmapText(isInitialize)
 	local isWorldMapOpened = WorldMapFrame:IsShown()
 	local WMFrame = addon.WorldMapFrame
+	local playerPosText = getPlayerPositionText(true) or ""
 
 	if (profile.show_coords_onworldmap and (isWorldMapOpened or isInitialize)) then
-		WMFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..getPlayerPositionText(true))
+		WMFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..playerPosText)
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
 			WMFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos or "0.0, 0.0")
@@ -233,15 +243,21 @@ end
 local function onscreenFrameStatusRefresh()
 	local f = _G[private.addon_name.."Frame"]
 	if (f and profile.show_coords_onscreen) then
-		f:Show()
-		f:SetAlpha(profile.alpha)
-		f:SetScale(profile.scale)
-		local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
-		f:ClearAllPoints()
-		f:SetParent("UIParent")
-		f:SetPoint(point or "TOPLEFT", nil, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
+		if (IsInInstance() and (not profile.show_indungeon)) then
+			f:Hide()
+		else
+			f:Show()
+			f:SetAlpha(profile.alpha)
+			f:SetScale(profile.scale)
+			local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
+			f:ClearAllPoints()
+			f:SetParent("UIParent")
+			f:SetPoint(point or "TOPLEFT", nil, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
+		end
 	elseif (f) then
 		f:Hide()
+	else
+		-- do nothing
 	end
 end
 
@@ -282,7 +298,7 @@ local function setupCoordsTrackingFrame()
 		end
 
 		if (profile.show_zonenametooltip) then
-			if(CoordsTrackingFrame:IsVisible()) then
+			if(CoordsTrackingFrame:IsVisible() and (not IsInInstance())) then
 				get_zonename_tooltip(self)
 			end
 		end
@@ -378,6 +394,14 @@ function addon:SetWorldMapFontColor()
 end
 
 local function CoordsOnWorldMapFrameRefresh()
+	local ofsy_diff1, ofsy_diff2 = 0, 0
+	if (WoWRetail) then
+		-- n/a
+	else
+		ofsy_diff1 = 6
+		ofsy_diff2 = 20
+	end
+
 	local f = _G[worldmapName]
 	if not f then return end
 	updateWorldmapText(true)
@@ -388,9 +412,9 @@ local function CoordsOnWorldMapFrameRefresh()
 			ofsx = -ofsx
 		end
 		if (point == "TOPRIGHT" or point == "TOPLEFT") then
-			ofsy = - ofsy - (WoWClassic and 6 or 0)
+			ofsy = - ofsy - ofsy_diff1
 		else
-			ofsy = ofsy - (WoWClassic and 20 or 0)
+			ofsy = ofsy - ofsy_diff2
 		end
 		
 		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then

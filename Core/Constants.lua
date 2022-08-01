@@ -23,6 +23,7 @@ constants.defaults = {
 		show_zonename = true,
 		show_zonenametooltip = true,
 		show_coords_onworldmap = true,
+		show_indungeon = false,
 		coords_accuracy = 1,
 		worldmap_accuracy = 2,
 		point = { "TOPLEFT", "UIParent", "TOPLEFT", 450, -80 },
