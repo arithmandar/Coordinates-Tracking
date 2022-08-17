@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.30 (Aug. 17, 2022)
+-----------------------
+- Toc update to support WoW 9.2.7
+
 * v2.29 (Aug. 02, 2022)
 -----------------------
 - Added option to toggle whether to show or not while in dungeon
