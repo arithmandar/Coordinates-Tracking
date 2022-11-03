@@ -448,7 +448,9 @@ local function openOptions()
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.Profiles)
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.Profiles) -- yes, run twice to force the tre get expanded
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.General)
-	InterfaceOptionsFrame:Raise()
+	if InterfaceOptionsFrame then
+		InterfaceOptionsFrame:Raise()
+	end
 end
 
 function addon:OpenOptions() 

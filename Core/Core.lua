@@ -251,7 +251,7 @@ local function onscreenFrameStatusRefresh()
 			f:SetScale(profile.scale)
 			local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
 			f:ClearAllPoints()
-			f:SetParent("UIParent")
+			f:SetParent(UIParent)
 			f:SetPoint(point or "TOPLEFT", nil, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 		end
 	elseif (f) then
@@ -321,7 +321,7 @@ local function setupCoordsTrackingFrame()
 	f:SetHeight(28)
 	--f:SetText(name)
 	local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
-	f:SetPoint(point or "TOPLEFT", "UIParent", relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
+	f:SetPoint(point or "TOPLEFT", UIParent, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 	
 	f.Background = f:CreateTexture(name.."Background", "BACKGROUND")
 	f.Border = CreateFrame("Frame", name.."Border", f, BackdropTemplateMixin and "BackdropTemplate" or nil)
