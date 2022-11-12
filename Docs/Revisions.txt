@@ -3,7 +3,7 @@
 Revision History:
 =================
 
-* v2.32 (Nov. XX, 2022)
+* v2.32 (Nov. 12, 2022)
 -----------------------
 - Fixed the issue that toggling to show coords while in dungeon or not is not functioning well
 

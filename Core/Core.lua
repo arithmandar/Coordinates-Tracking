@@ -122,7 +122,7 @@ local function getPlayerPositionText(isWorldMap)
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
-	if ( IsInInstance() ) then
+	if ( IsInInstance() or (C_Garrison and C_Garrison.IsOnGarrisonMap())) then
 		if (profile.show_indungeon) then
 			posText = "0.0, 0.0"
 		else
