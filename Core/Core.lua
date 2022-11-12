@@ -123,7 +123,11 @@ local function getPlayerPositionText(isWorldMap)
 	crdsText = crdsTextTemplate:format(acc, acc)
 	
 	if ( IsInInstance() ) then
-		posText = ""
+		if (profile.show_indungeon) then
+			posText = "0.0, 0.0"
+		else
+			posText = ""
+		end
 	elseif (posXY) then
 		posX, posY = posXY:GetXY()
 		posText = format(crdsText, posX and posX*100 or 0, posY and posY*100 or 0)
@@ -139,7 +143,7 @@ local function getButtonText()
 	if (profile.show_zonename) then
 		if ( IsInInstance() ) then
 			if (profile.show_indungeon) then 
-				posText = locationText
+				posText = format("%s"..L["COLON"].."%s", locationText or "", playerPosText or "")
 			else
 				posText = ""
 			end

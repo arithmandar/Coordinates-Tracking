@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.32 (Nov. XX, 2022)
+-----------------------
+- Fixed the issue that toggling to show coords while in dungeon or not is not functioning well
+
 * v2.31 (Nov. 05, 2022)
 -----------------------
 - Dragonflight implementation
