@@ -253,10 +253,9 @@ local function onscreenFrameStatusRefresh()
 			f:Show()
 			f:SetAlpha(profile.alpha)
 			f:SetScale(profile.scale)
-			local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
+			local point, relativePoint, ofsx, ofsy = unpack(profile.latestpoint)
 			f:ClearAllPoints()
-			f:SetParent(UIParent)
-			f:SetPoint(point or "TOPLEFT", nil, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
+			f:SetPoint(point or "TOPLEFT", UIParent, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 		end
 	elseif (f) then
 		f:Hide()
@@ -291,8 +290,8 @@ local function setupCoordsTrackingFrame()
 	local function onMouseUp(self, buttonName)
 		if(CoordsTrackingFrame:IsVisible()) then
 			CoordsTrackingFrame:StopMovingOrSizing()
-			local a, b, c, d, e = CoordsTrackingFrame:GetPoint()
-			profile.point = { a, b, c, d, e }
+			local point, _, relativePoint, offsetX, offsetY = CoordsTrackingFrame:GetPoint()
+			profile.latestpoint = { point, relativePoint, offsetX, offsetY }
 		end
 	end
 
@@ -324,7 +323,7 @@ local function setupCoordsTrackingFrame()
 	f:SetWidth(200)
 	f:SetHeight(28)
 	--f:SetText(name)
-	local point, relativeTo, relativePoint, ofsx, ofsy = unpack(profile.point)
+	local point, relativePoint, ofsx, ofsy = unpack(profile.latestpoint)
 	f:SetPoint(point or "TOPLEFT", UIParent, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 	
 	f.Background = f:CreateTexture(name.."Background", "BACKGROUND")
@@ -457,6 +456,8 @@ end
 function addon:OnInitialize()
 	self.db = AceDB:New(addon.Name.."DB", addon.constants.defaults, true)
 	profile = self.db.profile
+	
+	if profile.point then profile.point = nil end
 
 	self.db.RegisterCallback(self, "OnProfileChanged", "Refresh")
 	self.db.RegisterCallback(self, "OnProfileCopied", "Refresh")

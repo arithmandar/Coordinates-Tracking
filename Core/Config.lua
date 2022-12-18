@@ -83,9 +83,8 @@ local function getOptions()
 									type = "execute",
 									name = L["Reset position"],
 									func = function()
-										CoordsTrackingFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", 450, -80)
-										profile.offsetx = 450
-										profile.offsety = -80
+										CoordsTrackingFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 450, -80)
+										profile.latestpoint = { "TOPLEFT", "TOPLEFT", 450, -80 }
 									end,
 									disabled = function()
 										return not profile.show_coords_onscreen

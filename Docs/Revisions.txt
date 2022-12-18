@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.34 (Dec. 18, 2022)
+-----------------------
+- Enhanced UI position's treatment to prevent from UIParent's object being stored to database
+
 * v2.33 (Nov. 19, 2022)
 -----------------------
 - Toc update to support WoW 10.0.2
