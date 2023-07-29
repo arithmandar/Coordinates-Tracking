@@ -3,6 +3,10 @@
 Revision History:
 =================
 
+* v2.37 (Jul. 29, 2023)
+-----------------------
+- Toc update to support WoW 10.1.5 / 3.4.2
+
 * v2.36 (Mar. 05, 2023)
 -----------------------
 - Toc update to support WoW 10.0.7
