@@ -4,7 +4,6 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("CoordsTracking", "enUS", true, true)
 
 if L then
---@do-not-package@
 -- General
 L["TITLE"] = "Coordinates Tracking"
 L["ADDON_NOTES"] = "Tracks on your current coordinates and shows in on the screen and world map."
@@ -48,6 +47,4 @@ L["Point of the font string to adjust based on the anchor."] = "Point of the fon
 L["Horizantal offset"] = "Horizantal offset"
 L["Vertical offset"] = "Vertical offset"
 
---@end-do-not-package@
---@localization(locale="enUS", format="lua_additive_table")@
 end

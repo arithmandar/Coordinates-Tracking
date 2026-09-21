@@ -1,34 +1,14 @@
-## Interface: 100205
-#@non-debug@
-## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
-## Title-deDE: @localization(locale="deDE", key="Title", namespace="ToC")@
-## Title-esES: @localization(locale="esES", key="Title", namespace="ToC")@
-## Title-esMX: @localization(locale="esMX", key="Title", namespace="ToC")@
-## Title-frFR: @localization(locale="frFR", key="Title", namespace="ToC")@
-## Title-itIT: @localization(locale="itIT", key="Title", namespace="ToC")@
-## Title-koKR: @localization(locale="koKR", key="Title", namespace="ToC")@
-## Title-ptBR: @localization(locale="ptBR", key="Title", namespace="ToC")@
-## Title-ruRU: @localization(locale="ruRU", key="Title", namespace="ToC")@
-## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="ToC")@
-## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="ToC")@
-## Notes: @localization(locale="enUS", key="Description", namespace="ToC")@
-## Notes-deDE: @localization(locale="deDE", key="Description", namespace="ToC")@
-## Notes-esES: @localization(locale="esES", key="Description", namespace="ToC")@
-## Notes-esMX: @localization(locale="esMX", key="Description", namespace="ToC")@
-## Notes-frFR: @localization(locale="frFR", key="Description", namespace="ToC")@
-## Notes-itIT: @localization(locale="itIT", key="Description", namespace="ToC")@
-## Notes-koKR: @localization(locale="koKR", key="Description", namespace="ToC")@
-## Notes-ptBR: @localization(locale="ptBR", key="Description", namespace="ToC")@
-## Notes-ruRU: @localization(locale="ruRU", key="Description", namespace="ToC")@
-## Notes-zhCN: @localization(locale="zhCN", key="Description", namespace="ToC")@
-## Notes-zhTW: @localization(locale="zhTW", key="Description", namespace="ToC")@
-#@end-non-debug@
-#@debug@
+## Interface: 11509, 20506, 50504, 120100
 ## Title: Coordinates Tracking
+## Title-deDE: Coordinates Tracking
+## Title-koKR: |cFF00FF00[가계부]|rCoordinates Tracking
+## Title-zhCN: |cFF00FF00[信息]|r坐标追踪
 ## Title-zhTW: |cFF00FF00[資訊]|r座標追蹤
 ## Notes: Tracks on your current coordinates and shows in on the screen and world map.
+## Notes-deDE: Zeigt deine aktuellen Koordinaten auf dem Bildschirm und Weltkarte an.
+## Notes-koKR: |cff00CC33화면상 위치와 세계지도에 좌표를 표시하는 애드온입니다.|r
+## Notes-zhCN: |cff00CC33追踪并显示你目前所在位置的坐标并显示在游戏画面和世界地图上|r
 ## Notes-zhTW: |cff00CC33追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上|r
-#@end-debug@
 ## Author: arith
 ## Version: @project-version@
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets

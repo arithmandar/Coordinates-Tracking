@@ -14,8 +14,9 @@ local modf = math.modf
 local FOLDER_NAME, private = ...
 local LibStub = _G.LibStub;
 local addon = LibStub("AceAddon-3.0"):GetAddon(private.addon_name)
-local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name);
+local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
 
+local OpenSettingsPanel = C_SettingsUtil and C_SettingsUtil.OpenSettingsPanel
 local AceConfigReg = LibStub("AceConfigRegistry-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
@@ -180,7 +181,7 @@ local function getOptions()
 												profile.font_onscreen = value
 												addon:SetOnScreenFontStyle()
 											end,
-											values = AceGUIWidgetLSMlists.font,
+											values = AceGUIWidgetLSMlists and AceGUIWidgetLSMlists.font or {},
 										},
 										fontsize_onscreen = {
 											order = 2, 
@@ -223,7 +224,7 @@ local function getOptions()
 												profile.font_worldmap =  value
 												addon:SetWorldMapFontStyle()
 											end,
-											values = AceGUIWidgetLSMlists.font,
+											values = AceGUIWidgetLSMlists and AceGUIWidgetLSMlists.font or {},
 										},
 										fontsize_worldmap = {
 											order = 2, 
@@ -333,7 +334,7 @@ local function getOptions()
 											name = L["Background Texture"],
 											type = "select",
 											dialogControl = "LSM30_Background",
-											values = AceGUIWidgetLSMlists.background,
+											values = AceGUIWidgetLSMlists and AceGUIWidgetLSMlists.background or {},
 											get = function()
 												return profile.background
 											end,
@@ -443,13 +444,38 @@ local function getOptions()
 end
 
 local function openOptions()
+	local frames = addon.optionsFrames or {}
+	local frameRefs = addon.optionsFrameRefs or {}
+
 	-- open the profiles tab before, so the menu expands
+	--[[
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.Profiles)
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.Profiles) -- yes, run twice to force the tre get expanded
 	InterfaceOptionsFrame_OpenToCategory(addon.optionsFrames.General)
 	if InterfaceOptionsFrame then
 		InterfaceOptionsFrame:Raise()
 	end
+	]]
+	if OpenSettingsPanel then
+		if frames.Profiles then
+			OpenSettingsPanel(frames.Profiles)
+		end
+		if frames.General then
+			OpenSettingsPanel(frames.General)
+		end
+	elseif InterfaceOptionsFrame_OpenToCategory then
+		if frameRefs.Profiles then
+			InterfaceOptionsFrame_OpenToCategory(frameRefs.Profiles)
+		end
+		if frameRefs.General then
+			InterfaceOptionsFrame_OpenToCategory(frameRefs.General)
+		end
+	end
+
+	if InterfaceOptionsFrame then
+		InterfaceOptionsFrame:Raise()
+	end
+
 end
 
 function addon:OpenOptions() 
@@ -462,10 +488,13 @@ end
 
 function addon:SetupOptions()
 	self.optionsFrames = {}
+	self.optionsFrameRefs = {}
 
 	-- setup options table
 	AceConfigReg:RegisterOptionsTable(addon.LocName, getOptions)
-	self.optionsFrames.General = AceConfigDialog:AddToBlizOptions(addon.LocName, nil, nil, "general")
+	local generalFrame, generalCategoryID = AceConfigDialog:AddToBlizOptions(addon.LocName, nil, nil, "general")
+	self.optionsFrames.General = generalCategoryID
+	self.optionsFrameRefs.General = generalFrame
 
 	self:RegisterModuleOptions("Profiles", giveProfiles, L["Profile Options"])
 end
@@ -479,5 +508,7 @@ end
 -- Output: None.
 function addon:RegisterModuleOptions(name, optionTbl, displayName)
 	moduleOptions[name] = optionTbl
-	self.optionsFrames[name] = AceConfigDialog:AddToBlizOptions(addon.LocName, displayName, addon.LocName, name)
+	local frame, categoryID = AceConfigDialog:AddToBlizOptions(addon.LocName, displayName, addon.LocName, name)
+	self.optionsFrames[name] = categoryID
+	self.optionsFrameRefs[name] = frame
 end

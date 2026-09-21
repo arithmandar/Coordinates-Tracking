@@ -1,11 +1,10 @@
-﻿-- $Id$
+-- $Id$
 
 local L = LibStub("AceLocale-3.0"):NewLocale("CoordsTracking", "zhTW", false)
 
 if not L then return end
 
 if L then
---@do-not-package@
 -- General
 L["TITLE"] = "座標追蹤"
 L["ADDON_NOTES"] = "追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上"
@@ -48,6 +47,5 @@ L["Ancor point"] = "錨點"
 L["Point of the font string to adjust based on the anchor."] = "設定字串的錨點位置以用於調整位置"
 L["Horizantal offset"] = "水平平移"
 L["Vertical offset"] = "垂直平移"
---@end-do-not-package@
---@localization(locale="zhTW", format="lua_additive_table")@
+
 end

@@ -11,7 +11,10 @@ local format = string.format
 local GetCursorPosition, GetSubZoneText, GetZoneText = _G.GetCursorPosition, _G.GetSubZoneText, _G.GetZoneText
 local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
-local GetAddOnInfo, GameTooltip, GetZonePVPInfo = _G.GetAddOnInfo, _G.GameTooltip, _G.GetZonePVPInfo
+local C_AddOns = _G.C_AddOns
+local GetAddOnInfo, GameTooltip = C_AddOns.GetAddOnInfo, _G.GameTooltip
+local C_PvP = _G.C_PvP
+local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 
 local GetBuildInfo = _G.GetBuildInfo
 
@@ -117,7 +120,7 @@ local function getPlayerPositionText(isWorldMap)
 	local uiMapID = C_Map.GetBestMapForUnit("player")
 	local posXY = nil
 	if (uiMapID) then 
-		posXY = C_Map.GetPlayerMapPosition(uiMapID, "player") or nil
+		posXY = GetPlayerMapPosition(uiMapID, "player") or nil
 	end
 	
 	crdsText = crdsTextTemplate:format(acc, acc)
