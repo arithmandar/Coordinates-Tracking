@@ -19,19 +19,12 @@ local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 local GetBuildInfo = _G.GetBuildInfo
 
 -- Determine WoW TOC Version
-local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWRetail
 local wowversion  = select(4, GetBuildInfo())
-if wowversion < 20000 then
-	WoWClassicEra = true
-elseif wowversion < 30000 then 
-	WoWClassicTBC = true
-elseif wowversion < 40000 then 
-	WoWWOTLKC = true
-elseif wowversion > 90000 then
-	WoWRetail = true
-else
-	-- n/a
-end
+local isRetail = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE)
+local isClassicEra = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+local isAnniversaryTBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC or (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and wowversion >= 20000 and wowversion < 30000))
+local isProgressionClassic = (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and WOW_PROJECT_ID ~= WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
+local isClassicForever = (wowversion >= 10000 and wowversion < 20000)
 
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
@@ -401,7 +394,8 @@ end
 
 local function CoordsOnWorldMapFrameRefresh()
 	local ofsy_diff1, ofsy_diff2 = 0, 0
-	if (WoWRetail) then
+	-- 2026/09/21: ToDo - Suggest to revisit below offset on latest game clients
+	if (isRetail) then
 		-- n/a
 	else
 		ofsy_diff1 = 6
