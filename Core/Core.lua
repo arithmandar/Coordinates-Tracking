@@ -20,7 +20,7 @@ local GetBuildInfo = _G.GetBuildInfo
 
 -- Determine WoW TOC Version
 local wowversion  = select(4, GetBuildInfo())
-local isRetail = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE)
+local isRetail = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and wowversion >= 120000)
 local isClassicEra = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local isAnniversaryTBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC or (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and wowversion >= 20000 and wowversion < 30000))
 local isProgressionClassic = (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and WOW_PROJECT_ID ~= WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
@@ -393,10 +393,15 @@ function addon:SetWorldMapFontColor()
 end
 
 local function CoordsOnWorldMapFrameRefresh()
-	local ofsy_diff1, ofsy_diff2 = 0, 0
-	-- 2026/09/21: ToDo - Suggest to revisit below offset on latest game clients
+	local ofsx_diff1, ofsy_diff1, ofsy_diff2 = 0, 0, 0
 	if (isRetail) then
-		-- n/a
+		ofsy_diff2 = -4
+	elseif (isProgressionClassic) then
+		-- for now no adjustments needed
+	elseif (isClassicForever) then
+		ofsx_diff1 = 120
+		ofsy_diff1 = 6
+		ofsy_diff2 = -10
 	else
 		ofsy_diff1 = 6
 		ofsy_diff2 = 20
@@ -408,9 +413,11 @@ local function CoordsOnWorldMapFrameRefresh()
 	if (profile.wmPoint) then
 		local wp = profile.wmPoint
 		local point, relativePoint, ofsx, ofsy = wp.point, wp.relativePoint, wp.ofsx, wp.ofsy
+		-- adjust horizontal offset for right-aligned points
 		if (point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-			ofsx = -ofsx
+			ofsx = -ofsx - ofsx_diff1
 		end
+		-- offset when point is at the top or bottom
 		if (point == "TOPRIGHT" or point == "TOPLEFT") then
 			ofsy = - ofsy - ofsy_diff1
 		else

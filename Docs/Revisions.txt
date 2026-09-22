@@ -3,9 +3,10 @@
 Revision History:
 =================
 
-* v2.39 (Sep. 21, 2026)
+* v2.39 (Sep. 22, 2026)
 -----------------------
 - Codes update to support WoW 1.15.9, 2.5.6, 5.5.4, 12.1.0
+- Handling WorldMap frame's offset across different game clients
 
 * v2.38 (Jan. 21, 2024)
 -----------------------
