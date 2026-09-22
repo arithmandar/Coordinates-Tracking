@@ -9,7 +9,8 @@ local pairs, string, select = _G.pairs, _G.string, _G.select
 local format = string.format
 
 local GetCursorPosition, GetSubZoneText, GetZoneText = _G.GetCursorPosition, _G.GetSubZoneText, _G.GetZoneText
-local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local C_Map = _G.C_Map
+local GetPlayerMapPosition, GetBestMapForUnit = C_Map.GetPlayerMapPosition, C_Map.GetBestMapForUnit
 local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
 local C_AddOns = _G.C_AddOns
 local GetAddOnInfo, GameTooltip = C_AddOns.GetAddOnInfo, _G.GameTooltip
@@ -110,7 +111,7 @@ local function getPlayerPositionText(isWorldMap)
 	local crdsTextTemplate = "%%.%df"..L["COMMA"].."%%.%df"
 	local acc = isWorldMap and profile.worldmap_accuracy or profile.coords_accuracy
 	
-	local uiMapID = C_Map.GetBestMapForUnit("player")
+	local uiMapID = GetBestMapForUnit("player")
 	local posXY = nil
 	if (uiMapID) then 
 		posXY = GetPlayerMapPosition(uiMapID, "player") or nil
@@ -199,7 +200,7 @@ local function updateWorldmapText(isInitialize)
 		WMFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..playerPosText)
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
-			WMFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos or "0.0, 0.0")
+			WMFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos)
 			WMFrame.cursorTxt:Show()
 		else
 			--WMFrame.cursorTxt:SetText("")
@@ -370,7 +371,11 @@ function addon:SetOnScreenBackground()
 		f.Background:SetSize(f:GetWidth(), f:GetHeight())
 		f.Background:SetPoint("TOPLEFT", 0, 0)
 		local t = profile.backgroundColor or nil
-		f.Background:SetVertexColor(t.r or 0, t.g or 0, t.b or 0, t.a or 1)
+		if t then
+			f.Background:SetVertexColor(t.r, t.g, t.b, t.a)
+		else
+			f.Background:SetVertexColor(0, 0, 0, 1)
+		end
 	end
 end
 
@@ -461,7 +466,7 @@ function addon:OnInitialize()
 	self.db = AceDB:New(addon.Name.."DB", addon.constants.defaults, true)
 	profile = self.db.profile
 	
-	if profile.point then profile.point = nil end
+	if profile and profile.point then profile.point = nil end
 
 	self.db.RegisterCallback(self, "OnProfileChanged", "Refresh")
 	self.db.RegisterCallback(self, "OnProfileCopied", "Refresh")
@@ -493,7 +498,7 @@ function addon:Refresh()
 	CoordsOnWorldMapFrameRefresh()
 	addon:SetOnScreenFontStyle()
 	addon:SetWorldMapFontStyle()
-	if (profile.show_coords_onworldmap) then
+	if (profile and profile.show_coords_onworldmap) then
 		self.WorldMapFrame:Show()
 	else
 		self.WorldMapFrame:Hide()

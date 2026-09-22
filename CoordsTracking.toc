@@ -1,14 +1,26 @@
 ## Interface: 11509, 20506, 50504, 120100
 ## Title: Coordinates Tracking
-## Title-deDE: Coordinates Tracking
-## Title-koKR: |cFF00FF00[가계부]|rCoordinates Tracking
-## Title-zhCN: |cFF00FF00[信息]|r坐标追踪
-## Title-zhTW: |cFF00FF00[資訊]|r座標追蹤
-## Notes: Tracks on your current coordinates and shows in on the screen and world map.
-## Notes-deDE: Zeigt deine aktuellen Koordinaten auf dem Bildschirm und Weltkarte an.
-## Notes-koKR: |cff00CC33화면상 위치와 세계지도에 좌표를 표시하는 애드온입니다.|r
-## Notes-zhCN: |cff00CC33追踪并显示你目前所在位置的坐标并显示在游戏画面和世界地图上|r
-## Notes-zhTW: |cff00CC33追蹤並顯示你目前所在位置的座標並顯示在遊戲畫面和世界地圖上|r
+## Title-zhTW: |cFF00FF00[地圖]|r 座標追蹤
+## Title-zhCN: |cFF00FF00[地图]|r 坐标追踪
+## Title-esES: Seguimiento de Coordenadas
+## Title-esMX: Seguimiento de Coordenadas
+## Title-itIT: Tracciamento Coordinate
+## Title-deDE: Koordinaten-Verfolgung
+## Title-frFR: Suivi des Coordonnées
+## Title-koKR: 좌표 추적
+## Title-ruRU: Отслеживание координат
+## Title-ptBR: Rastreamento de Coordenadas
+## Notes: Tracks your current coordinates and displays them on the screen and world map.
+## Notes-zhTW: 追蹤目前所在位置的座標，並顯示於螢幕與世界地圖上。
+## Notes-zhCN: 追踪当前所在位置的坐标，并显示在屏幕与世界地图上。
+## Notes-esES: Rastrea tus coordenadas actuales y las muestra en la pantalla y el mapa del mundo.
+## Notes-esMX: Rastrea tus coordenadas actuales y las muestra en la pantalla y el mapa del mundo.
+## Notes-itIT: Traccia le tue coordinate attuali e le mostra sullo schermo e sulla mappa del mondo.
+## Notes-deDE: Verfolgt deine aktuellen Koordinaten und zeigt sie auf dem Bildschirm und der Weltkarte an.
+## Notes-frFR: Suit vos coordonnées actuelles et les affiche à l'écran et sur la carte du monde.
+## Notes-koKR: 현재 좌표를 추적하여 화면과 세계 지도에 표시합니다.
+## Notes-ruRU: Отслеживает ваши текущие координаты и отображает их на экране и мировой карте.
+## Notes-ptBR: Rastreia suas coordenadas atuais e as exibe na tela e no mapa do mundo.
 ## Author: arith
 ## Version: @project-version@
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
@@ -17,7 +29,17 @@
 ## X-Date: @project-date-iso@
 ## X-Website: https://wow.curseforge.com/projects/coordstracking
 ## X-License: GPLv2
-## X-Category: Information
+## Category: Map & Minimap
+## Category-zhTW: 地圖與小地圖
+## Category-zhCN: 地图与小地图
+## Category-deDE: Karte & Minimap
+## Category-esES: Mapa y minimapa
+## Category-esMX: Mapa y minimapa
+## Category-frFR: Carte & Minimap
+## Category-itIT: Mappa e Minimappa
+## Category-koKR: 지도 및 미니맵
+## Category-ptBR: Mapa e Minimapa
+## Category-ruRU: Карта и миникарта
 ## X-Localizations: enUS, zhTW, zhCN, deDE
 ## IconTexture: Interface\MINIMAP\MinimapArrow
 
