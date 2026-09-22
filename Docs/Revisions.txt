@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v2.40 (Sep. 22, 2026)
+-----------------------
+- Added support to Classic Forever (1.60.01)
+- Updated addon category in the TOC file
+
 * v2.39 (Sep. 22, 2026)
 -----------------------
 - Codes update to support WoW 1.15.9, 2.5.6, 5.5.4, 12.1.0

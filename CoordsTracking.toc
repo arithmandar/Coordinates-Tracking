@@ -1,4 +1,4 @@
-## Interface: 11509, 20506, 50504, 120100
+## Interface: 11509, 16001, 20506, 50504, 120100
 ## Title: Coordinates Tracking
 ## Title-zhTW: |cFF00FF00[地圖]|r 座標追蹤
 ## Title-zhCN: |cFF00FF00[地图]|r 坐标追踪
@@ -29,17 +29,17 @@
 ## X-Date: @project-date-iso@
 ## X-Website: https://wow.curseforge.com/projects/coordstracking
 ## X-License: GPLv2
-## Category: Map & Minimap
-## Category-zhTW: 地圖與小地圖
-## Category-zhCN: 地图与小地图
-## Category-deDE: Karte & Minimap
-## Category-esES: Mapa y minimapa
-## Category-esMX: Mapa y minimapa
-## Category-frFR: Carte & Minimap
-## Category-itIT: Mappa e Minimappa
-## Category-koKR: 지도 및 미니맵
-## Category-ptBR: Mapa e Minimapa
-## Category-ruRU: Карта и миникарта
+## Category: Map
+## Category-deDE: Karte
+## Category-esES: Mapa
+## Category-esMX: Mapa
+## Category-frFR: Carte
+## Category-itIT: Mappa
+## Category-koKR: 지도
+## Category-ptBR: Mapa
+## Category-ruRU: Карта
+## Category-zhCN: 地图
+## Category-zhTW: 地圖
 ## X-Localizations: enUS, zhTW, zhCN, deDE
 ## IconTexture: Interface\MINIMAP\MinimapArrow
 
