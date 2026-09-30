@@ -339,7 +339,7 @@ local function setupCoordsTrackingFrame()
 	f:SetScript("OnLeave", onLeave)
 	f:SetScript("OnMouseDown", onMouseDown)
 	f:SetScript("OnMouseUp", onMouseUp)
-	f:SetScript("OnShow", onLeave)
+	f:SetScript("OnShow", onShow)
 	f:SetScript("OnUpdate", onUpdate)
 end
 

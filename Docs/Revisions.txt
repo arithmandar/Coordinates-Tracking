@@ -3,6 +3,11 @@
 Revision History:
 =================
 
+* v2.41 (Sep. 30, 2026)
+-----------------------
+- Fixed the issue that the on-screen frame's OnShow script was incorrectly set to onLeave instead of onShow
+- Updated the TOC file to add addon category
+
 * v2.40 (Sep. 22, 2026)
 -----------------------
 - Added support to Classic Forever (1.60.01)
