@@ -44,9 +44,7 @@
 ## IconTexture: Interface\MINIMAP\MinimapArrow
 
 Libs\Libs.xml
-
 Locale\Locales.xml
-
 Core\Constants.lua
 Core\Core.lua
 Core\Config.lua

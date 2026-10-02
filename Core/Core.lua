@@ -14,6 +14,7 @@ local GetPlayerMapPosition, GetBestMapForUnit = C_Map.GetPlayerMapPosition, C_Ma
 local WorldMapScrollChild = WorldMapFrame.ScrollContainer.Child
 local C_AddOns = _G.C_AddOns
 local GetAddOnInfo, GameTooltip = C_AddOns.GetAddOnInfo, _G.GameTooltip
+local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 local C_PvP = _G.C_PvP
 local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 
@@ -55,6 +56,11 @@ addon.constants.addon_name = private.addon_name
 addon.Name = FOLDER_NAME
 addon.LocName = select(2, GetAddOnInfo(addon.Name))
 addon.Notes = select(3, GetAddOnInfo(addon.Name))
+-- ToC Metadata
+addon.Version 		= GetAddOnMetadata(addon.Name, "Version")
+addon.UpdateDate 	= GetAddOnMetadata(addon.Name, "X-Date")
+addon.Author 		= GetAddOnMetadata(addon.Name, "Author")
+
 _G.CoordsTracking = addon
 local profile
 local locationText = ""

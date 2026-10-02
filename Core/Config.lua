@@ -11,7 +11,7 @@ local modf = math.modf
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
-local FOLDER_NAME, private = ...
+local _, private = ...
 local LibStub = _G.LibStub;
 local addon = LibStub("AceAddon-3.0"):GetAddon(private.addon_name)
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
@@ -62,9 +62,42 @@ local function getOptions()
 					args = {
 						version = {
 							order = 10,
-							type = "description",
-							name = addon.Notes,
-							width = "full",
+							type = "group",
+							name = L["About"],
+							args = {
+								description = {
+									order = 10,
+									type = "description",
+									name = addon.Notes,
+									width = "full",
+								},
+								info = {
+									order = 20,
+									type = "group",
+									name = L["Addon Info"],
+									inline = true,
+									args = {
+										version = {
+											order = 21,
+											type = "description",
+											name = GAME_VERSION_LABEL..HEADER_COLON.." "..addon.Version,
+											width = "full",
+										},
+										update = {
+											order = 22, 
+											type = "description",
+											name = UPDATE..HEADER_COLON.." "..addon.UpdateDate,
+											width = "full",
+										},
+										author = {
+											order = 23, 
+											type = "description",
+											name = L["Author"]..HEADER_COLON.." "..addon.Author,
+											width = "full",
+										},
+									},
+								},
+							},
 						},
 						-- Display Settings
 						group1 = {

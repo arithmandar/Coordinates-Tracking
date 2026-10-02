@@ -3,6 +3,12 @@
 Revision History:
 =================
 
+* v2.42 (Oct. 02, 2026)
+-----------------------
+- Added About panel in option frame
+- Update translations for all missing languages and missing phrases
+  (If any translation requires revision, please comment on CurseForge, or send me the whole lua file)
+
 * v2.41 (Sep. 30, 2026)
 -----------------------
 - Fixed the issue that the on-screen frame's OnShow script was incorrectly set to onLeave instead of onShow

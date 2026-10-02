@@ -46,5 +46,9 @@ L["Ancor point"] = "Ancor point"
 L["Point of the font string to adjust based on the anchor."] = "Point of the font string to adjust based on the anchor."
 L["Horizantal offset"] = "Horizantal offset"
 L["Vertical offset"] = "Vertical offset"
+-- About panel
+L["About"] = "About"
+L["Addon Info"] = "Addon Info"
+L["Author"] = "Author"
 
 end
