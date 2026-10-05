@@ -21,14 +21,6 @@
 ## Notes-zhCN: 在屏幕和世界地图上显示玩家与鼠标指针的坐标。
 ## Title-zhTW: 座標追蹤
 ## Notes-zhTW: 在畫面和世界地圖上顯示玩家與滑鼠游標的座標。
-## Author: arith
-## Version: @project-version@
-## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
-## DefaultState: Enabled
-## SavedVariables: CoordsTrackingDB
-## X-Date: @project-date-iso@
-## X-Website: https://wow.curseforge.com/projects/coordstracking
-## X-License: GPLv2
 ## Category: Map
 ## Category-deDE: Karte
 ## Category-esES: Mapa
@@ -40,8 +32,18 @@
 ## Category-ruRU: Карта
 ## Category-zhCN: 地图
 ## Category-zhTW: 地圖
-## X-Localizations: enUS, zhTW, zhCN, deDE
+## Author: arith
+## Version: @project-version@
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
+## DefaultState: Enabled
+## SavedVariables: CoordsTrackingDB
 ## IconTexture: Interface\MINIMAP\MinimapArrow
+## X-Date: @project-date-iso@
+## X-Website: https://www.curseforge.com/wow/addons/coordstracking
+## X-License: GPLv2
+## X-Localizations: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
+## X-Curse-Project-ID: 102320
+## X-WoWI-ID: 26245
 
 Libs\Libs.xml
 Locale\Locales.xml

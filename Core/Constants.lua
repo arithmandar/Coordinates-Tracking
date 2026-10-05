@@ -1,4 +1,3 @@
--- $Id: Constants.lua 24 2017-05-24 14:29:40Z arith $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -9,10 +8,8 @@ local _G = getfenv(0)
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
-local FOLDER_NAME, private = ...
+local _, private = ...
 private.addon_name = "CoordsTracking"
-
-local LibStub = _G.LibStub
 
 local constants = {}
 private.constants = constants

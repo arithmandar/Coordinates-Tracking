@@ -8,33 +8,38 @@ license-output: Docs/LICENSE.txt
     
 enable-nolib-creation: no
 
+# configs for WowInterface
+wowi-archive-previous: yes
+wowi-create-changelog: no
+
+
 externals:
 # SVN
     Libs-release/LibStub: 
-        url: https://repos.wowace.com/wow/libstub/trunk
+        url: https://repos.curseforge.com/wow/libstub/trunk
     Libs-release/CallbackHandler-1.0: 
-        url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+        url: https://repos.curseforge.com/wow/callbackhandler/trunk/CallbackHandler-1.0
     Libs-release/AceAddon-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceAddon-3.0
     Libs-release/AceEvent-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceEvent-3.0
     Libs-release/AceLocale-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceLocale-3.0
     Libs-release/AceDB-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceDB-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceDB-3.0
     Libs-release/AceGUI-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceGUI-3.0
     Libs-release/AceConfig-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceConfig-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0
     Libs-release/AceDBOptions-3.0: 
-        url: https://repos.wowace.com/wow/ace3/trunk/AceDBOptions-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceDBOptions-3.0
     Libs-release/LibSharedMedia-3.0: 
-        url: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+        url: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
     Libs-release/AceGUI-3.0-SharedMediaWidgets:
-        url: https://repos.wowace.com/wow/ace-gui-3-0-shared-media-widgets/trunk
+        url: https://repos.curseforge.com/wow/ace-gui-3-0-shared-media-widgets/trunk
 # Git
     Libs-release/LibDataBroker-1.1: 
-        url: https://repos.wowace.com/wow/libdatabroker-1-1
+        url: https://repos.curseforge.com/wow/libdatabroker-1-1
 
 
 move-folders:
