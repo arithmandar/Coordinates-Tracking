@@ -1,6 +1,4 @@
-﻿-- $Id$
-
-local LibStub = _G.LibStub
+﻿local LibStub = _G.LibStub
 local L = LibStub("AceLocale-3.0"):GetLocale("CoordsTracking")
 
 --[[CRDS_TITLE			= L["TITLE"]

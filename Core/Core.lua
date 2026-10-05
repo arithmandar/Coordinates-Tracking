@@ -1,4 +1,3 @@
--- $Id$
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -163,7 +162,17 @@ end
 local function updateButtonText()
 	if (profile.show_coords_onscreen) then
 	
-		local posText = getButtonText() or ""
+		local posText
+		-- Hide the coordinates tracking frame if the player is in an instance and the frame is visible.
+		if (IsInInstance() and CoordsTrackingFrame:IsVisible()) then
+			posText = " "
+			if (CoordsTrackingFrame:IsShown()) then
+				addon.Text:SetText(posText)
+			end
+			return
+		end
+
+		posText = getButtonText() or ""
 		if (posText ~= CRDS_POSTEXT) then
 			local pvpType = GetZonePVPInfo()
 			local color = {}
@@ -301,6 +310,11 @@ local function setupCoordsTrackingFrame()
 	local function onEnter(self)
 		if (isInLockdown) then
 			return
+		end
+		if (IsInInstance() and CoordsTrackingFrame:IsVisible()) then
+			CoordsTrackingFrame:Hide()
+		else
+			CoordsTrackingFrame:Show()
 		end
 
 		if (profile.show_zonenametooltip) then

@@ -1,6 +1,3 @@
-<!--
-$Id$
--->
 <Bindings>
 	<Binding name="COORDSTRACKING_TOGGLE" header="COORDSTRACKING_TITLE" category="ADDONS">
 		CoordsTrackingOptions_ShowOnScreenToggle();
