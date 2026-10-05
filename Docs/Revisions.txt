@@ -5,7 +5,7 @@
 -----------------------
 - Hide the coordinates tracking frame if the player is in an instance and the frame is visible
 - Update TOC to add CurseForge and WoWInterface project ID for auto-packaging
-- Remove SVN keyword as we migtrated to Git repository
+- Remove SVN keyword as we migrated to Git repository
 
 * v2.42 (Oct. 02, 2026)
 -----------------------
