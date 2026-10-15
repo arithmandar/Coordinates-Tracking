@@ -14,6 +14,30 @@ private.addon_name = "CoordsTracking"
 local constants = {}
 private.constants = constants
 
+
+local projectID = WOW_PROJECT_ID
+
+local function IsProject(id)
+    return id ~= nil and projectID == id
+end
+
+-- Determine WoW TOC Version
+local Client = {
+    projectID = projectID,
+
+    isRetail = IsProject(WOW_PROJECT_MAINLINE),
+    isClassicEra = IsProject(WOW_PROJECT_CLASSIC),
+    isTBCClassic = IsProject(WOW_PROJECT_BURNING_CRUSADE_CLASSIC),
+    isCataclysmClassic = IsProject(WOW_PROJECT_CATACLYSM_CLASSIC),
+    isMistsClassic = IsProject(WOW_PROJECT_MISTS_CLASSIC),
+    isForever = IsProject(WOW_PROJECT_CAMELOT),
+}
+
+Client.isProgressionClassic = Client.isCataclysmClassic or Client.isMistsClassic
+Client.isAnyClassic = Client.isClassicEra or Client.isTBCClassic or Client.isProgressionClassic
+Client.isKnownProject = Client.isRetail or Client.isAnyClassic or Client.isForever
+private.Client = Client
+
 constants.defaults = {
 	profile = {
 		show_coords_onscreen = true,
