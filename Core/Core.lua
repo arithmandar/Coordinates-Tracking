@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
--- Functions
+local _, private = ...
 local _G = getfenv(0)
 local pairs, string, select = _G.pairs, _G.string, _G.select
--- Libraries
+
 local format = string.format
 
 local GetCursorPosition, GetSubZoneText, GetZoneText = _G.GetCursorPosition, _G.GetSubZoneText, _G.GetZoneText
@@ -17,15 +17,7 @@ local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 local C_PvP = _G.C_PvP
 local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 
-local GetBuildInfo = _G.GetBuildInfo
-
--- Determine WoW TOC Version
-local wowversion  = select(4, GetBuildInfo())
-local isRetail = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and wowversion >= 120000)
-local isClassicEra = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
-local isAnniversaryTBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC or (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and wowversion >= 20000 and wowversion < 30000))
-local isProgressionClassic = (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and WOW_PROJECT_ID ~= WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
-local isClassicForever = (wowversion >= 10000 and wowversion < 20000)
+local Client = private.Client
 
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
@@ -49,6 +41,25 @@ local worldmapName = "CoordsOnWorldMapFrame"
 local MyFrame = _G[onscreenName]
 if not MyFrame then MyFrame = CreateFrame("Frame", onscreenName, UIParent, BackdropTemplateMixin and "BackdropTemplate") end
 
+---@type CoordinatesTrackingAddon
+---@class CoordinatesTrackingAddon : AceAddon
+---@field constants table
+---@field optionsFrames table
+---@field optionsFrameRefs table
+---@field Name string
+---@field LocName string
+---@field Notes string
+---@field Version string
+---@field UpdateDate string
+---@field Author string
+---@field profile table
+---@field locationText string
+---@field isInLockdown boolean
+---@field CRDS_ORIG_GAMPTOOLTIP_SCALE number
+---@field CRDS_POSTEXT string
+---@field OpenOptions fun(self: CoordinatesTrackingAddon)
+---@field SetupOptions fun(self: CoordinatesTrackingAddon)
+---@field RegisterModuleOptions fun(self: CoordinatesTrackingAddon, moduleName: string, options: table, displayName: string)
 local addon = LibStub("AceAddon-3.0"):NewAddon(MyFrame, private.addon_name, "AceEvent-3.0")
 addon.constants = private.constants
 addon.constants.addon_name = private.addon_name
@@ -164,9 +175,9 @@ local function updateButtonText()
 	
 		local posText
 		-- Hide the coordinates tracking frame if the player is in an instance and the frame is visible.
-		if (IsInInstance() and CoordsTrackingFrame:IsVisible()) then
+		if (IsInInstance() and MyFrame:IsVisible()) then
 			posText = " "
-			if (CoordsTrackingFrame:IsShown()) then
+			if (MyFrame:IsShown()) then
 				addon.Text:SetText(posText)
 			end
 			return
@@ -194,9 +205,9 @@ local function updateButtonText()
 
 			local colortag = format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
 
-			if (CoordsTrackingFrame:IsShown()) then
+			if (MyFrame:IsShown()) then
 				addon.Text:SetText(posText)
-				addon:SetWidth(CoordsTrackingFrame.Text:GetStringWidth())
+				addon:SetWidth(MyFrame.Text:GetStringWidth())
 				addon.Text:SetTextColor(color.r, color.g, color.b)
 			end
 
@@ -286,12 +297,12 @@ local function setupCoordsTrackingFrame()
 		if (isInLockdown) then
 			return
 		end
-		if(CoordsTrackingFrame:IsVisible()) then
+		if(MyFrame:IsVisible()) then
 			-- Handle left button clicks
 			if (buttonName == "LeftButton") then
 				-- Hide tooltip while draging
 				GameTooltip:Hide()
-				CoordsTrackingFrame:StartMoving()
+				MyFrame:StartMoving()
 			elseif (buttonName == "RightButton") then
 				addon:OpenOptions()
 				GameTooltip_Hide()
@@ -300,9 +311,9 @@ local function setupCoordsTrackingFrame()
 	end
 
 	local function onMouseUp(self, buttonName)
-		if(CoordsTrackingFrame:IsVisible()) then
-			CoordsTrackingFrame:StopMovingOrSizing()
-			local point, _, relativePoint, offsetX, offsetY = CoordsTrackingFrame:GetPoint()
+		if(MyFrame:IsVisible()) then
+			MyFrame:StopMovingOrSizing()
+			local point, _, relativePoint, offsetX, offsetY = MyFrame:GetPoint()
 			profile.latestpoint = { point, relativePoint, offsetX, offsetY }
 		end
 	end
@@ -311,14 +322,14 @@ local function setupCoordsTrackingFrame()
 		if (isInLockdown) then
 			return
 		end
-		if (IsInInstance() and CoordsTrackingFrame:IsVisible()) then
-			CoordsTrackingFrame:Hide()
+		if (IsInInstance() and MyFrame:IsVisible()) then
+			MyFrame:Hide()
 		else
-			CoordsTrackingFrame:Show()
+			MyFrame:Show()
 		end
 
 		if (profile.show_zonenametooltip) then
-			if(CoordsTrackingFrame:IsVisible() and (not IsInInstance())) then
+			if(MyFrame:IsVisible() and (not IsInInstance())) then
 				get_zonename_tooltip(self)
 			end
 		end
@@ -419,11 +430,11 @@ end
 
 local function CoordsOnWorldMapFrameRefresh()
 	local ofsx_diff1, ofsy_diff1, ofsy_diff2 = 0, 0, 0
-	if (isRetail) then
+	if (Client.isRetail) then
 		ofsy_diff2 = -4
-	elseif (isProgressionClassic) then
+	elseif (Client.isProgressionClassic) then
 		-- for now no adjustments needed
-	elseif (isClassicForever) then
+	elseif (Client.isForever) then
 		ofsx_diff1 = 120
 		ofsy_diff1 = 6
 		ofsy_diff2 = -10
@@ -500,7 +511,7 @@ function addon:OnEnable()
 	self.WorldMapFrame = createCoordsOnWorldMapFrame()
 
 	-- Register events
-	for key, value in pairs( addon.constants.events ) do
+	for _, value in pairs( addon.constants.events ) do
 		self:RegisterEvent( value )
 	end
 

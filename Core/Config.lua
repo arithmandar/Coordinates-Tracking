@@ -12,6 +12,7 @@ local modf = math.modf
 -- ----------------------------------------------------------------------------
 local _, private = ...
 local LibStub = _G.LibStub;
+---@type CoordinatesTrackingAddon
 local addon = LibStub("AceAddon-3.0"):GetAddon(private.addon_name)
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
 
@@ -22,6 +23,8 @@ local AceDBOptions = LibStub("AceDBOptions-3.0")
 local Media = LibStub("LibSharedMedia-3.0")
 
 local profile
+
+local cFrame = _G.CoordsTrackingFrame
 
 --local WMwidth, WMheight = WorldMapFrame.ScrollContainer.Child:GetWidth(), WorldMapFrame.ScrollContainer.Child:GetHeight()
 local WMwidth, WMheight = WorldMapFrame.ScrollContainer:GetWidth() , WorldMapFrame.ScrollContainer:GetHeight()
@@ -116,7 +119,7 @@ local function getOptions()
 									type = "execute",
 									name = L["Reset position"],
 									func = function()
-										CoordsTrackingFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 450, -80)
+										cFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 450, -80)
 										profile.latestpoint = { "TOPLEFT", "TOPLEFT", 450, -80 }
 									end,
 									disabled = function()
@@ -510,7 +513,7 @@ local function openOptions()
 
 end
 
-function addon:OpenOptions() 
+function addon:OpenOptions()
 	openOptions()
 end
 

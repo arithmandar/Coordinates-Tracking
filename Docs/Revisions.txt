@@ -1,6 +1,10 @@
 ﻿Revision History:
 =================
 
+* v2.44 (Oct. 15, 2026)
+-----------------------
+- ToC update to support WoW 12.1.5
+
 * v2.43 (Oct. 05, 2026)
 -----------------------
 - Hide the coordinates tracking frame if the player is in an instance and the frame is visible
