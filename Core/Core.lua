@@ -91,6 +91,19 @@ local function getLocationText()
 	return locationText
 end
 
+-- Classic Forever now use so-called "Main Name" and "Secondary Name", it's more like the first and last name of the player. And both look to be mandatory. 
+-- While in other game client, UnitName's second return value is actually the realmName
+local function getPlayerSName()
+    local firstName, secondName = UnitName("player")
+	local storageName = firstName
+
+    if Client.isForever and (secondName and secondName ~= "") then
+        storageName = firstName .. " " .. secondName
+    end
+
+    return storageName
+end
+
 -- Codes adopted from Mapster
 local function getCursorPositionText()
 	local left, top = WorldMapScrollChild:GetLeft() or 0, WorldMapScrollChild:GetTop() or 0
@@ -175,7 +188,7 @@ local function updateButtonText()
 	
 		local posText
 		-- Hide the coordinates tracking frame if the player is in an instance and the frame is visible.
-		if (IsInInstance() and MyFrame:IsVisible()) then
+		if (IsInInstance() and MyFrame:IsVisible() and not profile.show_indungeon) then
 			posText = " "
 			if (MyFrame:IsShown()) then
 				addon.Text:SetText(posText)
@@ -221,9 +234,10 @@ local function updateWorldmapText(isInitialize)
 	local isWorldMapOpened = WorldMapFrame:IsShown()
 	local WMFrame = addon.WorldMapFrame
 	local playerPosText = getPlayerPositionText(true) or ""
+	local playerName = getPlayerSName()
 
 	if (profile.show_coords_onworldmap and (isWorldMapOpened or isInitialize)) then
-		WMFrame.playerTxt:SetText(UnitName("player")..L["COLON"]..playerPosText)
+		WMFrame.playerTxt:SetText(playerName..L["COLON"]..playerPosText)
 		local cursorPos = getCursorPositionText()
 		if (cursorPos) then
 			WMFrame.cursorTxt:SetText(L["Cursor"]..L["COLON"]..cursorPos)
@@ -322,7 +336,7 @@ local function setupCoordsTrackingFrame()
 		if (isInLockdown) then
 			return
 		end
-		if (IsInInstance() and MyFrame:IsVisible()) then
+		if (IsInInstance() and MyFrame:IsVisible() and not profile.show_indungeon) then
 			MyFrame:Hide()
 		else
 			MyFrame:Show()
