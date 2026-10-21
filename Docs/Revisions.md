@@ -1,140 +1,114 @@
-﻿Revision History:
-=================
+﻿# Revision History
 
-* v2.44 (Oct. 15, 2026)
------------------------
+## v2.45 (Oct. 21 2026)
+- Fixed config toggling should not disable itself when toggling show zone name tooltip and show in dungeon
+- Fixed issue that even user enable to show in dungeon, but the frame was still not show
+- Fixed issue when in Forever client, only the primary name was cached
+
+## v2.44 (Oct. 15, 2026)
 - ToC update to support WoW 12.1.5
 
-* v2.43 (Oct. 05, 2026)
------------------------
+## v2.43 (Oct. 05, 2026)
 - Hide the coordinates tracking frame if the player is in an instance and the frame is visible
 - Update TOC to add CurseForge and WoWInterface project ID for auto-packaging
 - Remove SVN keyword as we migrated to Git repository
 
-* v2.42 (Oct. 02, 2026)
------------------------
+## v2.42 (Oct. 02, 2026)
 - Added About panel in option frame
 - Update translations for all missing languages and missing phrases
   (If any translation requires revision, please comment on CurseForge, or send me the whole lua file)
 
-* v2.41 (Sep. 30, 2026)
------------------------
+## v2.41 (Sep. 30, 2026)
 - Fixed the issue that the on-screen frame's OnShow script was incorrectly set to onLeave instead of onShow
 - Updated the TOC file to add addon category
 
-* v2.40 (Sep. 22, 2026)
------------------------
+## v2.40 (Sep. 22, 2026)
 - Added support to Classic Forever (1.60.01)
 - Updated addon category in the TOC file
 
-* v2.39 (Sep. 22, 2026)
------------------------
+## v2.39 (Sep. 22, 2026)
 - Codes update to support WoW 1.15.9, 2.5.6, 5.5.4, 12.1.0
 - Handling WorldMap frame's offset across different game clients
 - Added Category to the TOC file
 
-* v2.38 (Jan. 21, 2024)
------------------------
+## v2.38 (Jan. 21, 2024)
 - Toc update to support WoW 10.2.5 / 3.4.3 / 1.15.0
 
-* v2.37 (Jul. 29, 2023)
------------------------
+## v2.37 (Jul. 29, 2023)
 - Toc update to support WoW 10.1.5 / 3.4.2
 
-* v2.36 (Mar. 05, 2023)
------------------------
+## v2.36 (Mar. 05, 2023)
 - Toc update to support WoW 10.0.7
 
-* v2.35 (Feb. 05, 2023)
------------------------
+## v2.35 (Feb. 05, 2023)
 - Toc update to support WoW 10.0.5 / 3.4.1
 
-* v2.34 (Dec. 18, 2022)
------------------------
+## v2.34 (Dec. 18, 2022)
 - Enhanced UI position's treatment to prevent from UIParent's object being stored to database
 
-* v2.33 (Nov. 19, 2022)
------------------------
+## v2.33 (Nov. 19, 2022)
 - Toc update to support WoW 10.0.2
 
-* v2.32 (Nov. 12, 2022)
------------------------
+## v2.32 (Nov. 12, 2022)
 - Fixed the issue that toggling to show coords while in dungeon or not is not functioning well
 
-* v2.31 (Nov. 05, 2022)
------------------------
+## v2.31 (Nov. 05, 2022)
 - Dragonflight implementation
 - Toc update to support WoW 10.0.0
 
-* v2.30 (Aug. 17, 2022)
------------------------
+## v2.30 (Aug. 17, 2022)
 - Toc update to support WoW 9.2.7
 
-* v2.29 (Aug. 02, 2022)
------------------------
+## v2.29 (Aug. 02, 2022)
 - Added option to toggle whether to show or not while in dungeon
 - Added ToC to support WOLTKC - WoW 3.4.0
 
-* v2.28 (Jul. 17, 2022)
------------------------
+## v2.28 (Jul. 17, 2022)
 - Classic ToC update to support WoW 1.14.3
 
-* v2.27 (Jul. 17, 2022)
------------------------
+## v2.27 (Jul. 17, 2022)
 - Toc update to support WoW 9.2.5
 
-* v2.26 (Feb. 23, 2022)
------------------------
+## v2.26 (Feb. 23, 2022)
 - BCC ToC update to support WoW 2.5.4
 
-* v2.25 (Feb. 23, 2022)
------------------------
+## v2.25 (Feb. 23, 2022)
 - Toc update to support WoW 9.2.0
 
-* v2.24 (Feb. 9, 2022)
------------------------
+## v2.24 (Feb. 9, 2022)
 - Support multiple ToC
 - BCC ToC update to support WoW 2.5.3
 - Classic ToC update to support WoW 1.14.2
 
-* v2.23 (Jan. 26, 2022)
------------------------
+## v2.23 (Jan. 26, 2022)
 - ToC update to support WoW 9.1.5
 - Fixed GameToolTip's backdrop setting issue
 
-* v2.22 (Jun. 30, 2021)
------------------------
+## v2.22 (Jun. 30, 2021)
 - ToC update to support WoW 9.1.0
 
-* v2.21 (May 19, 2021)
------------------------
+## v2.21 (May 19, 2021)
 - ToC update to support WoW 9.0.5
 - Support WoW Classic 2.1.5
 
-* v2.20 (Nov. 22, 2020)
------------------------
+## v2.20 (Nov. 22, 2020)
 - Disable no-lib release as the new CurseForge seems to bring-in more torubles for users to download addon
 
-* v2.19 (Nov. 22, 2020)
------------------------
+## v2.19 (Nov. 22, 2020)
 - ToC update to support WoW 9.0.2
 
-* v2.18 (Oct. 20, 2020)
------------------------
+## v2.18 (Oct. 20, 2020)
 - Fixed issue that worldmap coordinates won't get updated when on-screen frame os disabled.
 
-* v2.17 (Oct. 18, 2020)
------------------------
+## v2.17 (Oct. 18, 2020)
 - ToC update to support WoW 9.0.1
 
-* v2.16 (Sep. 10, 2020)
------------------------
+## v2.16 (Sep. 10, 2020)
 - Added background control to onscreen frame
 - Added detection to check if WorldMap is shown and then to update workmapfram's button text
 - Added options to toggle WorldMap frame's text position
 
-* v2.15 (Aug. 24, 2020)
------------------------
+## v2.15 (Aug. 24, 2020)
 - Prevent from WorldMap data is still empty and result in cursor position's error
 - Supported Shadowlands
 - Library update:
@@ -147,75 +121,60 @@
 - Bug Fix:
   - Toggle show-zonename is not working properly
 
-* v2.14 (Jan. 17, 2020)
------------------------
+## v2.14 (Jan. 17, 2020)
 - ToC update to support WoW 8.3.0
 
-* v2.13 (Jan. 07, 2020)
------------------------
+## v2.13 (Jan. 07, 2020)
 - ToC update to support WoW 8.2.5
 
-* v2.12 (Sep. 09, 2019)
------------------------
+## v2.12 (Sep. 09, 2019)
 - Added worldmap's text color's default value to prevent from error
 
-* v2.11 (Sep. 08, 2019)
------------------------
+## v2.11 (Sep. 08, 2019)
 - Added option to allow user to customize text color on world map.
 
-* v2.10 (Sep. 03, 2019)
------------------------
+## v2.10 (Sep. 03, 2019)
 - ToC update to support WoW 8.2.0
 
-* v2.09 (Dec. 16, 2018)
------------------------
+## v2.09 (Dec. 16, 2018)
 - ToC update to support WoW 8.1.0
 
-* v2.08 (Aug. 07, 2018)
------------------------
+## v2.08 (Aug. 07, 2018)
 - Fixed error while loading the player position when in some cases the mapID is not yet available
 
-* v2.07 (Aug. 06, 2018)
------------------------
+## v2.07 (Aug. 06, 2018)
 - Adjust on-map coordinates' position
 - Fixed issue while entering class order hall
 
-* v2.06 (Jul. 25, 2018)
------------------------
+## v2.06 (Jul. 25, 2018)
 - Libs Update
 - ToC update to support WoW 8.0.1
 - API and codes update to support WoW 8.0.1
 
-* v2.05 (Mar. 20, 2018)
------------------------
+## v2.05 (Mar. 20, 2018)
 - Lib Update: 
   - LibSharedMedia
 - Translation updated:
   - Korean (next96)
 
-* v2.04 (Mar. 04, 2018)
------------------------
+## v2.04 (Mar. 04, 2018)
 - Lib Update: 
   - AceConfig
 
-* v2.03 (Nov. 09, 2017)
------------------------
+## v2.03 (Nov. 09, 2017)
 - Lib update: AceConfigDialog
 
-* v2.02 (Aug. 29, 2017)
------------------------
+## v2.02 (Aug. 29, 2017)
 - ToC update to support WoW 7.3.0
 - Lib Update: Ace3
 - Translation updated:
   - Korean (next96)
 
-* v2.01 (Jun. 16, 2017)
------------------------
+## v2.01 (Jun. 16, 2017)
 - Fixed no-lib version's lib setting. LibDataBroker-1.1 should be embedded anyway.
 - Removed LibAboutPanel.
 
-* v2.00 (May 31, 2017)
------------------------
+## v2.00 (May 31, 2017)
 - Migrated option toggling to Ace library
   - Option settings will need to be reconfigured since this release
 - Introduced LibSharedMedia-3.0 to provide more font's options
@@ -226,67 +185,55 @@
 - Translation updated:
   - Korean (next96)
 
-* v1.11 (Mar. 27, 2017)
------------------------
+## v1.11 (Mar. 27, 2017)
 - Toc update to support WoW 7.2
 
-* v1.10 (Feb. 21, 2017)
------------------------
+## v1.10 (Feb. 21, 2017)
 - Fixed error while player is in a contested zone.
 - Zone text now will have text color based on PvP type on LDB-suported frame
 - Fixed the issue that on-screen showing's toggle won't immediately show it
   when it was set to disable in a fresh login.
 
-* v1.09 (Feb. 21, 2017)
------------------------
+## v1.09 (Feb. 21, 2017)
 - Translation updated:
   - German (pas06)
 
-* v1.08 (Feb. 12, 2017)
------------------------
+## v1.08 (Feb. 12, 2017)
 - Fixed the issue the LDB text won't show or update properly when on-screen 
   button is disabled.
 
-* v1.07 (Feb. 10, 2017)
------------------------
+## v1.07 (Feb. 10, 2017)
 - Added key binding
 - Translation updated:
   - Korean (next96)
 
-* v1.06 (Feb. 07, 2017)
------------------------
+## v1.06 (Feb. 07, 2017)
 - Supported in adjusting coordinate info's scale and transparency
 
-* v1.05 (Feb. 02, 2017)
------------------------
+## v1.05 (Feb. 02, 2017)
 - Fixed the issue that show tooltip's check-box didn't reflect the actual 
   configuration in Option window
 - Zone text now will have text color based on PvP type
 - Frame structure re-organized
 - Codes clean-up
 
-* v1.04 (Jan. 17, 2017)
------------------------
+## v1.04 (Jan. 17, 2017)
 - Fixed the issue that when toggling coordinates to show / not-show on world 
   map and it won't take effect immediately.
 
-* v1.03 (Dec. 22, 2016)
------------------------
+## v1.03 (Dec. 22, 2016)
 - Translation updated:
   - Korean (next96)
 
-* v1.02 (Oct. 27, 2016)
------------------------
+## v1.02 (Oct. 27, 2016)
 - Toc update to support WoW 7.1.0
 - Fixed the issue that coordinates cannot be shown while in instance (transitbus)
-  (WoW 7.1.0 now do not allow addon to access player's position while in instance
+  (WoW 7.1.0 now do not allow addon to access player's position while in instance)
 - Translation updated:
   - German (pas06)
   
-* v1.01 (Sep. 20, 2016)
------------------------
+## v1.01 (Sep. 20, 2016)
 - Added Simplified Chinese translation
 
-* v1.00 (Sep. 13, 2016)
------------------------
+## v1.00 (Sep. 13, 2016)
 - Initial version which support WoW 7.0.3
