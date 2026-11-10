@@ -114,31 +114,46 @@ local function getCursorPositionText()
 	return posText
 end
 
+-- Instances and garrisons are treated the same way everywhere: the on-screen
+-- frame, the zone tooltip and the coordinates all follow profile.show_indungeon.
+---@return boolean
+local function isInInstanceOrGarrison()
+	if IsInInstance() then
+		return true
+	end
+	if C_Garrison and C_Garrison.IsOnGarrisonMap and C_Garrison.IsOnGarrisonMap() then
+		return true
+	end
+	return false
+end
+
+---@param isWorldMap boolean?
+---@return string?
 local function getPlayerPositionText(isWorldMap)
-	local posText, crdsText, posX, posY
 	local crdsTextTemplate = "%%.%df"..L["COMMA"].."%%.%df"
 	local acc = isWorldMap and profile.worldmap_accuracy or profile.coords_accuracy
-	
+	local crdsText = crdsTextTemplate:format(acc, acc)
+
+	local isRestricted = isInInstanceOrGarrison()
+	if (isRestricted and not profile.show_indungeon) then
+		return ""
+	end
+
 	local uiMapID = GetBestMapForUnit("player")
-	local posXY = nil
-	if (uiMapID) then 
-		posXY = GetPlayerMapPosition(uiMapID, "player") or nil
-	end
-	
-	crdsText = crdsTextTemplate:format(acc, acc)
-	
-	if ( IsInInstance() or (C_Garrison and C_Garrison.IsOnGarrisonMap())) then
-		if (profile.show_indungeon) then
-			posText = "0.0, 0.0"
-		else
-			posText = ""
-		end
-	elseif (posXY) then
+	local posXY = uiMapID and GetPlayerMapPosition(uiMapID, "player")
+	local posX, posY
+	if (posXY) then
 		posX, posY = posXY:GetXY()
-		posText = format(crdsText, posX and posX*100 or 0, posY and posY*100 or 0)
 	end
-	
-	return posText
+
+	if (posX and posY) then
+		return format(crdsText, posX*100, posY*100)
+	elseif (isRestricted) then
+		-- Most instances don't expose the player position; show zeros using the
+		-- configured accuracy and localized separator instead of a fixed "0.0, 0.0".
+		return format(crdsText, 0, 0)
+	end
+	return nil
 end
 
 local function getButtonText()
@@ -146,7 +161,7 @@ local function getButtonText()
 	local playerPosText = getPlayerPositionText()
 
 	if (profile.show_zonename) then
-		if ( IsInInstance() ) then
+		if ( isInInstanceOrGarrison() ) then
 			if (profile.show_indungeon) then 
 				posText = format("%s"..L["COLON"].."%s", locationText or "", playerPosText or "")
 			else
@@ -156,7 +171,7 @@ local function getButtonText()
 			posText = format("%s"..L["COLON"].."%s", locationText or "", playerPosText or "")
 		end
 	else
-		posText = playerPosText
+		posText = playerPosText or ""
 	end
 
 	return posText
@@ -167,7 +182,7 @@ local function updateButtonText()
 	
 		local posText
 		-- Hide the coordinates tracking frame if the player is in an instance and the frame is visible.
-		if (IsInInstance() and MyFrame:IsVisible() and not profile.show_indungeon) then
+		if (isInInstanceOrGarrison() and MyFrame:IsVisible() and not profile.show_indungeon) then
 			posText = " "
 			if (MyFrame:IsShown()) then
 				addon.Text:SetText(posText)
@@ -263,7 +278,7 @@ end
 local function onscreenFrameStatusRefresh()
 	local f = _G[private.addon_name.."Frame"]
 	if (f and profile.show_coords_onscreen) then
-		if (IsInInstance() and (not profile.show_indungeon)) then
+		if (isInInstanceOrGarrison() and (not profile.show_indungeon)) then
 			f:Hide()
 		else
 			f:Show()
@@ -278,6 +293,18 @@ local function onscreenFrameStatusRefresh()
 		f:Hide()
 	else
 		-- do nothing
+	end
+end
+
+-- Re-evaluate the on-screen frame visibility after a zone change, so entering or
+-- leaving an instance/garrison shows or hides it without a /reload. Only touches
+-- the frame when the state actually changes, so a frame being dragged isn't reset.
+local function onscreenFrameVisibilityRefresh()
+	local f = _G[private.addon_name.."Frame"]
+	if not (f and profile) then return end
+	local shouldShow = profile.show_coords_onscreen and not (isInInstanceOrGarrison() and not profile.show_indungeon)
+	if (shouldShow and not f:IsShown()) or (not shouldShow and f:IsShown()) then
+		onscreenFrameStatusRefresh()
 	end
 end
 
@@ -316,14 +343,14 @@ local function setupCoordsTrackingFrame()
 		if (isInLockdown) then
 			return
 		end
-		if (IsInInstance() and MyFrame:IsVisible() and not profile.show_indungeon) then
+		if (isInInstanceOrGarrison() and MyFrame:IsVisible() and not profile.show_indungeon) then
 			MyFrame:Hide()
 		else
 			MyFrame:Show()
 		end
 
 		if (profile.show_zonenametooltip) then
-			if(MyFrame:IsVisible() and (not IsInInstance())) then
+			if(MyFrame:IsVisible() and (not isInInstanceOrGarrison())) then
 				get_zonename_tooltip(self)
 			end
 		end
@@ -542,14 +569,22 @@ function addon:PLAYER_REGEN_ENABLED()
 	isInLockdown = false
 end
 
+function addon:PLAYER_ENTERING_WORLD()
+	if (profile.show_zonename) then getLocationText() end
+	onscreenFrameVisibilityRefresh()
+end
+
 function addon:ZONE_CHANGED()
 	if (profile.show_zonename) then getLocationText() end
+	onscreenFrameVisibilityRefresh()
 end
 
 function addon:ZONE_CHANGED_NEW_AREA()
 	if (profile.show_zonename) then getLocationText() end
+	onscreenFrameVisibilityRefresh()
 end
 
 function addon:ZONE_CHANGED_INDOORS()
 	if (profile.show_zonename) then getLocationText() end
+	onscreenFrameVisibilityRefresh()
 end

@@ -158,6 +158,7 @@ function CoordinatesTrackingAddon:SetOnScreenBackground() end
 function CoordinatesTrackingAddon:SetWorldMapFontStyle() end
 function CoordinatesTrackingAddon:SetWorldMapFontColor() end
 
+function CoordinatesTrackingAddon:PLAYER_ENTERING_WORLD() end
 function CoordinatesTrackingAddon:PLAYER_REGEN_DISABLED() end
 function CoordinatesTrackingAddon:PLAYER_REGEN_ENABLED() end
 function CoordinatesTrackingAddon:ZONE_CHANGED() end

@@ -1,6 +1,9 @@
 ﻿# Revision History
 
-## v2.45 (Implementing)
+## v2.46 (Implementing)
+- Instances and garrisons are now handled the same way for the on-screen frame, zone tooltip and coordinates (all follow "Show in dungeon")
+- Coordinates shown in instances now use the configured accuracy and localized separator instead of a fixed "0.0, 0.0", and show the real position when the game provides one
+- Fixed the on-screen frame staying hidden after leaving an instance until the next /reload or settings change
 
 ## v2.45 (Oct. 21 2026)
 - Fixed config toggling should not disable itself when toggling show zone name tooltip and show in dungeon
