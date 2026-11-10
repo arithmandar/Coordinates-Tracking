@@ -1,7 +1,8 @@
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
-local _, private = ...
+---@type string, CoordinatesTrackingPrivate
+local FOLDER_NAME, private = ...
 local _G = getfenv(0)
 local pairs, string, select = _G.pairs, _G.string, _G.select
 
@@ -18,11 +19,6 @@ local C_PvP = _G.C_PvP
 local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 
 local Client = private.Client
-
--- ----------------------------------------------------------------------------
--- AddOn namespace.
--- ----------------------------------------------------------------------------
-local FOLDER_NAME, private = ...
 
 local LibStub = _G.LibStub
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
@@ -42,24 +38,6 @@ local MyFrame = _G[onscreenName]
 if not MyFrame then MyFrame = CreateFrame("Frame", onscreenName, UIParent, BackdropTemplateMixin and "BackdropTemplate") end
 
 ---@type CoordinatesTrackingAddon
----@class CoordinatesTrackingAddon : AceAddon
----@field constants table
----@field optionsFrames table
----@field optionsFrameRefs table
----@field Name string
----@field LocName string
----@field Notes string
----@field Version string
----@field UpdateDate string
----@field Author string
----@field profile table
----@field locationText string
----@field isInLockdown boolean
----@field CRDS_ORIG_GAMPTOOLTIP_SCALE number
----@field CRDS_POSTEXT string
----@field OpenOptions fun(self: CoordinatesTrackingAddon)
----@field SetupOptions fun(self: CoordinatesTrackingAddon)
----@field RegisterModuleOptions fun(self: CoordinatesTrackingAddon, moduleName: string, options: table, displayName: string)
 local addon = LibStub("AceAddon-3.0"):NewAddon(MyFrame, private.addon_name, "AceEvent-3.0")
 addon.constants = private.constants
 addon.constants.addon_name = private.addon_name

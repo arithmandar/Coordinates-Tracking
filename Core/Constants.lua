@@ -8,6 +8,7 @@ local _G = getfenv(0)
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
+---@type string, CoordinatesTrackingPrivate
 local _, private = ...
 private.addon_name = "CoordsTracking"
 

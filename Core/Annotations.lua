@@ -1,0 +1,48 @@
+---@meta
+-- LuaLS (WoW API extension) type definitions only. Not loaded by the game client.
+
+---@class CoordinatesTrackingClient
+---@field projectID integer?
+---@field isRetail boolean
+---@field isClassicEra boolean
+---@field isTBCClassic boolean
+---@field isCataclysmClassic boolean
+---@field isMistsClassic boolean
+---@field isForever boolean
+---@field isProgressionClassic boolean
+---@field isAnyClassic boolean
+---@field isKnownProject boolean
+
+---@class CoordinatesTrackingConstants
+---@field addon_name string
+---@field defaults table
+---@field events string[]
+
+---@class CoordinatesTrackingPrivate
+---@field addon_name string
+---@field constants CoordinatesTrackingConstants
+---@field Client CoordinatesTrackingClient
+
+---@class CoordinatesTrackingAddon : AceAddon
+---@field constants CoordinatesTrackingConstants
+---@field optionsFrames table
+---@field optionsFrameRefs table
+---@field Name string
+---@field LocName string
+---@field Notes string
+---@field Version string
+---@field UpdateDate string
+---@field Author string
+---@field profile table
+---@field locationText string
+---@field isInLockdown boolean
+---@field CRDS_ORIG_GAMPTOOLTIP_SCALE number
+---@field CRDS_POSTEXT string
+---@field OpenOptions fun(self: CoordinatesTrackingAddon)
+---@field SetupOptions fun(self: CoordinatesTrackingAddon)
+---@field RegisterModuleOptions fun(self: CoordinatesTrackingAddon, moduleName: string, options: table, displayName: string)
+---@field SetOnScreenFontStyle fun(self: CoordinatesTrackingAddon)
+---@field SetOnScreenBackground fun(self: CoordinatesTrackingAddon)
+---@field SetWorldMapFontStyle fun(self: CoordinatesTrackingAddon)
+---@field SetWorldMapFontColor fun(self: CoordinatesTrackingAddon)
+---@field Refresh fun(self: CoordinatesTrackingAddon)

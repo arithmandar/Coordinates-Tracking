@@ -10,6 +10,7 @@ local modf = math.modf
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
+---@type string, CoordinatesTrackingPrivate
 local _, private = ...
 local LibStub = _G.LibStub;
 ---@type CoordinatesTrackingAddon
