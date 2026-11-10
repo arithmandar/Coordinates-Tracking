@@ -56,7 +56,6 @@ local locationText = ""
 
 local isInLockdown = false
 
-local CRDS_ORIG_GAMPTOOLTIP_SCALE = GameTooltip:GetScale()
 local CRDS_POSTEXT = nil
 
 local function getLocationText()
@@ -244,47 +243,99 @@ local function updateWorldmapText(isInitialize)
 end
 
 
--- GameTooltip has no SetBackdropColor on current clients: it inherits
--- SharedTooltipArtTemplate, whose background is the NineSlice center. Blizzard
--- resets it in GameTooltip_OnHide (SharedTooltip_SetBackdropStyle), so the alpha
--- doesn't leak into other tooltips.
+-- ----------------------------------------------------------------------------
+-- Zone tooltip
+--
+-- The same content is shown in two places: on GameTooltip when hovering the
+-- on-screen frame, and in whatever tooltip an LDB display passes to
+-- OnTooltipShow. The tooltip scale/alpha options are applied to that tooltip,
+-- and its original values are put back when it hides, so they don't leak into
+-- tooltips shown by the game or other addons.
+--
+-- Background: GameTooltip has no SetBackdropColor on current clients. It
+-- inherits SharedTooltipArtTemplate, whose background is the NineSlice center.
+-- ----------------------------------------------------------------------------
+---@class CoordinatesTrackingSavedTooltipStyle
+---@field scale number
+---@field r number?
+---@field g number?
+---@field b number?
+---@field a number?
+
+---@type table<GameTooltip, CoordinatesTrackingSavedTooltipStyle>
+local styledTooltips = setmetatable({}, { __mode = "k" })
+---@type table<GameTooltip, boolean>
+local hookedTooltips = setmetatable({}, { __mode = "k" })
+
+---OnHide hook: restore what applyTooltipStyle changed.
 ---@param tooltip GameTooltip
----@param alpha number
-local function setTooltipBackgroundAlpha(tooltip, alpha)
+local function restoreTooltipStyle(tooltip)
+	local saved = styledTooltips[tooltip]
+	if not saved then return end
+	styledTooltips[tooltip] = nil
+
+	tooltip:SetScale(saved.scale)
 	local nineSlice = tooltip.NineSlice
-	if nineSlice then
-		nineSlice:SetCenterColor(0, 0, 0, alpha)
+	if nineSlice and saved.r then
+		nineSlice:SetCenterColor(saved.r, saved.g, saved.b, saved.a)
 	end
 end
 
-local function get_zonename_tooltip(frame)
-	if (not GameTooltip:IsShown()) then
-		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
-		local zoneText = locationText
-		if frame then GameTooltip:SetOwner(frame, "ANCHOR_BOTTOM", -10, 0) end
-		setTooltipBackgroundAlpha(GameTooltip, profile.tooltip_alpha)
-		if ( pvpType == "sanctuary" ) then
-			GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 )
-		elseif ( pvpType == "arena" ) then
-			GameTooltip:SetText( zoneText.." "..FREE_FOR_ALL_TERRITORY, 1.0, 0.1, 0.1 )	
-		elseif ( pvpType == "friendly" ) then
-			GameTooltip:SetText( zoneText, 0.1, 1.0, 0.1 )
-			GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 0.1, 1.0, 0.1)
-		elseif ( pvpType == "hostile" ) then
-			GameTooltip:SetText( zoneText, 1.0, 0.1, 0.1 )
-			GameTooltip:AddLine(format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1)
-		elseif ( pvpType == "contested" ) then
-			GameTooltip:SetText( zoneText.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 )	
-		elseif ( pvpType == "combat" ) then
-			GameTooltip:SetText( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 )
-		else
-			GameTooltip:SetText( zoneText, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b )
+---Apply the tooltip scale/alpha options to a tooltip that already has an owner.
+---@param tooltip GameTooltip
+local function applyTooltipStyle(tooltip)
+	local nineSlice = tooltip.NineSlice
+
+	-- Save the original values once per show; they're restored on hide.
+	if not styledTooltips[tooltip] then
+		local saved = { scale = tooltip:GetScale() }
+		if nineSlice and nineSlice.GetCenterColor then
+			saved.r, saved.g, saved.b, saved.a = nineSlice:GetCenterColor()
 		end
-		GameTooltip:SetScale(profile.tooltip_scale)
-		GameTooltip:Show()
-	else
-		GameTooltip:Hide()
+		styledTooltips[tooltip] = saved
 	end
+	if not hookedTooltips[tooltip] and tooltip.HookScript then
+		hookedTooltips[tooltip] = true
+		tooltip:HookScript("OnHide", restoreTooltipStyle)
+	end
+
+	tooltip:SetScale(profile.tooltip_scale)
+	if nineSlice then
+		nineSlice:SetCenterColor(0, 0, 0, profile.tooltip_alpha)
+	end
+end
+
+---Add the zone name and PvP status lines to the given tooltip.
+---@param tooltip GameTooltip
+local function addZoneTooltipLines(tooltip)
+	local pvpType, _, factionName = GetZonePVPInfo()
+	local zoneText = locationText or ""
+	if ( pvpType == "sanctuary" ) then
+		tooltip:AddLine( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 )
+	elseif ( pvpType == "arena" ) then
+		tooltip:AddLine( zoneText.." "..FREE_FOR_ALL_TERRITORY, 1.0, 0.1, 0.1 )
+	elseif ( pvpType == "friendly" ) then
+		tooltip:AddLine( zoneText, 0.1, 1.0, 0.1 )
+		tooltip:AddLine( format(FACTION_CONTROLLED_TERRITORY, factionName), 0.1, 1.0, 0.1 )
+	elseif ( pvpType == "hostile" ) then
+		tooltip:AddLine( zoneText, 1.0, 0.1, 0.1 )
+		tooltip:AddLine( format(FACTION_CONTROLLED_TERRITORY, factionName), 1.0, 0.1, 0.1 )
+	elseif ( pvpType == "contested" ) then
+		tooltip:AddLine( zoneText.." "..CONTESTED_TERRITORY, 1.0, 0.7, 0.0 )
+	elseif ( pvpType == "combat" ) then
+		tooltip:AddLine( zoneText.." "..COMBAT_ZONE, 1.0, 0.1, 0.1 )
+	else
+		tooltip:AddLine( zoneText, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b )
+	end
+end
+
+---Show the zone tooltip on GameTooltip, anchored to the on-screen frame.
+---@param owner Frame
+local function showZoneTooltip(owner)
+	GameTooltip:SetOwner(owner, "ANCHOR_BOTTOM", -10, 0)
+	applyTooltipStyle(GameTooltip)
+	addZoneTooltipLines(GameTooltip)
+	GameTooltip:Show()
 end
 
 local function onscreenFrameStatusRefresh()
@@ -363,14 +414,16 @@ local function setupCoordsTrackingFrame()
 
 		if (profile.show_zonenametooltip) then
 			if(MyFrame:IsVisible() and (not isInInstanceOrGarrison())) then
-				get_zonename_tooltip(self)
+				showZoneTooltip(self)
 			end
 		end
 	end
 
 	local function onLeave(self)
-		GameTooltip_Hide()
-		GameTooltip:SetScale(CRDS_ORIG_GAMPTOOLTIP_SCALE)
+		-- Only hide GameTooltip if it's still ours; scale/alpha are restored in its OnHide.
+		if GameTooltip:IsOwned(self) then
+			GameTooltip:Hide()
+		end
 	end
 
 	local function onUpdate()
@@ -412,10 +465,13 @@ local function setupLDB()
 	-- setup LDB
 	LDB.text = getButtonText()
 	LDB.OnClick = (function(self, button) addon:OpenOptions() end)
+	-- The LDB display owns the tooltip: it has already called SetOwner and will
+	-- call Show/Hide itself, so only style it and add lines here.
 	LDB.OnTooltipShow = (function(tooltip)
 		if not tooltip or not tooltip.AddLine then return end
 		if (profile.show_zonenametooltip) then
-			get_zonename_tooltip()
+			applyTooltipStyle(tooltip)
+			addZoneTooltipLines(tooltip)
 		end
 	end)
 end
