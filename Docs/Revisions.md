@@ -1,6 +1,6 @@
 ﻿# Revision History
 
-## v2.46 (Implementing)
+## v2.46 (Nov. 10, 2026)
 - Instances and garrisons are now handled the same way for the on-screen frame, zone tooltip and coordinates (all follow "Show in dungeon")
 - Coordinates shown in instances now use the configured accuracy and localized separator instead of a fixed "0.0, 0.0", and show the real position when the game provides one
 - Fixed the on-screen frame staying hidden after leaving an instance until the next /reload or settings change
