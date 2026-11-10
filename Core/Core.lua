@@ -1,7 +1,8 @@
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
-local _, private = ...
+---@type string, CoordinatesTrackingPrivate
+local FOLDER_NAME, private = ...
 local _G = getfenv(0)
 local pairs, string, select = _G.pairs, _G.string, _G.select
 
@@ -19,11 +20,6 @@ local GetZonePVPInfo = C_PvP.GetZonePVPInfo
 
 local Client = private.Client
 
--- ----------------------------------------------------------------------------
--- AddOn namespace.
--- ----------------------------------------------------------------------------
-local FOLDER_NAME, private = ...
-
 local LibStub = _G.LibStub
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
 local AceDB = LibStub("AceDB-3.0")
@@ -38,40 +34,23 @@ local Media = LibStub("LibSharedMedia-3.0")
 -- Frame names
 local onscreenName = private.addon_name.."Frame"
 local worldmapName = "CoordsOnWorldMapFrame"
+---@type CoordinatesTrackingOnScreenFrame
 local MyFrame = _G[onscreenName]
-if not MyFrame then MyFrame = CreateFrame("Frame", onscreenName, UIParent, BackdropTemplateMixin and "BackdropTemplate") end
+if not MyFrame then MyFrame = CreateFrame("Frame", onscreenName, UIParent, BackdropTemplateMixin and "BackdropTemplate") --[[@as CoordinatesTrackingOnScreenFrame]] end
 
----@type CoordinatesTrackingAddon
----@class CoordinatesTrackingAddon : AceAddon
----@field constants table
----@field optionsFrames table
----@field optionsFrameRefs table
----@field Name string
----@field LocName string
----@field Notes string
----@field Version string
----@field UpdateDate string
----@field Author string
----@field profile table
----@field locationText string
----@field isInLockdown boolean
----@field CRDS_ORIG_GAMPTOOLTIP_SCALE number
----@field CRDS_POSTEXT string
----@field OpenOptions fun(self: CoordinatesTrackingAddon)
----@field SetupOptions fun(self: CoordinatesTrackingAddon)
----@field RegisterModuleOptions fun(self: CoordinatesTrackingAddon, moduleName: string, options: table, displayName: string)
-local addon = LibStub("AceAddon-3.0"):NewAddon(MyFrame, private.addon_name, "AceEvent-3.0")
+local addon = LibStub("AceAddon-3.0"):NewAddon(MyFrame, private.addon_name, "AceEvent-3.0") --[[@as CoordinatesTrackingAddon]]
 addon.constants = private.constants
 addon.constants.addon_name = private.addon_name
 addon.Name = FOLDER_NAME
 addon.LocName = select(2, GetAddOnInfo(addon.Name))
 addon.Notes = select(3, GetAddOnInfo(addon.Name))
 -- ToC Metadata
-addon.Version 		= GetAddOnMetadata(addon.Name, "Version")
-addon.UpdateDate 	= GetAddOnMetadata(addon.Name, "X-Date")
-addon.Author 		= GetAddOnMetadata(addon.Name, "Author")
+addon.Version 		= GetAddOnMetadata(addon.Name, "Version") or ""
+addon.UpdateDate 	= GetAddOnMetadata(addon.Name, "X-Date") or ""
+addon.Author 		= GetAddOnMetadata(addon.Name, "Author") or ""
 
 _G.CoordsTracking = addon
+---@type CoordinatesTrackingProfile
 local profile
 local locationText = ""
 
@@ -290,7 +269,8 @@ local function onscreenFrameStatusRefresh()
 			f:Show()
 			f:SetAlpha(profile.alpha)
 			f:SetScale(profile.scale)
-			local point, relativePoint, ofsx, ofsy = unpack(profile.latestpoint)
+			local lp = profile.latestpoint
+			local point, relativePoint, ofsx, ofsy = lp[1], lp[2], lp[3], lp[4]
 			f:ClearAllPoints()
 			f:SetPoint(point or "TOPLEFT", UIParent, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 		end
@@ -365,7 +345,8 @@ local function setupCoordsTrackingFrame()
 	f:SetWidth(200)
 	f:SetHeight(28)
 	--f:SetText(name)
-	local point, relativePoint, ofsx, ofsy = unpack(profile.latestpoint)
+	local lp = profile.latestpoint
+	local point, relativePoint, ofsx, ofsy = lp[1], lp[2], lp[3], lp[4]
 	f:SetPoint(point or "TOPLEFT", UIParent, relativePoint or "TOPLEFT", ofsx or 450, ofsy or -80)
 	
 	f.Background = f:CreateTexture(name.."Background", "BACKGROUND")
@@ -488,9 +469,11 @@ local function CoordsOnWorldMapFrameRefresh()
 	end
 end
 
+---@return CoordinatesTrackingWorldMapFrame
 local function createCoordsOnWorldMapFrame()
+	---@type CoordinatesTrackingWorldMapFrame
 	local f = _G[worldmapName]
-	if not f then f = CreateFrame("Frame", worldmapName, WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") end
+	if not f then f = CreateFrame("Frame", worldmapName, WorldMapFrame.ScrollContainer, BackdropTemplateMixin and "BackdropTemplate") --[[@as CoordinatesTrackingWorldMapFrame]] end
 	
 	local function onUpdate()
 		updateWorldmapText()
@@ -508,7 +491,7 @@ local function createCoordsOnWorldMapFrame()
 end
 
 function addon:OnInitialize()
-	self.db = AceDB:New(addon.Name.."DB", addon.constants.defaults, true)
+	self.db = AceDB:New(addon.Name.."DB", addon.constants.defaults, true) --[[@as CoordinatesTrackingDB]]
 	profile = self.db.profile
 	
 	if profile and profile.point then profile.point = nil end
@@ -560,10 +543,6 @@ function addon:PLAYER_REGEN_ENABLED()
 end
 
 function addon:ZONE_CHANGED()
-	if (profile.show_zonename) then getLocationText() end
-end
-
-function addon:ZONE_CHANGED_NEW()
 	if (profile.show_zonename) then getLocationText() end
 end
 

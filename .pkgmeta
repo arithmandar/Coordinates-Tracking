@@ -8,6 +8,9 @@ license-output: Docs/LICENSE.txt
     
 enable-nolib-creation: no
 
+ignore:
+    - Core/Annotations.lua
+
 # configs for WowInterface
 wowi-archive-previous: yes
 wowi-create-changelog: no
