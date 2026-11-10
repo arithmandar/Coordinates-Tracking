@@ -13,8 +13,7 @@ local modf = math.modf
 ---@type string, CoordinatesTrackingPrivate
 local _, private = ...
 local LibStub = _G.LibStub;
----@type CoordinatesTrackingAddon
-local addon = LibStub("AceAddon-3.0"):GetAddon(private.addon_name)
+local addon = LibStub("AceAddon-3.0"):GetAddon(private.addon_name) --[[@as CoordinatesTrackingAddon]]
 local L = LibStub("AceLocale-3.0"):GetLocale(private.addon_name)
 
 local OpenSettingsPanel = C_SettingsUtil and C_SettingsUtil.OpenSettingsPanel
@@ -23,8 +22,10 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
 local Media = LibStub("LibSharedMedia-3.0")
 
+---@type CoordinatesTrackingProfile
 local profile
 
+---@type CoordinatesTrackingOnScreenFrame
 local cFrame = _G.CoordsTrackingFrame
 
 --local WMwidth, WMheight = WorldMapFrame.ScrollContainer.Child:GetWidth(), WorldMapFrame.ScrollContainer.Child:GetHeight()
