@@ -31,6 +31,31 @@ InterfaceOptionsFrame = nil
 AceGUIWidgetLSMlists = {}
 
 -- ----------------------------------------------------------------------------
+-- Blizzard frames/fields not covered by the WoW API annotations.
+-- ----------------------------------------------------------------------------
+
+---A NineSlicePanelTemplate frame (Blizzard NineSlicePanelMixin).
+---@class CoordinatesTrackingNineSlicePanel : Frame
+local CoordinatesTrackingNineSlicePanel = {}
+
+---@param r number
+---@param g number
+---@param b number
+---@param a number?
+function CoordinatesTrackingNineSlicePanel:SetCenterColor(r, g, b, a) end
+
+---@return number r
+---@return number g
+---@return number b
+---@return number a
+function CoordinatesTrackingNineSlicePanel:GetCenterColor() end
+
+---GameTooltip inherits SharedTooltipArtTemplate on Retail and Classic, which draws
+---its background with a NineSlice child instead of BackdropTemplate.
+---@class GameTooltip
+---@field NineSlice CoordinatesTrackingNineSlicePanel?
+
+-- ----------------------------------------------------------------------------
 -- Client detection (Core/Constants.lua)
 -- ----------------------------------------------------------------------------
 

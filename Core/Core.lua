@@ -244,13 +244,25 @@ local function updateWorldmapText(isInitialize)
 end
 
 
+-- GameTooltip has no SetBackdropColor on current clients: it inherits
+-- SharedTooltipArtTemplate, whose background is the NineSlice center. Blizzard
+-- resets it in GameTooltip_OnHide (SharedTooltip_SetBackdropStyle), so the alpha
+-- doesn't leak into other tooltips.
+---@param tooltip GameTooltip
+---@param alpha number
+local function setTooltipBackgroundAlpha(tooltip, alpha)
+	local nineSlice = tooltip.NineSlice
+	if nineSlice then
+		nineSlice:SetCenterColor(0, 0, 0, alpha)
+	end
+end
+
 local function get_zonename_tooltip(frame)
 	if (not GameTooltip:IsShown()) then
 		local pvpType, isSubZonePvP, factionName = GetZonePVPInfo()
 		local zoneText = locationText
 		if frame then GameTooltip:SetOwner(frame, "ANCHOR_BOTTOM", -10, 0) end
-		--GameTooltip:SetBackdropColor(0, 0, 0, profile.tooltip_alpha)
-		GameTooltip.NineSlice:SetCenterColor(0, 0, 0, profile.tooltip_alpha)
+		setTooltipBackgroundAlpha(GameTooltip, profile.tooltip_alpha)
 		if ( pvpType == "sanctuary" ) then
 			GameTooltip:SetText( zoneText.." "..SANCTUARY_TERRITORY, 0.41, 0.8, 0.94 )
 		elseif ( pvpType == "arena" ) then
