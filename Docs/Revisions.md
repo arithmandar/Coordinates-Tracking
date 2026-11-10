@@ -1,5 +1,7 @@
 ﻿# Revision History
 
+## v2.45 (Implementing)
+
 ## v2.45 (Oct. 21 2026)
 - Fixed config toggling should not disable itself when toggling show zone name tooltip and show in dungeon
 - Fixed issue that even user enable to show in dungeon, but the frame was still not show
