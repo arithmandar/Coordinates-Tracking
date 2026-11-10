@@ -1,5 +1,12 @@
 ﻿# Revision History
 
+## v2.46 (Nov. 10, 2026)
+- Instances and garrisons are now handled the same way for the on-screen frame, zone tooltip and coordinates (all follow "Show in dungeon")
+- Coordinates shown in instances now use the configured accuracy and localized separator instead of a fixed "0.0, 0.0", and show the real position when the game provides one
+- Fixed the on-screen frame staying hidden after leaving an instance until the next /reload or settings change
+- Fixed the tooltip scale option leaking into all other tooltips after hovering the LDB (data broker) display
+- The zone tooltip of the LDB display is now drawn on the tooltip provided by the display addon instead of always using GameTooltip
+
 ## v2.45 (Oct. 21 2026)
 - Fixed config toggling should not disable itself when toggling show zone name tooltip and show in dungeon
 - Fixed issue that even user enable to show in dungeon, but the frame was still not show

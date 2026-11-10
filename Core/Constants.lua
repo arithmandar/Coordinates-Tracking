@@ -73,6 +73,7 @@ constants.defaults = {
 }
 
 constants.events = {
+	"PLAYER_ENTERING_WORLD",
 	"PLAYER_REGEN_ENABLED",
 	"PLAYER_REGEN_DISABLED",
 	"ZONE_CHANGED",
